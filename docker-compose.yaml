@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  db:
+    restart: always
+    image: postgres
+    environment:
+    - POSTGRES_DB=calorie_db
+    - POSTGRES_PORT=5432
+    - POSTGRES_PASSWORD=password
+    - CONTAINER_NAME=calorie_tracker
+    - POSTGRES_HOST=127.0.0.1
+    - POSTGRES_USER=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./db/db_init.sh:/docker-entrypoint-initdb.d/db_init.sh
+      - ./db/postgres-data:/var/lib/postgresql/data
