@@ -1,0 +1,12 @@
+{
+  "dictionary": [
+    {"tag":  "greeting",
+      "requests": ["Hey", "Hi", "Hello", "Good morning", "Good evening"],
+      "responses": ["Hello!", "Hi! Welcome"]
+    },
+    {"tag":  "goodbye",
+      "requests": ["Goodbye", "See you later", "Good night", "Have a good day", "Bye", "Farewell", "Take care", "I'm out"],
+      "responses": ["Goodbye! Have a good one!", "Bye, I hope I will see You soon"]
+    }
+  ]
+}
