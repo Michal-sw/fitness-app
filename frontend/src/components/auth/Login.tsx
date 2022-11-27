@@ -6,7 +6,7 @@ import { LoginDT } from '../../core/types/LoginDT';
 function Login() {
 
   const handleLogin = (values: LoginDT) => {
-      // validate values and send to the backend
+      // validate values and sent* :P to the backend
   }
 
   return (
