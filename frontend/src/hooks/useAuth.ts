@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { LoginDT } from "../core/types/LoginDT";
 import useCookies from "./useCookies";
 
 const useAuth = () => {
@@ -16,15 +17,16 @@ const useAuth = () => {
   }, [])
 
   // Data should be sent through HTTPS to prevent sniffing
-  const login = (login: String, password: String) => {
+  const login = ({ login, password }: LoginDT) => {
     if (isAuthenticated) return;
 
     axios.post(`${apiPath}/users/auth`, { login, password })
       .then(res => {
         if (res.status === 200) {
-          const token = res.data;
+          const token = res.data.token;
           setCookie("jwtToken", token, 1);
-          setIsAuthenticated(token);
+          setIsAuthenticated(true);
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         }
       })
       .catch(err => {

@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../../styles/auth/Login.scss';
 import { Field, Form, Formik } from 'formik';
 import { LoginDT } from '../../core/types/LoginDT';
+import useAuth from '../../hooks/useAuth';
 
 function Login() {
-
+  const { login, isAuthenticated } = useAuth();
   const handleLogin = (values: LoginDT) => {
-      // validate values and sent* :P to the backend
+    login(values);
+
   }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+        
+    }
+  }, [isAuthenticated])
 
   return (
     <div className={"login_container"}>
