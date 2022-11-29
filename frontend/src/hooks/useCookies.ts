@@ -8,7 +8,9 @@ const useCookies = () => {
       date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
       expires = "; expires=" + date.toUTCString();
     }
+
     document.cookie = cookieKey + "=" + (value || "") + expires + "; path=/";  
+    console.log(cookieKey + "=" + (value || "") + expires + "; path=/");
   }
 
   const getCookie = (cookieKey: String) => {

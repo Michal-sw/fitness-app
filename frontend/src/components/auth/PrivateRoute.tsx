@@ -1,11 +1,16 @@
-import useAuth from "../../hooks/useAuth";
-import AccesDenied from "../../views/AccessDenied";
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
+import useAuth from "../../core/providers/AuthContext";
+import Login from "./Login";
 
 const PrivateRoute = ({ children }: { children: ReactElement}) => {
- const { isAuthenticated } = useAuth();
+ const { authenticated, token } = useAuth();
 
- return isAuthenticated ? children : <AccesDenied/>;
+ useEffect(() => {
+  console.log(token);
+  console.log(authenticated);
+ });
+
+ return authenticated ? children : <Login/>;
 };
 
 export default PrivateRoute;
