@@ -1,4 +1,5 @@
-nltk
+nltk~=3.7
 numpy
 tflearn
 tensorflow
+pandas~=1.3.5
