@@ -4,7 +4,7 @@ import random
 import pandas as pd
 
 
-fitness_data = pd.read_csv('fitness_exercises.csv', sep=',')
+fitness_data = pd.read_csv('data/fitness_exercises.csv', sep=',')
 bodyPart = []
 equipment = []
 target = []
@@ -53,5 +53,5 @@ for i in target:
     }
     intents.append(intent)
 
-with open('fitness_intents.json', 'w') as file:
+with open('data/fitness_intents.json', 'w') as file:
     json.dump(intents, file)
