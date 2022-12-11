@@ -6,9 +6,11 @@ from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 import json
 import pickle
+from utils.lemmatize import lemmatize
+from utils.bag_of_words import bag_of_words
 
 
-def prepare_word(intent_file_dir, file_name):
+def get_training_data(intent_file_dir, file_name):
     # read JSON file
     with open(intent_file_dir) as j:
         data = json.load(j)
@@ -42,25 +44,18 @@ def prepare_word(intent_file_dir, file_name):
 
     # Serialize data
     pickle.dump(word_list, open(f'./pickles/{file_name}_word_list.pkl', 'wb'))
-    pickle.dump(word_list, open(f'./pickles/{file_name}_tags.pkl', 'wb'))
+    pickle.dump(tags, open(f'./pickles/{file_name}_tags.pkl', 'wb'))
 
     training_data = []
 
     # Create bag of words to convert sentences into number for the AI
     for sentence in sentences:
-        bag_of_words = []
-        patterns = [i.lower() for i in sentence[0]]
-
-        for word in word_list:
-            if word in patterns:
-                bag_of_words.append(1)
-            else:
-                bag_of_words.append(0)
+        bag = bag_of_words(sentence[0], word_list)
 
         output = list([0] * len(tags))
         output[tags.index(sentence[1])] = 1
 
-        training_data.append([bag_of_words, output])
+        training_data.append([bag, output])
 
     random.shuffle(training_data)
     training_data = np.array(training_data)
@@ -68,6 +63,3 @@ def prepare_word(intent_file_dir, file_name):
     train_sety = list(training_data[:, 1])
 
     return [train_setx, train_sety]
-
-
-print(prepare_word('./data/basic_intents.json', 'basic_intents'))
