@@ -9,4 +9,13 @@ const getPublicKey = () => {
   }
 }
 
-export default { getPublicKey };
+const getPrivateKey = () => {
+  try {
+    const privateKey = fs.readFileSync('private.pem');
+    return privateKey;
+  } catch {
+    return "MOCK_SECRET"
+  }
+}
+
+export default { getPublicKey, getPrivateKey };

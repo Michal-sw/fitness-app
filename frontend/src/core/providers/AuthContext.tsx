@@ -1,12 +1,12 @@
-import axios from "axios";
-import React, { createContext, ReactElement, ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, ReactElement, useContext, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
-import useCookies from "../../hooks/useCookies";
 import { LoginDT } from "../types/LoginDT";
+import axiosService from "../../services/axiosService";
 
 interface AuthContextType {
   username?: String;
   token?: String;
+  refreshToken?: String;
   authenticated?: boolean;
   error?: any;
   login: (values: LoginDT) => void;
@@ -18,7 +18,6 @@ const AuthContext = createContext<AuthContextType>(
 );
 
 export function AuthProvider({ children }: {children: ReactElement }) {
-  const { getCookie, setCookie } = useCookies();
   const [username, setUsername] = useState<String>();
   const [token, setToken] = useState<String>();
   const [authenticated, setAuthenticated] = useState<boolean>();
@@ -31,21 +30,30 @@ export function AuthProvider({ children }: {children: ReactElement }) {
   }, [location.pathname]);
 
   useEffect(() => {
-    const token = getCookie("jwtToken");
-    setUsername(token || "");
-    setToken(token || "");
-    if (token) setAuthenticated(true);
-    setLoadingInitial(false);
+    axiosService.refreshToken()
+      .then(res => {
+        console.log(res.data);
+        console.log(res.status);
+        const token = res.data.token;
+        setUsername(token || "");
+        setToken(token || "");
+        if (token) setAuthenticated(true);
+      })
+      .catch(err => {
+        console.log(err);
+        setError(err);
+      })
+      .finally(() => {
+        setLoadingInitial(false);
+      })
   }, []);
-  
+
   function login(values: LoginDT) {
-    const apiPath = process.env.REACT_APP_API_PATH || "127.0.0.1:8080";
-    axios
-      .post(`http://${apiPath}/users/auth`, values )
+    axiosService.login(values)
       .then(res => {
         if (res.status === 200 && res.data.token) {
+          console.log(res.data);
           const token = res.data.token;
-          setCookie("jwtToken", token, 1);
           setAuthenticated(true);
           setToken(token);
         }
@@ -57,7 +65,6 @@ export function AuthProvider({ children }: {children: ReactElement }) {
   }
 
   function logout() {
-    setCookie("jwtToken", "");
     setToken("");
     setAuthenticated(false);
   }
