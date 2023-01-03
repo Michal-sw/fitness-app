@@ -4,7 +4,7 @@ from tensorflow.python.keras.layers import Dense
 import numpy as np
 
 
-train_x, train_y = get_training_data('data/fitness_intents.json', 'fitness_intents')
+train_x, train_y = get_training_data('data/main_intents.json', 'main_intents')
 
 
 network = Sequential([
@@ -17,4 +17,4 @@ network.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc
 
 hist = network.fit(np.array(train_x), np.array(train_y), epochs=200, batch_size=5, verbose=1)
 
-network.save('chatbotmodel.h5', hist)
+network.save('chatbotmodelv2.h5', hist)
