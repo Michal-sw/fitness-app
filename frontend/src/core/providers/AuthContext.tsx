@@ -32,15 +32,12 @@ export function AuthProvider({ children }: {children: ReactElement }) {
   useEffect(() => {
     axiosService.refreshToken()
       .then(res => {
-        console.log(res.data);
-        console.log(res.status);
         const token = res.data.token;
         setUsername(token || "");
         setToken(token || "");
         if (token) setAuthenticated(true);
       })
       .catch(err => {
-        console.log(err);
         setError(err);
       })
       .finally(() => {
@@ -52,14 +49,12 @@ export function AuthProvider({ children }: {children: ReactElement }) {
     axiosService.login(values)
       .then(res => {
         if (res.status === 200 && res.data.token) {
-          console.log(res.data);
           const token = res.data.token;
           setAuthenticated(true);
           setToken(token);
         }
       })
       .catch(err => {
-        console.log(err);
         setError(err);
       })
   }

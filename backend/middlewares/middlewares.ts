@@ -5,8 +5,9 @@ const jwt = require('jsonwebtoken');
 
 const corsMiddleware = (req: Request, res: Response, next: NextFunction) => {
   res.header('Access-Control-Allow-Credentials', "true");
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Origin", "http://127.0.0.1:3000");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-HTTP-Method-Override");
   return next()
 }
 
@@ -17,7 +18,6 @@ const authorizeMiddleware = (req: Request, res: Response, next: NextFunction) =>
   if (!token) return res.sendStatus(401);
 
   jwt.verify(token, privateKey, (error: VerifyErrors, decodedPayload: JwtPayload) => {
-    // JWT during issuing is signed with the username of token asker
     const username = decodedPayload.username;
     console.log(`USER MAKING REQUEST -> ${username}`);
     if (error) return res.sendStatus(403)

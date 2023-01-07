@@ -2,18 +2,19 @@ import express, { Request, Response, Router } from 'express';
 import { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import { authorizeMiddleware } from '../middlewares/middlewares';
 import utils from '../utils/utils';
+
 const jwt = require('jsonwebtoken');
 
 const router: Router = express.Router({mergeParams: true});
 
-const getNewTokenPair = (username: String) => {
+const getNewTokenPair = (login: String) => {
   const privateKey = utils.getPrivateKey();
 
   // The tokens must be paired with the user in the database
-  const refreshToken = jwt.sign({ username }, privateKey, {
+  const refreshToken = jwt.sign({ login }, privateKey, {
     expiresIn: 60*15
   });
-  const token = jwt.sign({ username }, privateKey, {
+  const token = jwt.sign({ login }, privateKey, {
     expiresIn: 60*15
   });
 
@@ -28,15 +29,15 @@ router.get('/', authorizeMiddleware,(req: Request, res: Response) => {
 });
 
 router.post('/login', (req: Request, res: Response) => {
-  const username = req.body.username;
+  const login = req.body.login;
   const password = req.body.password;
   // CHECK IF USER IS VALID
   
-  const { refreshToken, token } = getNewTokenPair(username);
+  const { refreshToken, token } = getNewTokenPair(login);
 
-  res.cookie("refreshToken", refreshToken, {
+  res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
-    sameSite: 'strict',
+    sameSite: 'strict'
   });
 
   return res.send({ token });
@@ -44,19 +45,19 @@ router.post('/login', (req: Request, res: Response) => {
 
 router.post('/refresh', (req: Request, res: Response) => {
   const privateKey = utils.getPrivateKey();
-  if (!req.cookies) {
+  if (!req.headers.cookie) {
     return res.sendStatus(401);
   }
-  const oldRefreshToken = req.cookies['refreshToken'];
+  const oldRefreshToken = utils.getCookie(req.headers.cookie, 'refreshToken');
 
   jwt.verify(oldRefreshToken, privateKey, (error: VerifyErrors, decodedPayload: JwtPayload) => {
-    const username = decodedPayload.username;
-    console.log(`USER MAKING REQUEST -> ${username}`);
     if (error) return res.sendStatus(403)
+    const login = decodedPayload?.login;
+    console.log(`USER MAKING REQUEST -> ${login}`);
 
-    const { refreshToken, token } = getNewTokenPair(username);
+    const { refreshToken, token } = getNewTokenPair(login);
 
-    res.cookie("refreshToken", refreshToken, {
+    res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       sameSite: 'strict',
     });  
