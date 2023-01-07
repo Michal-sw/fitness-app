@@ -20,11 +20,11 @@ const useCookies = () => {
     for (let cookie of cookieArray) {
       while (cookie.charAt(0) === ' ') {
         cookie = cookie.substring(1, cookie.length);
+      }
+      if (cookie.startsWith(cookieName)) {
+        return cookie.substring(cookieName.length, cookie.length);
+      }
     }
-    if (cookie.startsWith(cookieName)) {
-      return cookie.substring(cookieName.length, cookie.length);
-    }
-  }
     return null;  
   }
 

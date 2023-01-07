@@ -1,12 +1,13 @@
-import axios from "axios";
-import React, { createContext, ReactElement, ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, ReactElement, useContext, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
-import useCookies from "../../hooks/useCookies";
 import { LoginDT } from "../types/LoginDT";
+import axiosService from "../../services/axiosService";
+import { AxiosError } from "axios";
 
 interface AuthContextType {
   username?: String;
   token?: String;
+  refreshToken?: String;
   authenticated?: boolean;
   error?: any;
   login: (values: LoginDT) => void;
@@ -18,7 +19,6 @@ const AuthContext = createContext<AuthContextType>(
 );
 
 export function AuthProvider({ children }: {children: ReactElement }) {
-  const { getCookie, setCookie } = useCookies();
   const [username, setUsername] = useState<String>();
   const [token, setToken] = useState<String>();
   const [authenticated, setAuthenticated] = useState<boolean>();
@@ -26,38 +26,61 @@ export function AuthProvider({ children }: {children: ReactElement }) {
   const [loadingInitial, setLoadingInitial] = useState<boolean>(true);
   const location = useLocation();
 
+  axiosService
+    .axiosInstance
+    .interceptors
+    .response
+    .use(undefined, async (err: AxiosError | any) => {
+      if (err.response?.status === 401 && !err.config.__isRetryConfig) {
+        console.log("Refresh token expired, refreshing and retrying...");
+        axiosService.refreshToken()
+          .then(res => {
+            err.config.__isRetryConfig = true;
+            const newToken = res.data.token;
+            setToken(newToken || "");
+            if (newToken) setAuthenticated(true);
+            else setAuthenticated(false);
+          })
+          .catch(err => console.log(err));
+      }
+      return Promise.reject(err);
+    });
+
   useEffect(() => {
     if (error) setError(null);
   }, [location.pathname]);
-
-  useEffect(() => {
-    const token = getCookie("jwtToken");
-    setUsername(token || "");
-    setToken(token || "");
-    if (token) setAuthenticated(true);
-    setLoadingInitial(false);
-  }, []);
   
+  useEffect(() => {
+    axiosService.refreshToken()
+      .then(res => {
+        const token = res.data.token;
+        setUsername(token || "");
+        setToken(token || "");
+        if (token) setAuthenticated(true);
+      })
+      .catch(err => {
+        setError(err);
+      })
+      .finally(() => {
+        setLoadingInitial(false);
+      })
+  }, []);
+
   function login(values: LoginDT) {
-    const apiPath = process.env.REACT_APP_API_PATH || "127.0.0.1:8080";
-    axios
-      .post(`http://${apiPath}/users/auth`, values )
+    axiosService.login(values)
       .then(res => {
         if (res.status === 200 && res.data.token) {
           const token = res.data.token;
-          setCookie("jwtToken", token, 1);
           setAuthenticated(true);
           setToken(token);
         }
       })
       .catch(err => {
-        console.log(err);
         setError(err);
       })
   }
 
   function logout() {
-    setCookie("jwtToken", "");
     setToken("");
     setAuthenticated(false);
   }
@@ -71,7 +94,7 @@ export function AuthProvider({ children }: {children: ReactElement }) {
       login,
       logout,
     }),
-    [username, error, token]
+    [username, error, token, authenticated]
   );
 
   return (

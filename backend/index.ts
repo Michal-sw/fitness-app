@@ -4,14 +4,14 @@ import dotenv from 'dotenv';
 import users from './routes/users';
 
 import postgresClient from "./config/postgresClient";
-import { checkOriginMiddleware, logger } from './middlewares/middlewares';
+import { corsMiddleware, logger } from './middlewares/middlewares';
 
 dotenv.config();
 const port = process.env.PORT || 8080;
 const app: Express = express();
 
 app.use(logger);
-app.use(checkOriginMiddleware);
+app.use(corsMiddleware);
 app.use(express.json());
 app.use('/users', users);
 
