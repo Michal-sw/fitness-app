@@ -1,25 +1,24 @@
 import { Request, Response, NextFunction } from 'express';
-import { JsonWebTokenError, Jwt, JwtPayload, VerifyCallback, VerifyErrors } from 'jsonwebtoken';
+import { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import utils from '../utils/utils';
 const jwt = require('jsonwebtoken');
 
-const checkOriginMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "*");
+const corsMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  res.header('Access-Control-Allow-Credentials', "true");
+  res.header("Access-Control-Allow-Origin", "http://127.0.0.1:3000");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-HTTP-Method-Override, Authorization");
   return next()
 }
 
 const authorizeMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader;
-  const publicKey = utils.getPublicKey();
+  const token = authHeader?.slice(7);
+  const privateKey = utils.getPrivateKey();
   if (!token) return res.sendStatus(401);
 
-  jwt.verify(token, publicKey, (error: VerifyErrors, decodedPayload: JwtPayload) => {
-    // JWT during issuing is signed with the username of token asker
-    const username = decodedPayload.username;
-    console.log(`USER MAKING REQUEST -> ${username}`);
-    if (error) return res.sendStatus(403)
+  jwt.verify(token, privateKey, (error: VerifyErrors, decodedPayload: JwtPayload) => {
+    if (error) return res.sendStatus(401)
     return next()
   })
 }
@@ -30,4 +29,4 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
   return next()
 }
 
-export { authorizeMiddleware, checkOriginMiddleware, logger };
+export { authorizeMiddleware, corsMiddleware, logger };
