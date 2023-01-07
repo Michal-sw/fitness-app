@@ -7,20 +7,18 @@ const corsMiddleware = (req: Request, res: Response, next: NextFunction) => {
   res.header('Access-Control-Allow-Credentials', "true");
   res.header("Access-Control-Allow-Origin", "http://127.0.0.1:3000");
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-HTTP-Method-Override");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-HTTP-Method-Override, Authorization");
   return next()
 }
 
 const authorizeMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader;
+  const token = authHeader?.slice(7);
   const privateKey = utils.getPrivateKey();
   if (!token) return res.sendStatus(401);
 
   jwt.verify(token, privateKey, (error: VerifyErrors, decodedPayload: JwtPayload) => {
-    const username = decodedPayload.username;
-    console.log(`USER MAKING REQUEST -> ${username}`);
-    if (error) return res.sendStatus(403)
+    if (error) return res.sendStatus(401)
     return next()
   })
 }

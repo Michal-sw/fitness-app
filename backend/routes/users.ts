@@ -11,11 +11,13 @@ const getNewTokenPair = (login: String) => {
   const privateKey = utils.getPrivateKey();
 
   // The tokens must be paired with the user in the database
+  // 15 minute expire
   const refreshToken = jwt.sign({ login }, privateKey, {
     expiresIn: 60*15
   });
+  // 5 minutes expire
   const token = jwt.sign({ login }, privateKey, {
-    expiresIn: 60*15
+    expiresIn: 60*5
   });
 
   return {
@@ -25,7 +27,7 @@ const getNewTokenPair = (login: String) => {
 };
 
 router.get('/', authorizeMiddleware,(req: Request, res: Response) => {
-  res.sendStatus(200);
+  res.status(200).send([]);
 });
 
 router.post('/login', (req: Request, res: Response) => {
@@ -46,7 +48,7 @@ router.post('/login', (req: Request, res: Response) => {
 router.post('/refresh', (req: Request, res: Response) => {
   const privateKey = utils.getPrivateKey();
   if (!req.headers.cookie) {
-    return res.sendStatus(401);
+    return res.sendStatus(403);
   }
   const oldRefreshToken = utils.getCookie(req.headers.cookie, 'refreshToken');
 
@@ -60,7 +62,7 @@ router.post('/refresh', (req: Request, res: Response) => {
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       sameSite: 'strict',
-    });  
+    });
 
     return res.send({ token });
   });
