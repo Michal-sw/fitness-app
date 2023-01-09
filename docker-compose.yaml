@@ -1,18 +1,29 @@
 version: '3'
 
 services:
-  db:
-    restart: always
-    image: postgres
-    environment:
-    - POSTGRES_DB=calorie_db
-    - POSTGRES_PORT=5432
-    - POSTGRES_PASSWORD=password
-    - CONTAINER_NAME=calorie_tracker
-    - POSTGRES_HOST=127.0.0.1
-    - POSTGRES_USER=postgres
+
+  rest-api:
+    build: 
+      context: "./backend"
+      dockerfile: Dockerfile
     ports:
-      - '5432:5432'
+      - "8080:8080"
+    depends_on:
+      - "database"
+    environment:
+      - MONGODB_HOST=database
+      - MONGODB_DATABASE=db
+      - MONGODB_PORT=27017
+
+  database:
+    restart: always
+    image: "bitnami/mongodb:latest"
     volumes:
-      - ./db/db_init.sh:/docker-entrypoint-initdb.d/db_init.sh
-      - ./db/postgres-data:/var/lib/postgresql/data
+      - ./db/mongodb-data:/var/lib/mongodb/data
+    environment:
+      - MONGODB_DATABASE=db
+    ports:
+      - 27017:27017
+
+volumes:
+  mongodb-data:

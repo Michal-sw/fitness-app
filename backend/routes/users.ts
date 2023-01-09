@@ -2,6 +2,7 @@ import express, { Request, Response, Router } from 'express';
 import { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import { authorizeMiddleware } from '../middlewares/middlewares';
 import utils from '../utils/utils';
+import { addUser, getUsers, isCredentialsValid } from '../services/userService';
 
 const jwt = require('jsonwebtoken');
 
@@ -26,15 +27,36 @@ const getNewTokenPair = (login: String) => {
   }
 };
 
-router.get('/', authorizeMiddleware,(req: Request, res: Response) => {
-  res.status(200).send([]);
+router.get('/', authorizeMiddleware, async (req: Request, res: Response) => {
+  const response: any = await getUsers();
+  res.status(response.statusCode).json(response);
 });
+
+router.post('/signin', async (req: Request, res: Response) => {
+  const response = await addUser(req.body);
+
+  if (response.statusCode !== 200) {
+    return res.status(response.statusCode).send(response.result);
+  }
+    
+  const { refreshToken, token } = getNewTokenPair(req.body.login);
+
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    sameSite: 'strict'
+  });
+
+  return res.send({ token, result: response.result });
+})
 
 router.post('/login', (req: Request, res: Response) => {
   const login = req.body.login;
   const password = req.body.password;
   // CHECK IF USER IS VALID
   
+  const isValid = isCredentialsValid({login, password});
+  console.log(`Password validated? - ${isValid}`);
+
   const { refreshToken, token } = getNewTokenPair(login);
 
   res.cookie('refreshToken', refreshToken, {

@@ -1,9 +1,9 @@
 import express, { Express } from 'express';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
 import users from './routes/users';
 
-import postgresClient from "./config/postgresClient";
 import { corsMiddleware, logger } from './middlewares/middlewares';
 
 dotenv.config();
@@ -15,19 +15,26 @@ app.use(corsMiddleware);
 app.use(express.json());
 app.use('/users', users);
 
-app.listen(port, () => console.log("listening"));
+const dbConnData = {
+  host: process.env.MONGODB_HOST || '127.0.0.1',
+  port: process.env.MONGODB_PORT || 27017,
+  database: process.env.MONGODB_DATABASE || 'db'
+};
 
-// const tryConnecting = setInterval(
-//   () => postgresClient.connect()
-//     .then(() => {
-//       console.log("Connected to PostgreSQL");
-//       app.listen(port, () => {
-//         console.log(`Express server listening on port ${port}!`);
-//       });
-//       clearInterval(tryConnecting);
-//     })
-//     .catch(() => {
-//       console.log("[ERR] unable to connect, trying again in 5 seconds...")
-//     })
-//   , 5000);
+const tryConnecting = setInterval(
+  async () => {
+    await mongoose.connect(`mongodb://${dbConnData.host}:${dbConnData.port}/${dbConnData.database}`, {
+  
+    })
+    .then(response => {
+        console.log(`Connected to MongoDB. Database name: "${response.connections[0].name}"`)
+        const apiHost = process.env.API_HOST || '127.0.0.1';
+        app.listen(port, () => {
+            console.log(`API server available from: https://${apiHost}:${port}`);
+        })
+        clearInterval(tryConnecting);
+    })
+    .catch(error => console.error("[ERR] unable to connect, trying again in 5 seconds... " + error));
+  }
+, 5000);
 
