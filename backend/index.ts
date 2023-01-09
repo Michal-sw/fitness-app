@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import users from './routes/users';
 
 import { corsMiddleware, logger } from './middlewares/middlewares';
+import connectToMongoDB from './config/mongoClient';
 
 dotenv.config();
 const port = process.env.PORT || 8080;
@@ -21,20 +22,17 @@ const dbConnData = {
   database: process.env.MONGODB_DATABASE || 'db'
 };
 
-const tryConnecting = setInterval(
-  async () => {
-    await mongoose.connect(`mongodb://${dbConnData.host}:${dbConnData.port}/${dbConnData.database}`, {
-  
+const runApp = async () => {
+  await connectToMongoDB()
+    .then((e) => {
+      app.listen(port, () => {
+        console.log(e);
+        console.log(`App listening on ${port}`);
+      });
     })
-    .then(response => {
-        console.log(`Connected to MongoDB. Database name: "${response.connections[0].name}"`)
-        const apiHost = process.env.API_HOST || '127.0.0.1';
-        app.listen(port, () => {
-            console.log(`API server available from: https://${apiHost}:${port}`);
-        })
-        clearInterval(tryConnecting);
-    })
-    .catch(error => console.error("[ERR] unable to connect, trying again in 5 seconds... " + error));
-  }
-, 5000);
+    .catch((e) => {
+      console.log(e);
+    });
+}
 
+runApp();
