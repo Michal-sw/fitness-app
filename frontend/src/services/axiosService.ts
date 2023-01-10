@@ -1,7 +1,8 @@
-import axios, { Axios, AxiosError, AxiosResponse } from "axios";
+import axios, { Axios, AxiosResponse } from "axios";
 import { LoginDT } from "../core/types/LoginDT";
 
 const apiPath = process.env.REACT_APP_API_PATH || "127.0.0.1:8080";
+const chatbotPath = process.env.REACT_APP_CHATBOT_API_PATH || "127.0.0.1:5000";
 
 const axiosInstance = axios.create({
   headers: {
@@ -18,16 +19,22 @@ const login = async (values: LoginDT) => {
   return axiosInstance.post(`http://${apiPath}/users/login`, values);
 };
 
+const logout = async () => {
+  return axiosInstance.get(`http://${apiPath}/users/logout`);
+}
+
 interface AxiosService {
   axiosInstance: Axios,
   refreshToken: () => Promise<AxiosResponse>,
-  login: (values: LoginDT) => Promise<AxiosResponse>
+  login: (values: LoginDT) => Promise<AxiosResponse>,
+  logout: () => Promise<AxiosResponse>,
 };
 
 const axiosService: AxiosService = {
   axiosInstance,
   refreshToken,
-  login
+  login,
+  logout,
 };
 
 export default axiosService;

@@ -83,6 +83,7 @@ export function AuthProvider({ children }: {children: ReactElement }) {
   function logout() {
     setToken("");
     setAuthenticated(false);
+    axiosService.logout();
   }
 
   const memoedValue = useMemo(

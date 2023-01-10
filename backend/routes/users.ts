@@ -2,7 +2,7 @@ import express, { Request, Response, Router } from 'express';
 import { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import { authorizeMiddleware } from '../middlewares/middlewares';
 import utils from '../utils/utils';
-import { addUser, getUsers, isCredentialsValid } from '../services/userService';
+import { addUser, deleteUser, getUsers, isCredentialsValid } from '../services/userService';
 
 const jwt = require('jsonwebtoken');
 
@@ -49,12 +49,11 @@ router.post('/signin', async (req: Request, res: Response) => {
   return res.send({ token, result: response.result });
 })
 
-router.post('/login', (req: Request, res: Response) => {
+router.post('/login', async (req: Request, res: Response) => {
   const login = req.body.login;
   const password = req.body.password;
-  // CHECK IF USER IS VALID
-  
-  const isValid = isCredentialsValid({login, password});
+
+  const isValid = await isCredentialsValid({login, password});
   console.log(`Password validated? - ${isValid}`);
 
   const { refreshToken, token } = getNewTokenPair(login);
@@ -65,6 +64,15 @@ router.post('/login', (req: Request, res: Response) => {
   });
 
   return res.send({ token });
+})
+
+router.get('/logout', (req: Request, res: Response) => {
+  res.cookie('refreshToken', "", {
+    httpOnly: true,
+    sameSite: 'strict'
+  });
+
+  return res.send();
 })
 
 router.post('/refresh', (req: Request, res: Response) => {

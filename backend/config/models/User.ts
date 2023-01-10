@@ -29,7 +29,6 @@ const userSchema = new Schema<IUser>({
     email: {
       type: String,
       lowercase: true,
-      unique: true,
       match: [/[\w.]*[@][\w]*[.][\w]*/, 'Please put in a correct email address']
     },
     activities: [{

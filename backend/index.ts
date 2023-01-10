@@ -1,6 +1,5 @@
 import express, { Express } from 'express';
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
 
 import users from './routes/users';
 
@@ -16,11 +15,6 @@ app.use(corsMiddleware);
 app.use(express.json());
 app.use('/users', users);
 
-const dbConnData = {
-  host: process.env.MONGODB_HOST || '127.0.0.1',
-  port: process.env.MONGODB_PORT || 27017,
-  database: process.env.MONGODB_DATABASE || 'db'
-};
 
 const runApp = async () => {
   await connectToMongoDB()
