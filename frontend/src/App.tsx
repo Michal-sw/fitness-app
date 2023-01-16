@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.scss';
 import PrivateRoute from './components/auth/PrivateRoute';
-import Chatbot from './components/chatbot/Chatbot';
-import MapWrapper from './components/map/MapWrapper';
 import { AuthProvider } from './core/providers/AuthContext';
 import Navbar from './components/navbar/Navbar';
+import Dashboard from './components/dashboard/Dashboard';
+import MapWrapper from './components/map/MapWrapper';
 
 function App() {
   
@@ -18,14 +18,20 @@ function App() {
             <Route path='/' element=
                 {
                   <PrivateRoute>
-                    <MapWrapper/>
+                    <Dashboard />
+                  </PrivateRoute>
+                }/>
+            <Route path='/map' element=
+                {
+                  <PrivateRoute>
+                    <MapWrapper />
                   </PrivateRoute>
                 }/>
             </Routes>
           </>
         </AuthProvider>
         </BrowserRouter>
-        <Chatbot />
+        {/* <Chatbot /> */}
       </div>
   );
 }

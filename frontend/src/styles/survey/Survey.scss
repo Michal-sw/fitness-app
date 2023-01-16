@@ -1,0 +1,40 @@
+#survey-container {
+    height: 94vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    .survey-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        width: 50%;
+        height: 25rem;
+        text-align: center;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        box-shadow: 0 0 10px 2px gray;
+        padding: 16px 16px;
+
+        .survey-header {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            h2 {
+                font-size: 32px;
+                margin-bottom: 0;
+            }
+        }
+
+        .survey-buttons {
+            display: flex;
+            justify-content: center;
+
+            button {
+                margin: 0 8px;
+            }
+        }
+    }
+
+}
