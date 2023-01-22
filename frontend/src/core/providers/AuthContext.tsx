@@ -4,11 +4,12 @@ import { LoginDT } from "../types/LoginDT";
 import axiosService from "../../services/axiosService";
 import { AxiosError } from "axios";
 import useNotifications from "../../hooks/useNotifications";
+import { UserDT } from "../types/UserDT";
 
 interface AuthContextType {
-  username?: String;
-  token?: String;
-  refreshToken?: String;
+  user: UserDT;
+  token: string;
+  refreshToken?: string;
   authenticated?: boolean;
   error?: any;
   login: (values: LoginDT) => void;
@@ -16,13 +17,25 @@ interface AuthContextType {
   logout: () => void;
 }
 
+const initUser: UserDT = {
+  _id: "",
+  firstName: "",
+  lastName: "",
+  password: "",
+  login: "",
+  email: "",
+  refreshToken: "",
+  activities: [],
+  registrationDate: new Date(),
+}
+
 const AuthContext = createContext<AuthContextType>(
   {} as AuthContextType
 );
 
 export function AuthProvider({ children }: {children: ReactElement }) {
-  const [username, setUsername] = useState<String>();
-  const [token, setToken] = useState<String>();
+  const [user, setUser] = useState<UserDT>(initUser);
+  const [token, setToken] = useState<string>("");
   const [authenticated, setAuthenticated] = useState<boolean>();
   const [error, setError] = useState<any>();
   const [loadingInitial, setLoadingInitial] = useState<boolean>(true);
@@ -53,9 +66,9 @@ export function AuthProvider({ children }: {children: ReactElement }) {
     setError(err);
   }
 
-  function setAuthData({ token, login }: { token:string, login:string}) {
+  function setAuthData({ token, user }: { token:string, user:UserDT}) {
     setToken(token || "");
-    setUsername(login);
+    setUser(user);
     if (token) setAuthenticated(true);
   }
 
@@ -94,15 +107,15 @@ export function AuthProvider({ children }: {children: ReactElement }) {
 
   const memoedValue = useMemo(
     () => ({
-      username,
       error,
+      user,
       token,
       authenticated,
       login,
       signIn,
       logout,
     }),
-    [username, error, token, authenticated]
+    [error, token, authenticated]
   );
 
   return (

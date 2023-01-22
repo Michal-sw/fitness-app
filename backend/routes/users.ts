@@ -2,7 +2,8 @@ import express, { Request, Response, Router } from 'express';
 import { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import { authorizeMiddleware } from '../middlewares/middlewares';
 import utils from '../utils/utils';
-import { addUser, deleteUser, getUsers, isCredentialsValid } from '../services/userService';
+import { addUser, getUsers, getUserIfCredentialValid, getUserByLogin } from '../services/userService';
+import { IUser } from '../config/models/User';
 
 const jwt = require('jsonwebtoken');
 
@@ -53,10 +54,9 @@ router.post('/login', async (req: Request, res: Response) => {
   const login = req.body.login;
   const password = req.body.password;
 
-  const isValid = await isCredentialsValid({login, password});
-  console.log(`Password validated? - ${isValid}`);
+  const user: IUser | null = await getUserIfCredentialValid({login, password});
 
-  if (!isValid) return res.sendStatus(401);
+  if (!user) return res.sendStatus(401);
 
   const { refreshToken, token } = getNewTokenPair(login);
 
@@ -65,7 +65,7 @@ router.post('/login', async (req: Request, res: Response) => {
     sameSite: 'strict'
   });
 
-  return res.send({ token, login });
+  return res.send({ token, user });
 })
 
 router.post('/signin', async (req: Request, res: Response) => {
@@ -85,7 +85,9 @@ router.post('/signin', async (req: Request, res: Response) => {
     sameSite: 'strict'
   });
 
-  return res.send({ token, login });
+  const user: IUser = response.result;
+
+  return res.send({ token, user });
 })
 
 router.get('/logout', (req: Request, res: Response) => {
@@ -104,10 +106,9 @@ router.post('/refresh', (req: Request, res: Response) => {
   }
   const oldRefreshToken = utils.getCookie(req.headers.cookie, 'refreshToken');
 
-  jwt.verify(oldRefreshToken, privateKey, (error: VerifyErrors, decodedPayload: JwtPayload) => {
+  jwt.verify(oldRefreshToken, privateKey, async (error: VerifyErrors, decodedPayload: JwtPayload) => {
     if (error) return res.sendStatus(403)
     const login = decodedPayload?.login;
-    console.log(`USER MAKING REQUEST -> ${login}`);
 
     const { refreshToken, token } = getNewTokenPair(login);
 
@@ -116,7 +117,10 @@ router.post('/refresh', (req: Request, res: Response) => {
       sameSite: 'strict',
     });
 
-    return res.send({ token, login });
+    const response = await getUserByLogin(login);
+    const user: IUser = response.result;
+
+    return res.send({ token, user });
   });
 })
 

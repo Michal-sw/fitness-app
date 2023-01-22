@@ -8,7 +8,7 @@ import Navbar from './components/navbar/Navbar';
 import SignIn from './components/auth/SignIn';
 import Login from './components/auth/Login';
 import Notifications from './components/Notifications';
-import Dashboard from './views/Dashboard';
+import Dashboard from './components/dashboard/Dashboard';
 
 function App() {
   
@@ -22,14 +22,19 @@ function App() {
             <Route path='/' element=
                 {
                   <PrivateRoute>
-                    <Dashboard/>
+                    <Dashboard />
                   </PrivateRoute>
                 }/>
             <Route path='/login' element=
-              {
-                <Login/>
-              }
-            />
+                {
+                  <Login/>
+                }/>
+            <Route path='/map' element=
+                {
+                  <PrivateRoute>
+                    <MapWrapper />
+                  </PrivateRoute>
+                }/>
             <Route path='/signIn' element=
               {
                 <SignIn/>

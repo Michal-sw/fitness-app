@@ -3,27 +3,24 @@ import useAuth from '../../core/providers/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
-    const { logout, authenticated, signIn } = useAuth();
+    const { logout, authenticated } = useAuth();
     const navigate = useNavigate();
-
-    const navigateToSignin = () => {
-        navigate("/signIn");
-    }
-    const navigateToLogin = () => {
-        navigate("/login");
-    }
 
     return (
         <div id="navbar">
             {authenticated 
                 ? 
+                    <>
+                    <button className='navButton' onClick={() => navigate('/')}>Dashboard</button>
+                    <button className='navButton' onClick={() => navigate('/map')}>Map</button>
                     <div className='spacedRight'>
                         <button className='navButton' onClick={logout}>Logout</button>
                     </div>
+                    </>
                 :
                     <div className='spacedRight'>
-                        <button className='navButton' onClick={navigateToLogin}>Log In</button>
-                        <button className='navButton' onClick={navigateToSignin}>Sign In</button>
+                        <button className='navButton' onClick={() => navigate("/login")}>Log In</button>
+                        <button className='navButton' onClick={() => navigate("/signin")}>Sign In</button>
                     </div>
             }
 

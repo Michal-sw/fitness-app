@@ -16,3 +16,11 @@
     width: 90vw;
   }
 }
+
+#map-wrapper-container {
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}

@@ -1,4 +1,4 @@
-import { Document, MongooseError } from "mongoose";
+import { MongooseError } from "mongoose";
 import User, { IUser } from "../config/models/User";
 import { LoginDT } from "../types/LoginDT";
 
@@ -15,11 +15,11 @@ export const getUsers = async () => {
     return result;
 }
 
-export const isCredentialsValid = async ({ login, password }: LoginDT) => {
+export const getUserIfCredentialValid = async ({ login, password }: LoginDT) => {
     const user: IUser | null = await User
         .findOne({ login })
 
-    return (user && user.password === password);
+    return (user && user.password === password) ? user : null;
 }
 
 export const addUser = async ({ login, password }: LoginDT) => {
@@ -44,6 +44,14 @@ export const getUserById = async (id: string) => {
         return getErrorObject(404);
     }
     return getCorrectObject(user);
+};
+
+export const getUserByLogin = async (login: string) => {
+    const user = await User.find({ login });
+    if (!user) {
+        return getErrorObject(404);
+    }
+    return getCorrectObject(user[0]);
 };
 
 export const replaceUser = async ({ id, ...body }: {id:string}) => {
