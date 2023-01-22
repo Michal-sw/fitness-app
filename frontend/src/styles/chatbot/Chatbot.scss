@@ -1,35 +1,56 @@
 .container {
-    width: 100vw;
-    height: 75vh;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+
+    z-index: 1000;
+
+    height: fit-content;
     display: flex;
     justify-content: center;
+    align-items: center;
+
     .bot_container {
-        width: 50%;
-        height: 75%;
+        width: fit-content;
+        background-color: whitesmoke;
+        border-radius: 20px;
+
+        height: fit-content;
         border: 1px solid black;
         padding: 16px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
+        gap: 20px;
 
-        h1 {
-            font-size: 64px;
-            margin: 0;
+
+        div {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            h1 {
+                font-size: 2rem;
+                margin: 0;
+                margin-left: auto;
+            }
+            button {
+                width: fit-content;
+            }
         }
+
 
         input {
             width: 80%;
-            font-size: 32px;
+            font-size: 1rem;
             padding: 8px;
         }
 
         button {
             height: 64px;
             width: 75%;
-            background-color: transparent;
             outline: none;
-            font-size: 32px;
+
             border: 1px solid black;
             border-radius: 16px;
             cursor: pointer;
@@ -37,13 +58,31 @@
         }
 
         button:hover {
+            background-color: black;
             opacity: 1;
             border-width: 2px;
         }
 
         span {
-            font-size: 32px;
-            text-align: center;
+            word-wrap:break-word;
+            padding: 10px;
+            width: 80%;
         }
     }
+}
+
+#open_chatbot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+
+    width: fit-content;
+    height: 50px;
+    border-radius: 100px;
+    background-color: black;
+    color: white;
+}
+
+#open_chatbot:hover {
+    transform: scale(1.1);
 }
