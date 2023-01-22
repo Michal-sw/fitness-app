@@ -9,21 +9,45 @@ function InteractiveMap(coordinates: Coordinates) {
 
     const onMapClick = (event: LeafletMouseEvent) => {
         const map: Map = event.target;
+        console.log(event.propagatedFrom);
+        // L.popup()
+        //     .setLatLng(event.latlng)
+        //     .setContent("You clicked the map at " + event.latlng.toString())
+        //     .openOn(map);
 
-        L.popup()
-            .setLatLng(event.latlng)
-            .setContent("You clicked the map at " + event.latlng.toString())
-            .openOn(map);
 
         // FOR QUERY HELP - https://wiki.openstreetmap.org/wiki/Overpass_API
         const queryFitnessCentres = "(node({{bbox}})[leisure];node({{bbox}})[fitness_centre];);out qt;";
         if (!dataRequested) {
             const opl = new (L as any).OverPassLayer({
                 'query': queryFitnessCentres,
+                onSuccess: function(data: any) {
+                    const dataPoints = data.elements;
+                    for (let i = 0; i<dataPoints.length; i++) {
+                        const dataPoint = dataPoints[i];
+                        console.log(dataPoint);
+                        
+
+                        const pos = new L.LatLng(dataPoint.lat, dataPoint.lon);
+                        const color = 'green';
+                        L.circle(pos, 5, {
+                          color: color,
+                          fillColor: '#fa3',
+                          fillOpacity: 1,
+                        }).addTo(map);
+                        
+                    }                      
+                  },
+                
             });
+
             map.addLayer(opl)
+
+            opl.on('click', (e: any) => { console.log(e.layer) });
+
+            console.log(opl);
+
             setDataRequested(true);
-            console.log("Layer added");
         }
     }
 
