@@ -1,14 +1,14 @@
 import '../../styles/auth/Login.scss';
 import { Field, Form, Formik } from 'formik';
-import { LoginDT } from '../../core/types/LoginDT';
 import useAuth from '../../core/providers/AuthContext';
+import { LoginDT } from '../../core/types/LoginDT';
 
 
-function Login() {
-  const { login } = useAuth();
+function SignIn() {
+  const { signIn } = useAuth();
 
-  const handleLogin = (values: LoginDT) => {
-    login(values);
+  const handleSignIn = (values: LoginDT) => {
+    signIn(values);
   }
 
   return (
@@ -16,15 +16,15 @@ function Login() {
         <Formik initialValues={{
             login: "",
             password: ""
-        }} onSubmit={(values) => handleLogin(values)}>
+        }} onSubmit={(values) => handleSignIn(values)}>
             <Form className={"login_form"}>
                 <Field name={"login"} placeholder={"Email or mobile number"} />
                 <Field name={"password"} placeholder={"Password"} type={"password"} />
-                <button type={"submit"} className={"login_button"}>Log in</button>
+                <button type={"submit"} className={"login_button"}>Sign in</button>
             </Form>
         </Formik>   
     </div>
   )
 }
 
-export default Login
+export default SignIn

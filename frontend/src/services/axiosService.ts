@@ -19,6 +19,10 @@ const login = async (values: LoginDT) => {
   return axiosInstance.post(`http://${apiPath}/users/login`, values);
 };
 
+const signIn = async (values: LoginDT) => {
+  return axiosInstance.post(`http://${apiPath}/users/signin`, values);
+};
+
 const logout = async () => {
   return axiosInstance.get(`http://${apiPath}/users/logout`);
 }
@@ -27,6 +31,7 @@ interface AxiosService {
   axiosInstance: Axios,
   refreshToken: () => Promise<AxiosResponse>,
   login: (values: LoginDT) => Promise<AxiosResponse>,
+  signIn: (values: LoginDT) => Promise<AxiosResponse>,
   logout: () => Promise<AxiosResponse>,
 };
 
@@ -34,6 +39,7 @@ const axiosService: AxiosService = {
   axiosInstance,
   refreshToken,
   login,
+  signIn,
   logout,
 };
 

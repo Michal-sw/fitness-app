@@ -31,7 +31,7 @@ function InteractiveMap(coordinates: Coordinates) {
         const mapContainer = mapContainerRef.current;
         if (mapContainer) {
             const map: Map = L.map('map-container', {
-                center: [54.35, 18.60],
+                center: [coordinates.longitude, coordinates.latitude],
                 zoom: 12,
                 layers: [
                     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {

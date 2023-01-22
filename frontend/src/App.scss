@@ -1,8 +1,46 @@
+* {
+	box-sizing: border-box;
+}
+
 #App {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   padding: 0;
   margin: 0;
+
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+
+  align-content: center;
+  justify-content: center;
+
+  font-weight: normal;
+  gap: 15px;
+}
+
+button {
+  transition: 0.2s;
+  padding: 8px 15px;
+  border: 1px solid rgb(52, 52, 52);
+  color: #333;
+  background-color:#fff;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+
+  box-shadow: var(--shadow);
+}
+
+button:hover{
+  background-color: #3885ea;
+  color: white;
+}
+
+.spacedRight {
+  margin-left: auto;
 }
