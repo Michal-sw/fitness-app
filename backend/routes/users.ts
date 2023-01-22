@@ -65,7 +65,7 @@ router.post('/login', async (req: Request, res: Response) => {
     sameSite: 'strict'
   });
 
-  return res.send({ token });
+  return res.send({ token, login });
 })
 
 router.post('/signin', async (req: Request, res: Response) => {
@@ -85,7 +85,7 @@ router.post('/signin', async (req: Request, res: Response) => {
     sameSite: 'strict'
   });
 
-  return res.send({ token });
+  return res.send({ token, login });
 })
 
 router.get('/logout', (req: Request, res: Response) => {
@@ -116,7 +116,7 @@ router.post('/refresh', (req: Request, res: Response) => {
       sameSite: 'strict',
     });
 
-    return res.send({ token });
+    return res.send({ token, login });
   });
 })
 

@@ -37,10 +37,7 @@ export function AuthProvider({ children }: {children: ReactElement }) {
   useEffect(() => {
     axiosService.refreshToken()
       .then(res => {
-        const token = res.data.token;
-        setUsername(token || "");
-        setToken(token || "");
-        if (token) setAuthenticated(true);
+        setAuthData(res.data);
       })
       .catch(err => {
         setError(err);
@@ -56,13 +53,17 @@ export function AuthProvider({ children }: {children: ReactElement }) {
     setError(err);
   }
 
+  function setAuthData({ token, login }: { token:string, login:string}) {
+    setToken(token || "");
+    setUsername(login);
+    if (token) setAuthenticated(true);
+  }
+
   function login(values: LoginDT) {
     axiosService.login(values)
       .then(res => {
         if (res.status === 200 && res.data.token) {
-          const token = res.data.token;
-          setAuthenticated(true);
-          setToken(token);
+          setAuthData(res.data);
           navigate('/');
         }
       })
@@ -75,9 +76,7 @@ export function AuthProvider({ children }: {children: ReactElement }) {
     axiosService.signIn(values)
       .then(res => {
         if (res.status === 200 && res.data.token) {
-          const token = res.data.token;
-          setAuthenticated(true);
-          setToken(token);
+          setAuthData(res.data);
           navigate('/');
         }
       })
