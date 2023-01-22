@@ -1,0 +1,20 @@
+#notification_container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 5px;
+    left: 50vw;
+
+    gap: 8px;
+}
+
+.notification {
+    list-style: none;
+    background-color: rgba(17, 181, 175, 0.077);
+    border-radius: 5px;
+    padding: 10px;
+
+    color: black;
+
+    font-weight: 500;
+}

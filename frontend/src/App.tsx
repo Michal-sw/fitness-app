@@ -5,6 +5,9 @@ import Chatbot from './components/chatbot/Chatbot';
 import MapWrapper from './components/map/MapWrapper';
 import { AuthProvider } from './core/providers/AuthContext';
 import Navbar from './components/navbar/Navbar';
+import SignIn from './components/auth/SignIn';
+import Login from './components/auth/Login';
+import Notifications from './components/Notifications';
 
 function App() {
   
@@ -21,11 +24,21 @@ function App() {
                     <MapWrapper/>
                   </PrivateRoute>
                 }/>
+            <Route path='/login' element=
+              {
+                <Login/>
+              }
+            />
+            <Route path='/signIn' element=
+              {
+                <SignIn/>
+              }/>
             </Routes>
           </>
         </AuthProvider>
         </BrowserRouter>
         <Chatbot />
+        <Notifications />
       </div>
   );
 }

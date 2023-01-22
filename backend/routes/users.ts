@@ -56,6 +56,28 @@ router.post('/login', async (req: Request, res: Response) => {
   const isValid = await isCredentialsValid({login, password});
   console.log(`Password validated? - ${isValid}`);
 
+  if (!isValid) return res.sendStatus(401);
+
+  const { refreshToken, token } = getNewTokenPair(login);
+
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    sameSite: 'strict'
+  });
+
+  return res.send({ token });
+})
+
+router.post('/signin', async (req: Request, res: Response) => {
+  const login = req.body.login;
+  const password = req.body.password;
+
+  const response = await addUser({ login, password });
+  
+  if (response.statusCode !== 200) {
+    return res.status(response.statusCode).send(response.result);
+  }
+
   const { refreshToken, token } = getNewTokenPair(login);
 
   res.cookie('refreshToken', refreshToken, {

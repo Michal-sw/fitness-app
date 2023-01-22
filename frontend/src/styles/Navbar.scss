@@ -6,11 +6,6 @@
     align-items: center;
 }
 
-#navbar button {
-    height: 30px;
-    padding: 10px;
-}
-
-#logout {
-    margin-left:auto;
+.navButton:hover{
+    background-color: #3885ea;
 }

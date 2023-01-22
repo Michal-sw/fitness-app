@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const dbConnData = {
   host: process.env.MONGODB_HOST || '127.0.0.1',
   port: process.env.MONGODB_PORT || 27017,
-  database: process.env.MONGODB_DATABASE || 'db',
+  database: process.env.MONGODB_DATABASE || 'health_app_db',
   user: process.env.MONGODB_USERNAME || 'user',
   password: process.env.MONGODB_PASSWORD || 'password'
 }
