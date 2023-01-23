@@ -3,6 +3,7 @@ import React from 'react';
 import '../../styles/maps/ActivityForm.scss';
 import DateTimeInput from './DateTimeInput';
 import useAuth from '../../core/providers/AuthContext';
+import useNotifications from '../../hooks/useNotifications';
 
 interface ActivityFormProps {
     isVisible: boolean,
@@ -12,6 +13,7 @@ interface ActivityFormProps {
 
 function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
     const { user } = useAuth();
+    const { actions } = useNotifications();
     
     function handleAddActivity (values: any) {
         const result = {
@@ -19,7 +21,10 @@ function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
             attendees: [user._id],
             placeId
         };
+
+        actions.sendDissapearingNotification({ message: "Workout succesfully added!" });
         console.log(result);
+        setVisible(false);
     }
     
     return (
