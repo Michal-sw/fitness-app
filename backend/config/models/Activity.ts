@@ -3,7 +3,9 @@ import { Schema, Types, model } from "mongoose";
 interface IActivity {
   placeID: string;
   attendees: [Types.ObjectId];
-  activityType: Types.ObjectId;
+  activityType: String;
+  date: Date;
+  hasBeenChecked: boolean;
 }
 
 const activitySchema = new Schema<IActivity>({
@@ -15,7 +17,13 @@ const activitySchema = new Schema<IActivity>({
       ref: "User"
     }],
     activityType: {
-      type: Schema.Types.ObjectId
+      type: String
+    },
+    date: {
+      type: Date
+    },
+    hasBeenChecked: {
+      type: Boolean
     }
 });
 
