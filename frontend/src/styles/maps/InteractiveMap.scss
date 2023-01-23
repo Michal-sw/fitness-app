@@ -23,5 +23,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
 
+#map-search {
+  position: absolute;
+  z-index: 999;
+  right: 0
+}
+
+#map-spinner {
+  position: absolute;
+  top: 40%;
+  left:47%;
+  z-index: 1000;
 }

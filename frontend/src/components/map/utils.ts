@@ -2,12 +2,12 @@ import L, { Map, LatLng } from "leaflet"
 import { OverpassNode } from "overpass-ts";
 
 
-export const addOverpassResultToMap = (map: Map, dataPoints: OverpassNode[]): void => {
+export const addOverpassResultToMap = (map: Map, dataPoints: OverpassNode[], buttonCallback: (dataPoint:OverpassNode) => void = () => null): void => {
 
     for (let dataPoint of dataPoints) {
         const position = new LatLng(dataPoint.lat, dataPoint.lon);
 
-        const popup = createPopupDiv(dataPoint);
+        const popup = createPopupDiv(dataPoint, buttonCallback);
 
         L.circle(position, 20, {
           color: '#f69697',
@@ -22,12 +22,12 @@ export const addOverpassResultToMap = (map: Map, dataPoints: OverpassNode[]): vo
     }                      
 }
 
-const createPopupDiv = (dataPoint: OverpassNode): HTMLDivElement => {
+const createPopupDiv = (dataPoint: OverpassNode, buttonCallback: (dataPoint:OverpassNode) => void): HTMLDivElement => {
     const nameOfPlace = dataPoint.tags?.leisure || "";
 
     const popup = document.createElement('div');
     const text = createPopUpText(nameOfPlace);
-    const addWorkoutButton = createAddWorkoutButton();
+    const addWorkoutButton = createAddWorkoutButton(dataPoint, buttonCallback);
     
     popup.append(text);
     popup.append(addWorkoutButton);
@@ -41,11 +41,9 @@ const createPopUpText = (nameOfPlace: string): HTMLParagraphElement => {
     return text;
 }
 
-const createAddWorkoutButton = (): HTMLButtonElement => {
+const createAddWorkoutButton = (dataPoint: OverpassNode, callback: (dataPoint:OverpassNode) => void): HTMLButtonElement => {
     const addButton = document.createElement('button');
-    addButton.addEventListener('click', () => {
-        console.log(`Clicked`);
-    });
+    addButton.addEventListener('click', () => callback(dataPoint));
     addButton.innerText = "ADD WORKOUT";
 
     return addButton;

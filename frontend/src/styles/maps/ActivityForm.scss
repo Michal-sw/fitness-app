@@ -1,0 +1,52 @@
+#activity-form-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 999;
+
+    top: 0;
+    bottom: 0;
+    height: 60%;
+
+    left: 0; 
+    right: 0; 
+    width: fit-content;
+
+    margin: auto; 
+  
+    background-color: whitesmoke;
+    padding: 20px;
+    border-radius: 15px;
+
+    #close-button {
+        color:rgb(174, 0, 0);
+        position: absolute;
+        top: -10px;
+        right: 3px;
+        padding: 3px;
+
+        border-radius: 100px;
+        width:15%;
+        height:15%;
+        text-align: center;
+
+    }
+    #close-button:hover{
+        color: rgb(255, 0, 0);
+        cursor: pointer;
+    }
+
+    form {
+        margin:0;
+        padding: 20px 20px 20px 20px;
+        display: flex;
+        height:100%;
+        flex-direction: column;
+        gap: 20px;
+
+        button {
+            margin-top: auto;
+        }
+
+    }
+}

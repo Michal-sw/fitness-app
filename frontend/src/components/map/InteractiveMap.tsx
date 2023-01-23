@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Coordinates } from '../../core/types/CoordinatesDT';
-import L, { LeafletMouseEvent, Map } from 'leaflet';
+import L, { Map } from 'leaflet';
 import { overpass, OverpassNode } from 'overpass-ts';
 import useNotifications from '../../hooks/useNotifications';
 import { CircularProgress } from '@mui/material';
 import { addOverpassResultToMap } from './utils';
+import ActivityForm from './ActivityForm';
 
 
 function InteractiveMap(coordinates: Coordinates) {
@@ -12,6 +13,8 @@ function InteractiveMap(coordinates: Coordinates) {
     const { actions } = useNotifications();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [map, setMap] = useState<Map | null>(null);
+    const [isFormVisible, setIsFormVisible] = useState<boolean>(false);
+    const [placeId, setPlaceId] = useState<number>(0);
 
     const handleMapSearch = () => {
         if (!map) return; 
@@ -26,22 +29,17 @@ function InteractiveMap(coordinates: Coordinates) {
 
         setIsLoading(true);
         overpass(`[out:json];(node(${bottomLeftCorner.lat},${bottomLeftCorner.lng},${upperRightCorner.lat},${upperRightCorner.lng})[leisure];node(${bottomLeftCorner.lat},${bottomLeftCorner.lng},${upperRightCorner.lat},${upperRightCorner.lng})[fitness_centre];);out body;`, {  })
-            .then(async (res) => {
-                const result = await res.json();
-                const dataPoints: OverpassNode[] = result.elements;
-                addOverpassResultToMap(map, dataPoints);
+            .then((res) => res.json())
+            .then((res) => {
+                const dataPoints: OverpassNode[] = res.elements;
+                addOverpassResultToMap(map, dataPoints, (dataPoint: OverpassNode) => {
+                    console.log(`You just clicked ${dataPoint.id}`);
+                    setPlaceId(dataPoint.id);
+                    setIsFormVisible(true);
+                });
             })
             .catch(err => console.log(err))
             .finally(() => setIsLoading(false));
-
-
-    }
-
-    const onMapClick = (event: LeafletMouseEvent) => { 
-        const map: Map = event.target;
-        // FOR QUERY HELP - https://wiki.openstreetmap.org/wiki/Overpass_API
-        // Get nodes by id
-        // node(id:1926700039, 6224865808, 6186983783); out body;
     }
 
     useEffect(() => {
@@ -58,7 +56,6 @@ function InteractiveMap(coordinates: Coordinates) {
                 
             })
             setMap(map);
-            map.on('click', onMapClick)
             
             return () => {
                 map.remove(); 
@@ -69,8 +66,9 @@ function InteractiveMap(coordinates: Coordinates) {
     
     return (
         <>
-            {isLoading ? <CircularProgress style={{ position: "absolute", top: '40%', 'left':'47%', 'zIndex': "1000"}} /> : null}
-            <button onClick={handleMapSearch} style={{position:'absolute', 'zIndex':'999', 'right':'0'}}>Search</button>
+            {isLoading ? <CircularProgress id='map-spinner' /> : null}
+            <button id='map-search' onClick={handleMapSearch}>Search</button>
+            <ActivityForm isVisible={isFormVisible} setVisible={setIsFormVisible} placeId={placeId}/>
             <div id="map-container" ref={mapContainerRef}></div>
         </>
     )

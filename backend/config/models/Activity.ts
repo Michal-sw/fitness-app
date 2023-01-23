@@ -1,7 +1,7 @@
 import { Schema, Types, model } from "mongoose";
 
 interface IActivity {
-  placeID: string;
+  placeID: number;
   attendees: [Types.ObjectId];
   activityType: String;
   date: Date;
@@ -10,7 +10,7 @@ interface IActivity {
 
 const activitySchema = new Schema<IActivity>({
     placeID: {
-      type: String
+      type: Number
     },
     attendees: [{
       type: Schema.Types.ObjectId,
