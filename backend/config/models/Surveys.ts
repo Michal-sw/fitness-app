@@ -1,6 +1,7 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
-interface ISurvey {
+export interface ISurvey {
+  user: Types.ObjectId;
   date: Date;
   waterScore: number;
   sleepScore: number;
@@ -9,6 +10,10 @@ interface ISurvey {
 }
 
 const surveySchema = new Schema<ISurvey>({
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     date: {
       type: Date
     },
