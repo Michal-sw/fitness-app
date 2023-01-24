@@ -10,6 +10,7 @@ export interface IUser {
   refreshToken?: string;
   activities: [Types.ObjectId];
   registrationDate: Date;
+  surveyStreak: number
 }
 
 const userSchema = new Schema<IUser>({
@@ -39,6 +40,9 @@ const userSchema = new Schema<IUser>({
     }],
     registrationDate: {
       type: Date
+    },
+    surveyStreak: {
+      type: Number
     }
 });
 

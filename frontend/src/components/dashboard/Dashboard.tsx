@@ -16,8 +16,9 @@ const Dashboard = () => {
             axiosService.startSurvey(token, user._id)
                 .then(res => {
                     if (!res.data.completed && !res.data.result.hasBeenChecked) {
+                        console.log(res.data)
                         setSurveyId(res.data.result._doc._id);
-                        setSurveyNumber(res.data.result.amount)
+                        setSurveyNumber(res.data.currentStreak)
                         setVisibleSurvey(true);
                     }
                 }).catch(err => console.log(err))

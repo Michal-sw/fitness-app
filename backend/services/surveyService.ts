@@ -1,5 +1,6 @@
 import { MongooseError } from "mongoose";
 import Survey, { ISurvey } from "../config/models/Surveys";
+import User from "../config/models/User";
 
 
 const getCorrectObject = (result: any) => ({ result, statusCode: 200 })
@@ -26,8 +27,19 @@ export const addSurvey = async (id: string) => {
                 date.getMonth() === now.getMonth() &&
                 date.getDate() == now.getDate())
     })
-
     if (todaySurveys.length > 0) return { statusCode: 200, completed: true}
+
+
+    // Check if the last survey was yesterday to keep the streak
+
+    const lastDate = new Date(surveys.result[surveys.result.length - 1].date);
+
+    // Date diff in hours
+    const dateDiff = (now.getTime() - lastDate.getTime()) / (60 * 60 * 1000);
+
+    if (dateDiff < 24) {
+        await User.findOneAndUpdate({ _id: id }, { $inc: { surveyStreak: 1 }});
+    } else await User.findOneAndUpdate({ _id: id }, { surveyStreak: 1 })
 
     const result = await Survey.create({
         user: id,
@@ -40,7 +52,15 @@ export const addSurvey = async (id: string) => {
     .then((survey: ISurvey) => getCorrectObject({ ...survey, amount: surveys.result.length + 1 }))
     .catch((err: MongooseError) => getErrorObject(400, err.message));
 
-    return result;
+    // Get the current streak
+
+    let currentStreak = 1;
+
+    await User.findOne({ _id: id })
+        .then((res: any) => currentStreak = res.surveyStreak)
+        .catch((err: MongooseError) => getErrorObject(400, err.message));
+
+    return { ...result, currentStreak: currentStreak };
 };
 
 export const finishSurvey = async ({ id, ...body }: { id: string}) => {
