@@ -1,0 +1,26 @@
+#survey-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    ul {
+        padding: 0;
+        li {
+            list-style: none;
+            font-size: 24px;
+            padding: 8px 64px;
+            margin: 8px;
+            border: 2px solid;
+            border-radius: 8px;
+        }
+
+        .checked-survey-true {
+            border-color: green;
+        }
+
+        .checked-survey-false {
+            border-color: red;
+        }
+    }
+}

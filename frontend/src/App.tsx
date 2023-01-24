@@ -9,6 +9,7 @@ import SignIn from './components/auth/SignIn';
 import Login from './components/auth/Login';
 import Notifications from './components/Notifications';
 import Dashboard from './components/dashboard/Dashboard';
+import SurveyList from './components/survey/SurveyList';
 
 function App() {
   
@@ -35,6 +36,12 @@ function App() {
                     <MapWrapper />
                   </PrivateRoute>
                 }/>
+            <Route path='/surveys' element=
+            {
+              <PrivateRoute>
+                <SurveyList />
+              </PrivateRoute>
+            }/>
             <Route path='/signIn' element=
               {
                 <SignIn/>
