@@ -33,23 +33,6 @@ router.get('/', authorizeMiddleware, async (req: Request, res: Response) => {
   res.status(response.statusCode).json(response);
 });
 
-router.post('/signin', async (req: Request, res: Response) => {
-  const response = await addUser(req.body);
-
-  if (response.statusCode !== 200) {
-    return res.status(response.statusCode).send(response.result);
-  }
-    
-  const { refreshToken, token } = getNewTokenPair(req.body.login);
-
-  res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
-    sameSite: 'strict'
-  });
-
-  return res.send({ token, result: response.result });
-})
-
 router.post('/login', async (req: Request, res: Response) => {
   const login = req.body.login;
   const password = req.body.password;

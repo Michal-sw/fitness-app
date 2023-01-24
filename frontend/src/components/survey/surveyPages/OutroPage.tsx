@@ -13,23 +13,25 @@ interface IOutroPage {
     waterAnswer: number;
     sleepAnswer: number;
     trainingAnswer: number;
+    surveyId: string;
 }
 
 const OutroPage = (props: IOutroPage) => {
-    const { user, token } = useAuth();
+    const { token } = useAuth();
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleClose = async () => {
         setLoading(true);
         if (validateSurver(props.waterAnswer, props.sleepAnswer, props.trainingAnswer)) {
-            const answers: SurveyDT = { ...props };
-            const result = await axiosService
-                .sendSurvey(token, user._id, answers)
+            const answers: SurveyDT = { waterScore: props.waterAnswer,
+                                        sleepScore: props.sleepAnswer,
+                                        trainingScore: props.trainingAnswer };
+            await axiosService
+                .finishSurvey(token, props.surveyId, answers)
                 .then(res => console.log(res))
                 .catch(err => console.log(err));
         } else console.log(props)
-        // props.setVisible(false)
-        props.setPage(0)
+        props.setVisible(false)
         setLoading(false);
     }
 

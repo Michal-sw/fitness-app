@@ -45,6 +45,7 @@ export function AuthProvider({ children }: {children: ReactElement }) {
 
   useEffect(() => {
     if (error) setError(null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
   
   useEffect(() => {
@@ -115,6 +116,7 @@ export function AuthProvider({ children }: {children: ReactElement }) {
       signIn,
       logout,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [error, token, authenticated]
   );
 

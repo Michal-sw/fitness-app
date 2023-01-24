@@ -7,6 +7,8 @@ import OutroPage from "./surveyPages/OutroPage";
 interface ISurvey {
     visible: boolean,
     setVisible: (visible: boolean) => void;
+    surveyId: string;
+    surveyNumber: string;
 }
 
 const Survey = (props: ISurvey) => {
@@ -20,7 +22,7 @@ const Survey = (props: ISurvey) => {
         switch (page) {
             case 0: {
                 return (
-                    <IntroPage setPage={setPage}/>
+                    <IntroPage setPage={setPage} surveyNumber={props.surveyNumber}/>
                 )
             }
             case 1: {
@@ -63,7 +65,8 @@ const Survey = (props: ISurvey) => {
                         setPage={setPage}
                         waterAnswer={waterAnswer}
                         sleepAnswer={sleepAnswer}
-                        trainingAnswer= {trainingAnswer}
+                        trainingAnswer={trainingAnswer}
+                        surveyId={props.surveyId}
                     />
                 )
             }

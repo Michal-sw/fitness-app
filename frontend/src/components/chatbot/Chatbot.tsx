@@ -1,5 +1,5 @@
 import '../../styles/chatbot/Chatbot.scss'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import axios, { AxiosError } from 'axios'
 import useNotifications from '../../hooks/useNotifications';
 
@@ -17,10 +17,6 @@ const Chatbot = () => {
                 actions.sendDissapearingNotification({ message: "Could not get response from chatbot" });
             });
     };
-
-    useEffect(() => {
-        console.log(response);
-    }, [response])
     
     const handleVisibilityChange = () => {
         setVisible(!isVisible);
