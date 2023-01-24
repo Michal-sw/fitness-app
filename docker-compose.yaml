@@ -21,7 +21,7 @@ services:
     volumes:
       - ./db/mongodb-data:/var/lib/mongodb/data
     environment:
-      - MONGODB_DATABASE=db
+      - MONGODB_DATABASE=health_app_db
     ports:
       - 27017:27017
 
