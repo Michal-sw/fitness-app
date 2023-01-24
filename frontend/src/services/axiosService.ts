@@ -3,7 +3,7 @@ import { LoginDT } from "../core/types/LoginDT";
 import { SurveyDT } from "../core/types/SurrveryDT";
 
 const apiPath = process.env.REACT_APP_API_PATH || "127.0.0.1:8080";
-const chatbotPath = process.env.REACT_APP_CHATBOT_API_PATH || "127.0.0.1:5000";
+// const chatbotPath = process.env.REACT_APP_CHATBOT_API_PATH || "127.0.0.1:5000";
 
 const axiosInstance = axios.create({
   headers: {
@@ -12,18 +12,26 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-const getCompletedSurveys = async (token: string, id: string) => {
-  return axiosInstance.get(`http://${apiPath}/users/${id}/surveys`, {
+const getSurveys = async (token: string, id: string) => {
+  return axiosInstance.get(`http://${apiPath}/surveys/${id}`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`
     }
   });
 }
 
-const sendSurvey = async (token: string, id: string, values: SurveyDT) => {
-  return axiosInstance.post(`http://${apiPath}/users/${id}/surveys`, values, {
+const startSurvey = async (token: string, id: string) => {
+  return axiosInstance.post(`http://${apiPath}/surveys`, { id: id }, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`
+    }
+  });
+}
+
+const finishSurvey = async (token: string, id: string, values: SurveyDT) => {
+  return axiosInstance.patch(`http://${apiPath}/surveys`, { id: id, ...values }, {
+    headers: {
+      Authorization: `Bearer ${token}`
     }
   });
 }
@@ -46,8 +54,9 @@ const logout = async () => {
 
 interface AxiosService {
   axiosInstance: Axios,
-  getCompletedSurveys: (token: string, id: string) => Promise<AxiosResponse>,
-  sendSurvey: (token: string, id: string, values: SurveyDT) => Promise<AxiosResponse>,
+  getSurveys: (token: string, id: string) => Promise<AxiosResponse>,
+  startSurvey: (token: string, id: string) => Promise<AxiosResponse>,
+  finishSurvey: (token: string, id: string, values: SurveyDT) => Promise<AxiosResponse>,
   refreshToken: () => Promise<AxiosResponse>,
   login: (values: LoginDT) => Promise<AxiosResponse>,
   signIn: (values: LoginDT) => Promise<AxiosResponse>,
@@ -56,8 +65,9 @@ interface AxiosService {
 
 const axiosService: AxiosService = {
   axiosInstance,
-  getCompletedSurveys,
-  sendSurvey,
+  getSurveys,
+  startSurvey,
+  finishSurvey,
   refreshToken,
   login,
   signIn,

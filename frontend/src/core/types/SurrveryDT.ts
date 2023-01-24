@@ -1,5 +1,5 @@
 export interface SurveyDT {
-    waterAnswer: number;
-    sleepAnswer: number;
-    trainingAnswer: number;
+    waterScore: number;
+    sleepScore: number;
+    trainingScore: number;
 }
