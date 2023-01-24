@@ -30,7 +30,8 @@ export const addUser = async ({ login, password }: LoginDT) => {
     const result = await User.create({
         login,
         password,
-        registrationDate: new Date()
+        registrationDate: new Date(),
+        score: 100
     })
     .then((user: IUser) => getCorrectObject(user))
     .catch((err: MongooseError) => getErrorObject(400, err.message));

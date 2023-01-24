@@ -6,11 +6,40 @@ import User from "../config/models/User";
 const getCorrectObject = (result: any) => ({ result, statusCode: 200 })
 const getErrorObject = (statusCode: number, message?: string) => ({ statusCode, result: message })
 
+enum ScoreWeights {
+    WATER = 7,
+    SLEEP = 8,
+    TRAINING = 9
+}
+
+const calculateScore = async (id: string) => {
+    const survey = await Survey.findById(id);
+    if (survey) {
+        const user = await User.findById(survey.user);
+        if (user) {
+            let score = user.score || 100;
+            
+            score *= ((survey.waterScore + ScoreWeights.WATER) / 10)
+            score *= ((survey.sleepScore + ScoreWeights.SLEEP) / 10)
+            score *= ((survey.trainingScore + ScoreWeights.TRAINING) / 10)
+
+            await user.updateOne({ score: Math.ceil(score).toFixed(2) })
+            user.save
+        }
+    }
+}
+
 export const getSurveys = async ({ id }: { id: string }) => {
     const result = await Survey
         .find({ user: id })
         .then((surveys: [ISurvey] | any) => getCorrectObject(surveys))
         .catch((err: MongooseError) => getErrorObject(500, err.message));
+    
+    const user = await User.findById(id)
+
+    if (user) {
+        return { ...result, score: user.score || 100 }
+    }
 
     return result;
 }
@@ -68,5 +97,8 @@ export const finishSurvey = async ({ id, ...body }: { id: string}) => {
     const survey = await Survey.findByIdAndUpdate(id, { ...body, date: new Date(), hasBeenChecked: true })
         .then((survey: any) => getCorrectObject(survey))
         .catch((err: MongooseError) => getErrorObject(400, err.message));
+
+    calculateScore(id);
+
     return survey;
 }
