@@ -92,7 +92,7 @@ router.post('/refresh', (req: Request, res: Response) => {
 router.get('/:id/activities', async (req: Request, res: Response) => {
   const response = await getActivitiesByUser(req.params.id);
   
-  return res.status(response.statusCode).send(response.result);
+  return res.status(response.statusCode).send(response);
 });
 
 export default router;

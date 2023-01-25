@@ -3,6 +3,7 @@ import Survey from "../survey/Survey";
 import "../../styles/dashboard/Dashboard.scss";
 import axiosService from "../../services/axiosService";
 import useAuth from "../../core/providers/AuthContext";
+import UpcomingActivities from "./UpcomingActivities";
 
 const Dashboard = () => {
     const { token, user } = useAuth();
@@ -30,6 +31,7 @@ const Dashboard = () => {
     return (
         <div id="dashboard_container">
             <p>Hello {user ? user.login : null}!</p>
+            <UpcomingActivities />
             {visibleSurvey &&
                 <Survey visible={visibleSurvey} setVisible={setVisibleSurvey} surveyId={surveyId} surveyNumber={surveyNumber}/>
             }

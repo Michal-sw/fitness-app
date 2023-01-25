@@ -1,6 +1,7 @@
-import { Schema, Types, model } from "mongoose";
+import { ObjectId, Schema, Types, model } from "mongoose";
 
 export interface IActivity {
+  _id: ObjectId;
   placeId: number;
   attendees: [Types.ObjectId];
   activityType: String;

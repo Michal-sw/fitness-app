@@ -45,6 +45,14 @@ const getActivities = async (token: string) => {
   });
 };
 
+const getUserActivities = async (token: string, id: string) => {
+  return axiosInstance.get(`http://${apiPath}/users/${id}/activities/`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+} 
+
 const addActivity = async (token: string, id: string, values: ActivityDT) => {
   return axiosInstance.post(`http://${apiPath}/activities`, { id, ...values }, {
     headers: {
@@ -75,6 +83,7 @@ interface AxiosService {
   startSurvey: (token: string, id: string) => Promise<AxiosResponse>,
   finishSurvey: (token: string, id: string, values: SurveyDT) => Promise<AxiosResponse>,
   getActivities: (token: string) => Promise<AxiosResponse>,
+  getUserActivities: (token: string, id: string) => Promise<AxiosResponse>,
   addActivity: (token: string, id: string, values: ActivityDT) => Promise<AxiosResponse>,
   refreshToken: () => Promise<AxiosResponse>,
   login: (values: LoginDT) => Promise<AxiosResponse>,
@@ -90,6 +99,7 @@ const axiosService: AxiosService = {
   refreshToken,
   addActivity,
   getActivities,
+  getUserActivities,
   login,
   signIn,
   logout,

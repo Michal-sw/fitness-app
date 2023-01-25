@@ -1,6 +1,7 @@
 import { MongooseError, Types } from "mongoose";
 import Activity, { IActivity } from "../config/models/Activity";
 import { getCorrectObject, getErrorObject } from '../utils/utils';
+import { addUserActivity } from "./userService";
 
 export const getActivities = async () => {
     const result = await Activity
@@ -24,8 +25,18 @@ export const addActivity = async ({ placeId, attendees, ...body }: {placeId: num
     .then((activity: IActivity) => getCorrectObject(activity))
     .catch((err: MongooseError) => getErrorObject(400, err.message));
 
-    console.log(result);
-    return result;
+    if (result.statusCode !== 200) return result;
+
+    // Add activity to users
+    const activity: IActivity = result.result;
+
+    for (let user of attendees) {
+        const userResult = await addUserActivity(user, activity._id);
+        if (userResult.statusCode !== 200) return getErrorObject(404, "Activity not added to user");
+    }
+
+    return getCorrectObject(result);
+
 };
 
 export const getActivityById = async (id: string) => {
@@ -40,6 +51,7 @@ export const getActivitiesByUser = async (userId: string) => {
     const id = new Types.ObjectId(userId);
 
     const activities = await Activity.find({ attendees: id });
+    console.log(activities);
     if (!activities) {
         return getErrorObject(404);
     }

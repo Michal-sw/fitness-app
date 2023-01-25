@@ -1,4 +1,4 @@
-import { MongooseError, Types } from "mongoose";
+import { MongooseError, ObjectId, Types } from "mongoose";
 import User, { IUser } from "../config/models/User";
 import { LoginDT } from "../types/LoginDT";
 import { getCorrectObject, getErrorObject } from '../utils/utils';
@@ -32,6 +32,17 @@ export const addUser = async ({ login, password }: LoginDT) => {
     })
     .then((user: IUser) => getCorrectObject(user))
     .catch((err: MongooseError) => getErrorObject(400, err.message));
+
+    return result;
+};
+
+export const addUserActivity = async (id: string, activityId: ObjectId) => {
+    const result = await User.findOneAndUpdate(
+        { _id: new Types.ObjectId(id) }, 
+        { $push: { activities: activityId } }
+    )
+    .then((user: IUser | any) => getCorrectObject(user))
+    .catch((err: MongooseError) => getErrorObject(500, err.message));
 
     return result;
 };

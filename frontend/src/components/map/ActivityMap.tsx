@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Coordinates } from '../../core/types/CoordinatesDT';
 import L, { Map } from 'leaflet';
-import { overpass, OverpassJson, OverpassNode } from 'overpass-ts';
+import { overpass, OverpassNode } from 'overpass-ts';
 import useNotifications from '../../hooks/useNotifications';
 import { CircularProgress } from '@mui/material';
 import { addOverpassResultToMap } from './utils';
@@ -29,7 +29,6 @@ function ActivityMap(coordinates: Coordinates) {
                         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     }),
                 ],
-                
             })
             setMap(map);
             setIsLoading(true);
