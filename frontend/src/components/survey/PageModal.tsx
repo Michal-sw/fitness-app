@@ -1,12 +1,16 @@
-import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import { FormControl, FormControlLabel, IconButton, Radio, RadioGroup } from "@mui/material";
 import { SurveyPageDT } from "../../core/types/SurveyPageDT";
 import { Button } from '@mui/material';
+import { CloseOutlined } from "@mui/icons-material";
 
 const PageModal = (props: SurveyPageDT) => {
 
     return (
         <div className={'survey-body'}>
             <div className={"survey-header"}>
+                <IconButton sx={{ alignSelf: 'flex-end' }} onClick={() => props.setVisible(false)}>
+                    <CloseOutlined />
+                </IconButton>
                 <h2>
                    {props.header}
                 </h2>

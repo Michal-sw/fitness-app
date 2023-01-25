@@ -4,4 +4,5 @@ export interface SurveyPageDT {
     setAnswer: (answer: number) => void;
     setPage: (page: number) => void;
     pageNumber: number;
+    setVisible: (visible: boolean) => void;
 }

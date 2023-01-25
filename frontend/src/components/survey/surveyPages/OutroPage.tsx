@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useState } from "react";
@@ -6,10 +6,12 @@ import { validateSurver } from "../../../core/validators/SurveyValidator";
 import axiosService from "../../../services/axiosService";
 import { SurveyDT } from "../../../core/types/SurrveryDT";
 import useAuth from "../../../core/providers/AuthContext";
+import { CloseOutlined } from "@mui/icons-material";
 
 interface IOutroPage {
     setPage: (page: number) => void;
     setVisible: (visible: boolean) => void;
+    setPendingSurvey: (visible: boolean) => void;
     waterAnswer: number;
     sleepAnswer: number;
     trainingAnswer: number;
@@ -28,7 +30,7 @@ const OutroPage = (props: IOutroPage) => {
                                         trainingScore: props.trainingAnswer };
             await axiosService
                 .finishSurvey(token, props.surveyId, answers)
-                .then(res => console.log(res))
+                .then(res => props.setPendingSurvey(false))
                 .catch(err => console.log(err));
         } else console.log(props)
         props.setVisible(false)
@@ -42,7 +44,10 @@ const OutroPage = (props: IOutroPage) => {
                     <CircularProgress color="success"/>    
                 </Backdrop>
             }
-            <div className={"surveyHeader"}>
+            <div className={"survey-header"}>
+                <IconButton sx={{ alignSelf: 'flex-end' }} onClick={() => props.setVisible(false)}>
+                        <CloseOutlined />
+                </IconButton>
                 <h2>
                     Survey Completed!
                     {/* Header fetched from backend */}
