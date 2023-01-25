@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { NotificationMessage } from "../core/types/NotificationmessageDT";
 import { NotificationObservableService } from "../services/notificationObservable";
 
 const notificationStore = NotificationObservableService;
@@ -14,8 +13,8 @@ const useNotifications = () => {
 
   const actions = useMemo(() => {
     return {
-      sendDissapearingNotification: (notification: NotificationMessage, timeout:number = 5000) => 
-        notificationStore.addNotification(notification, timeout)
+      addNotification: (notificationMessage: string, timeout:number = 5000) => 
+        notificationStore.addNotification({message: notificationMessage}, timeout)
     }
   }, [])
   

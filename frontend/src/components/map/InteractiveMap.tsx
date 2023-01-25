@@ -23,7 +23,7 @@ function InteractiveMap(coordinates: Coordinates) {
         const upperRightCorner = bounds.getNorthEast();
 
         if (map.getZoom() < 15) {
-            actions.sendDissapearingNotification({ message: "Map zoom must be bigger" });
+            actions.addNotification("Map zoom must be bigger");
             return;
         }
 
@@ -32,10 +32,12 @@ function InteractiveMap(coordinates: Coordinates) {
             .then((res) => res.json())
             .then((res) => {
                 const dataPoints: OverpassNode[] = res.elements;
-                addOverpassResultToMap(map, dataPoints, (dataPoint: OverpassNode) => {
-                    console.log(`You just clicked ${dataPoint.id}`);
-                    setPlaceId(dataPoint.id);
-                    setIsFormVisible(true);
+                addOverpassResultToMap(map, dataPoints, {
+                    buttonCallback: (dataPoint: OverpassNode) => {
+                        setPlaceId(dataPoint.id);
+                        setIsFormVisible(true);
+                    },
+                    buttonText: "ADD WORKOUT!"
                 });
             })
             .catch(err => console.log(err))

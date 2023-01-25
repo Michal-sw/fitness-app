@@ -14,7 +14,7 @@ const Chatbot = () => {
             .then(res => {
                 setResponse(res.data.data)
             }).catch((err: AxiosError) => {
-                actions.sendDissapearingNotification({ message: "Could not get response from chatbot" });
+                actions.addNotification("Could not get response from chatbot");
             });
     };
     

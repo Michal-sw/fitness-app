@@ -1,10 +1,7 @@
-import { MongooseError } from "mongoose";
+import { MongooseError, Types } from "mongoose";
 import User, { IUser } from "../config/models/User";
 import { LoginDT } from "../types/LoginDT";
-
-
-const getCorrectObject = (result: any) => ({ result, statusCode: 200 })
-const getErrorObject = (statusCode: number, message?: string) => ({ statusCode, result: message })
+import { getCorrectObject, getErrorObject } from '../utils/utils';
 
 export const getUsers = async () => {
     const result = await User
@@ -56,13 +53,13 @@ export const getUserByLogin = async (login: string) => {
 };
 
 export const replaceUser = async ({ id, ...body }: {id:string}) => {
-    const user = await User.findOneAndReplace({id}, body);
+    const user = await User.findOneAndReplace({ _id: new Types.ObjectId(id) }, body);
     
     return getCorrectObject(user);
 };
 
 export const deleteUser = async (id: string) => {
-    await User.findOneAndDelete({ id })
+    await User.findOneAndDelete({ _id: new Types.ObjectId(id) })
         .then((user: IUser | null) => {
             return getCorrectObject(user);
         }).catch((err: MongooseError) => {
@@ -71,7 +68,7 @@ export const deleteUser = async (id: string) => {
 };
 
 export const editUser = async ({ id, ...body }: {id:string}) => {
-    const user = await User.findOneAndUpdate({id}, body);
+    const user = await User.findOneAndUpdate({ _id: new Types.ObjectId(id) }, body);
     
     return getCorrectObject(user);
 };

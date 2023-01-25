@@ -13,6 +13,7 @@ function Navbar() {
                     <>
                     <button className='navButton' onClick={() => navigate('/')}>Dashboard</button>
                     <button className='navButton' onClick={() => navigate('/map')}>Map</button>
+                    <button className='navButton' onClick={() => navigate('/map/activities')}>Join activity</button>
                     <button className='navButton' onClick={() => navigate('/surveys')}>Surveys</button>
                     <div className='spacedRight'>
                         <button className='navButton' onClick={logout}>Logout</button>

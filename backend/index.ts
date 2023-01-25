@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 
 import users from './routes/users';
 import surveys from './routes/surveys';
+import activities from './routes/activities';
 
 import { corsMiddleware, logger } from './middlewares/middlewares';
 import connectToMongoDB from './config/mongoClient';
@@ -16,7 +17,7 @@ app.use(corsMiddleware);
 app.use(express.json());
 app.use('/users', users);
 app.use('/surveys', surveys)
-
+app.use('/activities', activities);
 
 const runApp = async () => {
   await connectToMongoDB()

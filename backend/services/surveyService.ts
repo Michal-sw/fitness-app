@@ -1,10 +1,7 @@
-import { MongooseError } from "mongoose";
+import { MongooseError, Types } from "mongoose";
 import Survey, { ISurvey } from "../config/models/Surveys";
 import User from "../config/models/User";
-
-
-const getCorrectObject = (result: any) => ({ result, statusCode: 200 })
-const getErrorObject = (statusCode: number, message?: string) => ({ statusCode, result: message })
+import { getCorrectObject, getErrorObject } from '../utils/utils';
 
 enum ScoreWeights {
     WATER = 7,
@@ -61,14 +58,16 @@ export const addSurvey = async (id: string) => {
 
     // Check if the last survey was yesterday to keep the streak
 
-    const lastDate = new Date(surveys.result[surveys.result.length - 1].date);
+    const lastDate = surveys.result.length
+        ? new Date(surveys.result[surveys.result.length - 1].date)
+        : new Date("2000-12-17T03:24:00");
 
     // Date diff in hours
     const dateDiff = (now.getTime() - lastDate.getTime()) / (60 * 60 * 1000);
 
     if (dateDiff < 24) {
-        await User.findOneAndUpdate({ _id: id }, { $inc: { surveyStreak: 1 }});
-    } else await User.findOneAndUpdate({ _id: id }, { surveyStreak: 1 })
+        await User.findOneAndUpdate({ _id: new Types.ObjectId(id) }, { $inc: { surveyStreak: 1 }});
+    } else await User.findOneAndUpdate({ _id: new Types.ObjectId(id) }, { surveyStreak: 1 })
 
     const result = await Survey.create({
         user: id,
@@ -85,7 +84,7 @@ export const addSurvey = async (id: string) => {
 
     let currentStreak = 1;
 
-    await User.findOne({ _id: id })
+    await User.findOne({ _id: new Types.ObjectId(id) })
         .then((res: any) => currentStreak = res.surveyStreak)
         .catch((err: MongooseError) => getErrorObject(400, err.message));
 
@@ -94,7 +93,7 @@ export const addSurvey = async (id: string) => {
 
 export const finishSurvey = async ({ id, ...body }: { id: string}) => {
     
-    const survey = await Survey.findByIdAndUpdate(id, { ...body, date: new Date(), hasBeenChecked: true })
+    const survey = await Survey.findByIdAndUpdate({ _id: new Types.ObjectId(id) }, { ...body, date: new Date(), hasBeenChecked: true })
         .then((survey: any) => getCorrectObject(survey))
         .catch((err: MongooseError) => getErrorObject(400, err.message));
 

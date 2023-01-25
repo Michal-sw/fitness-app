@@ -1,7 +1,7 @@
 import { Schema, Types, model } from "mongoose";
 
-interface IActivity {
-  placeID: number;
+export interface IActivity {
+  placeId: number;
   attendees: [Types.ObjectId];
   activityType: String;
   date: Date;
@@ -9,7 +9,7 @@ interface IActivity {
 }
 
 const activitySchema = new Schema<IActivity>({
-    placeID: {
+    placeId: {
       type: Number
     },
     attendees: [{

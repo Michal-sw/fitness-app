@@ -3,6 +3,7 @@ import './App.scss';
 import PrivateRoute from './components/auth/PrivateRoute';
 import Chatbot from './components/chatbot/Chatbot';
 import MapWrapper from './components/map/MapWrapper';
+import ActivityMapWrapper from './components/map/ActivityMapWrapper';
 import { AuthProvider } from './core/providers/AuthContext';
 import Navbar from './components/navbar/Navbar';
 import SignIn from './components/auth/SignIn';
@@ -36,6 +37,12 @@ function App() {
                     <MapWrapper />
                   </PrivateRoute>
                 }/>
+            <Route path='map/activities' element=
+              {
+                <PrivateRoute>
+                    <ActivityMapWrapper />
+                </PrivateRoute>
+              }/>
             <Route path='/surveys' element=
             {
               <PrivateRoute>

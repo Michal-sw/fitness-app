@@ -1,32 +1,14 @@
 import express, { Request, Response, Router } from 'express';
 import { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import { authorizeMiddleware } from '../middlewares/middlewares';
-import utils from '../utils/utils';
+import { getCookie, getPrivateKey, getNewTokenPair } from '../utils/utils';
 import { addUser, getUsers, getUserIfCredentialValid, getUserByLogin } from '../services/userService';
 import { IUser } from '../config/models/User';
+import { getActivitiesByUser } from '../services/activitiesService';
 
 const jwt = require('jsonwebtoken');
 
 const router: Router = express.Router({mergeParams: true});
-
-const getNewTokenPair = (login: String) => {
-  const privateKey = utils.getPrivateKey();
-
-  // The tokens must be paired with the user in the database
-  // 15 minute expire
-  const refreshToken = jwt.sign({ login }, privateKey, {
-    expiresIn: 60*15
-  });
-  // 5 minutes expire
-  const token = jwt.sign({ login }, privateKey, {
-    expiresIn: 60*5
-  });
-
-  return {
-    refreshToken,
-    token
-  }
-};
 
 router.get('/', authorizeMiddleware, async (req: Request, res: Response) => {
   const response: any = await getUsers();
@@ -83,11 +65,11 @@ router.get('/logout', (req: Request, res: Response) => {
 })
 
 router.post('/refresh', (req: Request, res: Response) => {
-  const privateKey = utils.getPrivateKey();
+  const privateKey = getPrivateKey();
   if (!req.headers.cookie) {
     return res.sendStatus(403);
   }
-  const oldRefreshToken = utils.getCookie(req.headers.cookie, 'refreshToken');
+  const oldRefreshToken = getCookie(req.headers.cookie, 'refreshToken');
 
   jwt.verify(oldRefreshToken, privateKey, async (error: VerifyErrors, decodedPayload: JwtPayload) => {
     if (error) return res.sendStatus(403)
@@ -107,8 +89,10 @@ router.post('/refresh', (req: Request, res: Response) => {
   });
 })
 
-router.get('/test', (req: Request, res: Response) => {
-  res.sendStatus(401);
+router.get('/:id/activities', async (req: Request, res: Response) => {
+  const response = await getActivitiesByUser(req.params.id);
+  
+  return res.status(response.statusCode).send(response.result);
 });
 
 export default router;

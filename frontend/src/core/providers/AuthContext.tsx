@@ -62,8 +62,7 @@ export function AuthProvider({ children }: {children: ReactElement }) {
   }, []);
 
   function handleError(err: AxiosError) {
-    console.log(err);
-    actions.sendDissapearingNotification({ message: err.message });
+    actions.addNotification(err.message);
     setError(err);
   }
 

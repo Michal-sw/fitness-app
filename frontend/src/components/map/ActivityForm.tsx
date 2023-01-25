@@ -4,6 +4,7 @@ import '../../styles/maps/ActivityForm.scss';
 import DateTimeInput from './DateTimeInput';
 import useAuth from '../../core/providers/AuthContext';
 import useNotifications from '../../hooks/useNotifications';
+import axiosService from '../../services/axiosService';
 
 interface ActivityFormProps {
     isVisible: boolean,
@@ -12,19 +13,23 @@ interface ActivityFormProps {
 }
 
 function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
-    const { user } = useAuth();
+    const { user, token } = useAuth();
     const { actions } = useNotifications();
     
     function handleAddActivity (values: any) {
         const result = {
             ...values,
             attendees: [user._id],
-            placeId
+            placeId,
+            hasBeenChecked: false,
         };
 
-        actions.sendDissapearingNotification({ message: "Workout succesfully added!" });
-        console.log(result);
+        actions.addNotification("Adding activity...");
         setVisible(false);
+
+        axiosService.addActivity(token, user._id, result)
+            .then(_res => actions.addNotification("Activity added!"))
+            .catch(_err => actions.addNotification("Error when adding activity!"));
     }
     
     return (
