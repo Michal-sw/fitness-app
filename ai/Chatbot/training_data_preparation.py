@@ -1,3 +1,4 @@
+import os
 import random
 
 import nltk
@@ -6,8 +7,11 @@ from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 import json
 import pickle
-from utils.lemmatize import lemmatize
 from utils.bag_of_words import bag_of_words
+
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('wordnet')
 
 
 def get_training_data(intent_file_dir, file_name):
@@ -43,8 +47,12 @@ def get_training_data(intent_file_dir, file_name):
     tags = sorted(set(tags))
 
     # Serialize data
-    pickle.dump(word_list, open(f'./pickles/{file_name}_word_list.pkl', 'wb'))
-    pickle.dump(tags, open(f'./pickles/{file_name}_tags.pkl', 'wb'))
+
+    if not os.path.exists('pickles'):
+        os.makedirs('pickles')
+
+    pickle.dump(word_list, open(f'pickles/{file_name}_word_list.pkl', 'wb'))
+    pickle.dump(tags, open(f'pickles/{file_name}_tags.pkl', 'wb'))
 
     training_data = []
 
