@@ -10,7 +10,7 @@ const Chatbot = () => {
     const { actions } = useNotifications();
 
     const getResponse = async () => {
-        axios.post('http://localhost:5000/', { data: request })
+        axios.post('http://localhost:5001/', { data: request })
             .then(res => {
                 setResponse(res.data.data)
             }).catch((err: AxiosError) => {
