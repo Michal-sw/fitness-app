@@ -2,6 +2,7 @@
     display:flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
 }
 
 #history-lists-container {
@@ -10,13 +11,19 @@
     width: 100%;
     max-width: 1300px;
 
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-evenly;
 
     #activities-container {
-        flex-direction: column;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        
         justify-content: center;
         align-items: center;
+
+        max-height: 90vh;
+        overflow: auto;
     }
 
 }

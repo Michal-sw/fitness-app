@@ -20,7 +20,7 @@ function InteractiveMap({ latitude = 18.60, longitude = 54.35 }: InteractiveMapP
     const [map, setMap] = useState<Map | null>(null);
     const [isFormVisible, setIsFormVisible] = useState<boolean>(false);
     const [placeId, setPlaceId] = useState<number>(0);
-    const {state} = useLocation();
+    const { state } = useLocation();
 
 
     const handleMapSearch = () => {
@@ -66,7 +66,7 @@ function InteractiveMap({ latitude = 18.60, longitude = 54.35 }: InteractiveMapP
             })
             setMap(map);
             
-            if (state.preFetchLocation) fetchLocation(map);
+            if (state?.preFetchLocation) fetchLocation(map);
 
             return () => {
                 map.remove(); 
