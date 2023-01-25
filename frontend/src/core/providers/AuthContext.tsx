@@ -47,6 +47,12 @@ export function AuthProvider({ children }: {children: ReactElement }) {
     if (error) setError(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
+
+  useEffect(() => {
+    const interval = setInterval(() => axiosService.refreshToken(), 120000);
+    return () => clearInterval(interval); 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
   
   useEffect(() => {
     axiosService.refreshToken()
@@ -113,7 +119,7 @@ export function AuthProvider({ children }: {children: ReactElement }) {
       authenticated,
       login,
       signIn,
-      logout,
+      logout
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [error, token, authenticated]

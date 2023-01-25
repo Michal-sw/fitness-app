@@ -20,9 +20,8 @@ router.post('/', authorizeMiddleware, async (req: Request, res: Response) => {
     res.status(response.statusCode).json(response);
 });
 
-router.patch('/:id', authorizeMiddleware, async (req: Request, res: Response) => {
-    const response: any = await editActivity({ id: req.params.id, ...req.body });
-
+router.patch('/', authorizeMiddleware, async (req: Request, res: Response) => {
+    const response: any = await editActivity({ id: req.body._id, ...req.body });
     res.status(response.statusCode).json(response);
 });
 

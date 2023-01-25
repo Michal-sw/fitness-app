@@ -39,13 +39,34 @@ export const addUser = async ({ login, password }: LoginDT) => {
 export const addUserActivity = async (id: string, activityId: ObjectId) => {
     const result = await User.findOneAndUpdate(
         { _id: new Types.ObjectId(id) }, 
-        { $push: { activities: activityId } }
+        { $push: { 
+            activities: {
+                    'activity': activityId,
+                    'skipped': false
+                }
+            }
+        }
     )
     .then((user: IUser | any) => getCorrectObject(user))
     .catch((err: MongooseError) => getErrorObject(500, err.message));
 
     return result;
 };
+
+export const markActivityAsSkipped = async (id: string, activityId: string) => {
+    const result = await User.findOneAndUpdate(
+        { _id: new Types.ObjectId(id), "activities.activity": new Types.ObjectId(activityId) },
+        { 
+            $set: {
+                "activities.$.skipped": true
+            }
+        }, { multi: true }
+    )
+    .then((user: IUser | any) => getCorrectObject(user))
+    .catch((err: MongooseError) => getErrorObject(500, err.message));
+
+    return result;
+}
 
 export const getUserById = async (id: string) => {
     const user = await User.findById(id);

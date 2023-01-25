@@ -2,9 +2,11 @@ import express, { Request, Response, Router } from 'express';
 import { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import { authorizeMiddleware } from '../middlewares/middlewares';
 import { getCookie, getPrivateKey, getNewTokenPair } from '../utils/utils';
-import { addUser, getUsers, getUserIfCredentialValid, getUserByLogin } from '../services/userService';
-import { IUser } from '../config/models/User';
+import { addUser, getUsers, getUserIfCredentialValid, getUserByLogin, markActivityAsSkipped } from '../services/userService';
+import User, { IUser } from '../config/models/User';
 import { getActivitiesByUser } from '../services/activitiesService';
+import Activity from '../config/models/Activity';
+import Surveys from '../config/models/Surveys';
 
 const jwt = require('jsonwebtoken');
 
@@ -92,6 +94,13 @@ router.post('/refresh', (req: Request, res: Response) => {
 router.get('/:id/activities', async (req: Request, res: Response) => {
   const response = await getActivitiesByUser(req.params.id);
   
+  return res.status(response.statusCode).send(response);
+});
+
+router.patch('/:id/activities', async (req: Request, res: Response) => {
+  const activityId = req.body.activityId;
+  const response = await markActivityAsSkipped(req.params.id, activityId);
+ 
   return res.status(response.statusCode).send(response);
 });
 

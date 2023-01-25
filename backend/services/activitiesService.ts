@@ -74,7 +74,6 @@ export const deleteActivity = async (id: string) => {
 
 export const editActivity = async ({ id, ...body }: {id:string}) => {
     const activity = await Activity.findOneAndUpdate({ _id: new Types.ObjectId(id) }, body);
-    
     return getCorrectObject(activity);
 };
 

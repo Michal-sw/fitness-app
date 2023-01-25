@@ -61,6 +61,30 @@ const addActivity = async (token: string, id: string, values: ActivityDT) => {
   });
 };
 
+const markActivityAsSkipped = async (token: string, userId:string, values: ActivityDT) => {
+  return Promise.all([
+    updateActivity(token, values),
+    updateUserActivity(token, userId, values)
+  ]);
+};
+
+const updateUserActivity = async (token: string, userId: string, values: ActivityDT) => {
+  return axiosInstance.patch(`http://${apiPath}/users/${userId}/activities`, { activityId: values._id },{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+  });
+}
+
+const updateActivity = async (token: string, values: ActivityDT) => {
+  return axiosInstance.patch(`http://${apiPath}/activities`, values, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+};
+
+
 const refreshToken = async () => {
   return axiosInstance.post(`http://${apiPath}/users/refresh`);
 };
@@ -83,7 +107,9 @@ interface AxiosService {
   startSurvey: (token: string, id: string) => Promise<AxiosResponse>,
   finishSurvey: (token: string, id: string, values: SurveyDT) => Promise<AxiosResponse>,
   getActivities: (token: string) => Promise<AxiosResponse>,
+  markActivityAsSkipped: (token:string, userId: string, values: ActivityDT) => Promise<AxiosResponse[]>, 
   getUserActivities: (token: string, id: string) => Promise<AxiosResponse>,
+  updateActivity: (token:string, values: ActivityDT) => Promise<AxiosResponse>, 
   addActivity: (token: string, id: string, values: ActivityDT) => Promise<AxiosResponse>,
   refreshToken: () => Promise<AxiosResponse>,
   login: (values: LoginDT) => Promise<AxiosResponse>,
@@ -99,6 +125,8 @@ const axiosService: AxiosService = {
   refreshToken,
   addActivity,
   getActivities,
+  updateActivity,
+  markActivityAsSkipped,
   getUserActivities,
   login,
   signIn,
