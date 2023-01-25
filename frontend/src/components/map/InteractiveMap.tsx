@@ -6,15 +6,22 @@ import useNotifications from '../../hooks/useNotifications';
 import { CircularProgress } from '@mui/material';
 import { addOverpassResultToMap } from './utils';
 import ActivityForm from './ActivityForm';
+import { useLocation } from 'react-router';
 
+interface InteractiveMapProps {
+    latitude?: number,
+    longitude?: number,
+}
 
-function InteractiveMap(coordinates: Coordinates) {
+function InteractiveMap({ latitude = 18.60, longitude = 54.35 }: InteractiveMapProps) {
     const mapContainerRef = useRef(null);
     const { actions } = useNotifications();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [map, setMap] = useState<Map | null>(null);
     const [isFormVisible, setIsFormVisible] = useState<boolean>(false);
     const [placeId, setPlaceId] = useState<number>(0);
+    const {state} = useLocation();
+
 
     const handleMapSearch = () => {
         if (!map) return; 
@@ -48,7 +55,7 @@ function InteractiveMap(coordinates: Coordinates) {
         const mapContainer = mapContainerRef.current;
         if (mapContainer) {
             const map: Map = L.map('map-container', {
-                center: [coordinates.longitude, coordinates.latitude],
+                center: [longitude, latitude],
                 zoom: 12,
                 layers: [
                     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -59,12 +66,31 @@ function InteractiveMap(coordinates: Coordinates) {
             })
             setMap(map);
             
+            console.log(state.preFetchLocation);
+            if (state.preFetchLocation) fetchLocation(map);
+
             return () => {
                 map.remove(); 
                 setMap(null);
             };
         }
     }, []);
+
+    const fetchLocation = (map: Map) => {
+        setIsLoading(true);
+        overpass(`[out:json];node(id:${state.preFetchLocation});out body;`, {  })
+            .then((res) => res.json())
+            .then((res) => {
+                const dataPoints: OverpassNode[] = res.elements;
+                addOverpassResultToMap(map, dataPoints, {
+                    buttonCallback: (dataPoint: OverpassNode) => {},
+                    buttonText: "Your training location",
+                    popUpSize: 100
+                });
+            })
+            .catch(err => console.log(err))
+            .finally(() => setIsLoading(false));
+    }
     
     return (
         <>

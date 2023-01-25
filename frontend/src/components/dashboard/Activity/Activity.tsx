@@ -3,36 +3,36 @@ import { ActivityDT } from "../../../core/types/ActivityDT";
 import ActivityCheck from "./ActivityCheck";
 import axiosService from "../../../services/axiosService";
 import { AxiosResponse } from "axios";
+import useNotifications from "../../../hooks/useNotifications";
+import { useNavigate } from "react-router";
 
 interface ActivityProps {
     activity: ActivityDT;
 }
 
 const Activity = ({ activity }: ActivityProps) => {
-    const { attendees, activityType, hasBeenChecked, date } = activity;
+    const { attendees, activityType, hasBeenChecked, date, placeId } = activity;
     const { token, user } = useAuth();
+    const { actions } = useNotifications();
+    const navigate = useNavigate();
 
     const onCheck = (hasBeenSkipped: boolean) => {
         if (hasBeenSkipped) {
             axiosService
                 .markActivityAsSkipped(token, user._id, { ...activity, hasBeenChecked: true })
-                .then((res: AxiosResponse[]) => {
-                    const newActivity = res[0].data.result;
-                    const newUser = res[1].data.result;
-                    console.log(res);
-                    console.log(newActivity);
-                    console.log(newUser);
-                })
-                .catch(err => console.log(err));
+                .then(_res => actions.addNotification("Activity successfully marked"))
+                .catch(_err => actions.addNotification("Error checking activity"));
         } else {
             axiosService
                 .updateActivity(token, { ...activity, hasBeenChecked: true })
-                .then(res => {
-                    console.log(res);
-                })
-                .catch(err => console.log(err));
+                .then(res => actions.addNotification("Activity successfully marked"))
+                .catch(err => actions.addNotification("Error checking activity"));
         }
     }
+
+    const onNavigateToLocation = () => {
+        navigate('/map', { state: { preFetchLocation: placeId }, replace: true});
+    };
 
     return (
         <div className="activity">
@@ -51,6 +51,11 @@ const Activity = ({ activity }: ActivityProps) => {
                         <span className="activity-field-value">{new Date(date).toLocaleDateString()}</span>
                     </div>
                 : null};
+            <div className="activity-field">
+                <span className="activity-field-label">Location ID:</span>
+                <span className="activity-field-value">{placeId}</span>
+                <button onClick={onNavigateToLocation}>Show on map</button>
+            </div>
             { !hasBeenChecked
                 ? <ActivityCheck  onCheck={onCheck} date={activity.date}/>
                 : null
