@@ -4,4 +4,5 @@ export interface ActivityDT {
     date: Date;
     attendees: string[];
     placeId: number & string;
+    hasBeenChecked: boolean;
 }

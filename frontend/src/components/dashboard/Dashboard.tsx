@@ -3,7 +3,7 @@ import Survey from "../survey/Survey";
 import "../../styles/dashboard/Dashboard.scss";
 import axiosService from "../../services/axiosService";
 import useAuth from "../../core/providers/AuthContext";
-import UpcomingActivities from "./UpcomingActivities";
+import UpcomingActivities from "./Activity/UpcomingActivities";
 
 const Dashboard = () => {
     const { token, user } = useAuth();
