@@ -9,6 +9,7 @@ interface ISurvey {
     setVisible: (visible: boolean) => void;
     surveyId: string;
     surveyNumber: string;
+    setPendingSurvey: (visible: boolean) => void;
 }
 
 const Survey = (props: ISurvey) => {
@@ -22,7 +23,7 @@ const Survey = (props: ISurvey) => {
         switch (page) {
             case 0: {
                 return (
-                    <IntroPage setPage={setPage} surveyNumber={props.surveyNumber}/>
+                    <IntroPage setPage={setPage} surveyNumber={props.surveyNumber} setVisible={props.setVisible}/>
                 )
             }
             case 1: {
@@ -33,6 +34,7 @@ const Survey = (props: ISurvey) => {
                         setPage={setPage}
                         setAnswer={setWaterAnswer}
                         pageNumber={page}
+                        setVisible={props.setVisible}
                     />
                 )
             }
@@ -44,6 +46,7 @@ const Survey = (props: ISurvey) => {
                         setPage={setPage}
                         setAnswer={setSleepAnswer}
                         pageNumber={page}
+                        setVisible={props.setVisible}
                     />
                 )
             }
@@ -55,6 +58,7 @@ const Survey = (props: ISurvey) => {
                         setPage={setPage}
                         setAnswer={setTrainingAnswer}
                         pageNumber={page}
+                        setVisible={props.setVisible}
                     />
                 )
             }
@@ -62,6 +66,7 @@ const Survey = (props: ISurvey) => {
                 return (
                     <OutroPage
                         setVisible={props.setVisible}
+                        setPendingSurvey={props.setPendingSurvey}
                         setPage={setPage}
                         waterAnswer={waterAnswer}
                         sleepAnswer={sleepAnswer}

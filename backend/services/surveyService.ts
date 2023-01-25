@@ -53,7 +53,11 @@ export const addSurvey = async (id: string) => {
                 date.getMonth() === now.getMonth() &&
                 date.getDate() == now.getDate())
     })
-    if (todaySurveys.length > 0) return { statusCode: 200, completed: true}
+    if (todaySurveys.length > 0) {
+        console.log(todaySurveys)
+        if (todaySurveys[0].hasBeenChecked) return { statusCode: 200, completed: true}
+        else return { statusCode: 200, completed: false, survey: todaySurveys[0] }
+    }
 
 
     // Check if the last survey was yesterday to keep the streak

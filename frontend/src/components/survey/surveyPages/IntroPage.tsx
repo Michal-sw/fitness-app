@@ -1,10 +1,20 @@
-import { Button } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
+import { CloseOutlined } from "@mui/icons-material"
 
-const IntroPage = (props: { setPage: (page: number) => void, surveyNumber: string }) => {
+interface IIntroPage {
+    setPage: (page: number) => void;
+    setVisible: (visible: boolean) => void;
+    surveyNumber: string;
+}
+
+const IntroPage = (props: IIntroPage) => {
     
     return (
         <div className={'survey-body'}>
             <div className={"survey-header"}>
+                <IconButton sx={{ alignSelf: 'flex-end' }} onClick={() => props.setVisible(false)}>
+                    <CloseOutlined />
+                </IconButton>
                 <h2>
                     Hi this is your {props.surveyNumber} health survey!
                     {/* Header fetched from backend */}
@@ -20,9 +30,14 @@ const IntroPage = (props: { setPage: (page: number) => void, surveyNumber: strin
             <span>
                 Wanna get started?
             </span>
-            <Button variant={'contained'} onClick={() => props.setPage(1)}>
-                Let's go!
-            </Button>
+            <div className={'survey-buttons'}>
+                <Button variant={'outlined'} onClick={() => props.setVisible(false)}>
+                    Not now
+                </Button>
+                <Button variant={'contained'} onClick={() => props.setPage(1)}>
+                    Let's go!
+                </Button>
+            </div>
         </div>
     );
 };
