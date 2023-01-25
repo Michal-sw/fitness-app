@@ -66,7 +66,6 @@ function InteractiveMap({ latitude = 18.60, longitude = 54.35 }: InteractiveMapP
             })
             setMap(map);
             
-            console.log(state.preFetchLocation);
             if (state.preFetchLocation) fetchLocation(map);
 
             return () => {

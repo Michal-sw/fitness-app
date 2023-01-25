@@ -79,7 +79,6 @@ function ActivityMap(coordinates: Coordinates) {
                         .then(res => actions.addNotification("You have joined the activity!"))
                         .catch(err => console.log(err));
                 }
-                console.log(`You just clicked ${dataPoint.id}`);
             },
             buttonText: "JOIN ACTIVITY",
             popUpSize: 50
