@@ -14,6 +14,18 @@ services:
       - MONGODB_HOST=database
       - MONGODB_DATABASE=health_app_db
       - MONGODB_PORT=27017
+  
+  frontend:
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    
+    volumes:
+    - /opt/app/node_modules
+    - ./frontend:/opt/app
+
 
   database:
     restart: always
