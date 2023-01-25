@@ -2,9 +2,9 @@ import express, { Request, Response, Router } from 'express';
 import { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import { authorizeMiddleware } from '../middlewares/middlewares';
 import { getCookie, getPrivateKey, getNewTokenPair } from '../utils/utils';
-import { addUser, getUsers, getUserIfCredentialValid, getUserByLogin, markActivityAsSkipped } from '../services/userService';
+import { addUser, getUsers, getUserIfCredentialValid, getUserByLogin, markActivityAsSkipped, addUserActivity } from '../services/userService';
 import { IUser } from '../config/models/User';
-import { getActivitiesByUser } from '../services/activitiesService';
+import { addUserToActivity, getActivitiesByUser } from '../services/activitiesService';
 
 const jwt = require('jsonwebtoken');
 
@@ -99,6 +99,19 @@ router.patch('/:id/activities', async (req: Request, res: Response) => {
   const activityId = req.body.activityId;
   const response = await markActivityAsSkipped(req.params.id, activityId);
  
+  return res.status(response.statusCode).send(response);
+});
+
+router.post('/:id/activities', async (req: Request, res: Response) => {
+  const activityId = req.body.activityId;
+  
+  const response = await addUserActivity(req.params.id, activityId);
+  const activityResponse = await addUserToActivity(activityId, req.params.id);
+
+  if (activityResponse.statusCode !== 200) {
+    return res.status(activityResponse.statusCode).send(activityResponse);
+  }
+
   return res.status(response.statusCode).send(response);
 });
 

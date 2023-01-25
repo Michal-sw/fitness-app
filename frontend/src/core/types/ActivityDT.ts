@@ -1,5 +1,5 @@
 export interface ActivityDT {
-    _id?: string;
+    _id: string;
     activityType: string;
     date: Date;
     attendees: string[];

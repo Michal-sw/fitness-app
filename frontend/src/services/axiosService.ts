@@ -84,6 +84,13 @@ const updateActivity = async (token: string, values: ActivityDT) => {
   });
 };
 
+const addUserToActivity = async (token: string, userId: string, activityId: string) => {
+  return axiosInstance.post(`http://${apiPath}/users/${userId}/activities`, { activityId } ,{
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+};
 
 const refreshToken = async () => {
   return axiosInstance.post(`http://${apiPath}/users/refresh`);
@@ -111,6 +118,7 @@ interface AxiosService {
   getUserActivities: (token: string, id: string) => Promise<AxiosResponse>,
   updateActivity: (token:string, values: ActivityDT) => Promise<AxiosResponse>, 
   addActivity: (token: string, id: string, values: ActivityDT) => Promise<AxiosResponse>,
+  addUserToActivity: (token: string, userId: string, activityId: string) => Promise<AxiosResponse>,
   refreshToken: () => Promise<AxiosResponse>,
   login: (values: LoginDT) => Promise<AxiosResponse>,
   signIn: (values: LoginDT) => Promise<AxiosResponse>,
@@ -127,6 +135,7 @@ const axiosService: AxiosService = {
   getActivities,
   updateActivity,
   markActivityAsSkipped,
+  addUserToActivity,
   getUserActivities,
   login,
   signIn,

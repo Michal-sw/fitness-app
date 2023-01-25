@@ -13,7 +13,7 @@ import useAuth from '../../core/providers/AuthContext';
 function ActivityMap(coordinates: Coordinates) {
     const mapContainerRef = useRef(null);
     const { actions } = useNotifications();
-    const { token } = useAuth();
+    const { token, user } = useAuth();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [map, setMap] = useState<Map | null>(null);
     const [activities, setActivities] = useState<ActivityDT[]>([]);
@@ -32,7 +32,7 @@ function ActivityMap(coordinates: Coordinates) {
             })
             setMap(map);
             setIsLoading(true);
-            
+
             return () => {
                 map.remove(); 
                 setMap(null);
@@ -56,7 +56,7 @@ function ActivityMap(coordinates: Coordinates) {
 
                 return overpass(`[out:json];node(${placeIds});out body;`, {  })
                     .then((res) => res.json())
-                    .then((res) => handleOverpassResponse(res, map))
+                    .then((res) => handleOverpassResponse(res, map, activities))
                     .catch(err => err)
                     .finally(() => setIsLoading(false));
             })
@@ -66,12 +66,18 @@ function ActivityMap(coordinates: Coordinates) {
             });
     }, [isLoading]);
     
-    const handleOverpassResponse = (res: any, map: Map) => {
+    const handleOverpassResponse = (res: any, map: Map, activities: ActivityDT[]) => {
         const dataPoints: OverpassNode[] = res.elements;
         addOverpassResultToMap(map, dataPoints, {
             buttonCallback: (dataPoint: OverpassNode) => {
+                const activity = activities.find(a => a.placeId === dataPoint.id);
+                if (activity) {
+                    axiosService
+                        .addUserToActivity(token, user._id, activity._id)
+                        .then(res => actions.addNotification("You have joined the activity!"))
+                        .catch(err => console.log(err));
+                }
                 console.log(`You just clicked ${dataPoint.id}`);
-                actions.addNotification("You have joined the activity!");
             },
             buttonText: "JOIN ACTIVITY",
             popUpSize: 50

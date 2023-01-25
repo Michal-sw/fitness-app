@@ -77,3 +77,13 @@ export const editActivity = async ({ id, ...body }: {id:string}) => {
     return getCorrectObject(activity);
 };
 
+export const addUserToActivity = async (id: string, userId: string) => {
+    const result = await Activity.findOneAndUpdate(
+        { _id: new Types.ObjectId(id) }, 
+        { $push: { attendees: new Types.ObjectId(userId) }}
+    )
+    .then((activity: IActivity | any) => getCorrectObject(activity))
+    .catch((err: MongooseError) => getErrorObject(500, err.message));
+
+    return result;
+};
