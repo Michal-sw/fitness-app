@@ -16,4 +16,4 @@ def get_prediction():
     return {"data": result}
 
 
-app.run(debug=True, host="0.0.0.0", port=5001)
+app.run(debug=True)

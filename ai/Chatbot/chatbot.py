@@ -6,13 +6,12 @@ from tensorflow.python.keras.models import load_model
 from utils.bag_of_words import bag_of_words
 from utils.lemmatize import lemmatize
 import numpy as np
-from pathlib import Path
 
-intents = json.loads(open(f'{Path().absolute()}/Chatbot/data/main_intents.json').read())
+intents = json.loads(open('../training_data/data/main_intents.json').read())
 
-word_list = pickle.load(open('pickles/main_intents_word_list.pkl', 'rb'))
-tags = pickle.load(open('pickles/main_intents_tags.pkl', 'rb'))
-network = load_model('chatbotmodelv2.h5')
+word_list = pickle.load(open('../training_data/pickles/main_intents_word_list.pkl', 'rb'))
+tags = pickle.load(open('../training_data/pickles/main_intents_tags.pkl', 'rb'))
+network = load_model('../training_data/chatbotmodelv2.h5')
 
 probability = 0.5
 

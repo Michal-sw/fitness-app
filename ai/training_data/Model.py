@@ -2,9 +2,9 @@ from training_data_preparation import get_training_data
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense
 import numpy as np
-from pathlib import Path
 
-train_x, train_y = get_training_data(f'{Path().absolute()}/Chatbot/data/main_intents.json', 'main_intents')
+
+train_x, train_y = get_training_data('data/main_intents.json', 'main_intents')
 
 
 network = Sequential([
