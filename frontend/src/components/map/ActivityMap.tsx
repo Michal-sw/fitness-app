@@ -51,7 +51,9 @@ function ActivityMap(coordinates: Coordinates) {
 
         getActivities()
             .then((activities: ActivityDT[]) => {
-                setActivities(activities);
+                const filteredActivities = activities
+                    .filter(a => a.attendees.find(at => at === user._id) ? false : true);
+                setActivities(filteredActivities);
                 const placeIds = getPlaceIdsAsString(activities);
 
                 return overpass(`[out:json];node(${placeIds});out body;`, {  })
