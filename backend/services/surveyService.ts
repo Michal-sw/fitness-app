@@ -1,30 +1,7 @@
 import { MongooseError, Types } from "mongoose";
 import Survey, { ISurvey } from "../config/models/Surveys";
 import User from "../config/models/User";
-import { getCorrectObject, getErrorObject } from '../utils/utils';
-
-enum ScoreWeights {
-    WATER = 7,
-    SLEEP = 8,
-    TRAINING = 9
-}
-
-const calculateScore = async (id: string) => {
-    const survey = await Survey.findById(id);
-    if (survey) {
-        const user = await User.findById(survey.user);
-        if (user) {
-            let score = user.score || 100;
-            
-            score *= ((survey.waterScore + ScoreWeights.WATER) / 10)
-            score *= ((survey.sleepScore + ScoreWeights.SLEEP) / 10)
-            score *= ((survey.trainingScore + ScoreWeights.TRAINING) / 10)
-
-            await user.updateOne({ score: Math.ceil(score).toFixed(2) })
-            user.save
-        }
-    }
-}
+import { calculateScore, getCorrectObject, getErrorObject, ScoreType } from '../utils/utils';
 
 export const getSurveys = async ({ id }: { id: string }) => {
     const result = await Survey
@@ -101,7 +78,7 @@ export const finishSurvey = async ({ id, ...body }: { id: string}) => {
         .then((survey: any) => getCorrectObject(survey))
         .catch((err: MongooseError) => getErrorObject(400, err.message));
 
-    calculateScore(id);
+    calculateScore(ScoreType.SURVEY, id);
 
     return survey;
 }
