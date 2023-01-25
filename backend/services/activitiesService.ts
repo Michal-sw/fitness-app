@@ -51,7 +51,6 @@ export const getActivitiesByUser = async (userId: string) => {
     const id = new Types.ObjectId(userId);
 
     const activities = await Activity.find({ attendees: id });
-    console.log(activities);
     if (!activities) {
         return getErrorObject(404);
     }
