@@ -49,7 +49,11 @@ export function AuthProvider({ children }: {children: ReactElement }) {
   }, [location.pathname]);
 
   useEffect(() => {
-    const interval = setInterval(() => axiosService.refreshToken(), 120000);
+    const interval = setInterval(() => axiosService
+      .refreshToken()
+        .then(res => setAuthData(res.data))
+        .catch(err => setError(err))
+    , 60000);
     return () => clearInterval(interval); 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);

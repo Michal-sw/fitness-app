@@ -1,0 +1,22 @@
+#history-container {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#history-lists-container {
+    display:flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 1300px;
+
+    align-items: center;
+    justify-content: space-evenly;
+
+    #activities-container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+}

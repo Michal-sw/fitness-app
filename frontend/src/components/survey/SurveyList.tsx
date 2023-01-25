@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import useAuth from '../../core/providers/AuthContext';
 import axiosService from '../../services/axiosService';
-import '../../styles/survey/SurveyList.scss'
 
 const SurveyList = () => {
 
@@ -22,7 +21,6 @@ const SurveyList = () => {
     return (
         <>
             <div id={'survey-list'}>
-                <h1>Survey history</h1>
                 <h3>Your score is {score}</h3>
                 <ul>
                     {surveys.map((x: any) => {

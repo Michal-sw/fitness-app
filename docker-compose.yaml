@@ -11,6 +11,7 @@ services:
     depends_on:
       - "database"
     environment:
+      - FRONTEND_URL=frontend
       - MONGODB_HOST=database
       - MONGODB_DATABASE=health_app_db
       - MONGODB_PORT=27017

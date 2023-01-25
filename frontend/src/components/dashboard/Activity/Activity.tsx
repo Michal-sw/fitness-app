@@ -34,33 +34,28 @@ const Activity = ({ activity }: ActivityProps) => {
         }
     }
 
-    const shouldBeVisible = !hasBeenChecked || new Date(date) > new Date();
-
     return (
-        shouldBeVisible 
-            ?
-                <div className="activity">
+        <div className="activity">
+            <div className="activity-field">
+                <span className="activity-field-label">Activity type:</span>
+                <span className="activity-field-value">{activityType}</span>
+            </div>
+            <div className="activity-field">
+                <span className="activity-field-label">Attendees number:</span>
+                <span className="activity-field-value">{attendees.length}</span>
+            </div>
+            { activity.date
+                ?
                     <div className="activity-field">
-                        <span className="activity-field-label">Activity type:</span>
-                        <span className="activity-field-value">{activityType}</span>
+                        <span className="activity-field-label">Date:</span>
+                        <span className="activity-field-value">{new Date(date).toLocaleDateString()}</span>
                     </div>
-                    <div className="activity-field">
-                        <span className="activity-field-label">Attendees number:</span>
-                        <span className="activity-field-value">{attendees.length}</span>
-                    </div>
-                    { activity.date
-                        ?
-                            <div className="activity-field">
-                                <span className="activity-field-label">Date:</span>
-                                <span className="activity-field-value">{new Date(date).toLocaleDateString()}</span>
-                            </div>
-                        : null};
-                    { !hasBeenChecked
-                        ? <ActivityCheck  onCheck={onCheck} date={activity.date}/>
-                        : null
-                    }
-                </div>
-            : null
+                : null};
+            { !hasBeenChecked
+                ? <ActivityCheck  onCheck={onCheck} date={activity.date}/>
+                : null
+            }
+        </div>
     );
 };
 

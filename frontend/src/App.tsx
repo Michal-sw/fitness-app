@@ -10,7 +10,7 @@ import SignIn from './components/auth/SignIn';
 import Login from './components/auth/Login';
 import Notifications from './components/Notifications';
 import Dashboard from './components/dashboard/Dashboard';
-import SurveyList from './components/survey/SurveyList';
+import History from './components/history/History';
 
 function App() {
   
@@ -43,10 +43,10 @@ function App() {
                     <ActivityMapWrapper />
                 </PrivateRoute>
               }/>
-            <Route path='/surveys' element=
+            <Route path='/history' element=
             {
               <PrivateRoute>
-                <SurveyList />
+                <History />
               </PrivateRoute>
             }/>
             <Route path='/signIn' element=
@@ -59,6 +59,7 @@ function App() {
         </BrowserRouter>
         <Chatbot />
         <Notifications />
+        
       </div>
   );
 }

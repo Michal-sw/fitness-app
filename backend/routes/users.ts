@@ -3,10 +3,8 @@ import { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import { authorizeMiddleware } from '../middlewares/middlewares';
 import { getCookie, getPrivateKey, getNewTokenPair } from '../utils/utils';
 import { addUser, getUsers, getUserIfCredentialValid, getUserByLogin, markActivityAsSkipped } from '../services/userService';
-import User, { IUser } from '../config/models/User';
+import { IUser } from '../config/models/User';
 import { getActivitiesByUser } from '../services/activitiesService';
-import Activity from '../config/models/Activity';
-import Surveys from '../config/models/Surveys';
 
 const jwt = require('jsonwebtoken');
 

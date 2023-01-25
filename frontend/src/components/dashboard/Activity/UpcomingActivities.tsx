@@ -10,26 +10,31 @@ const UpcomingActivities = () => {
     const [activities, setActivities] = useState<ActivityDT[]>([]);
 
     useEffect(() => {
-        console.log(user.activities);
         axiosService.getUserActivities(token, user._id)
             .then(res => {
-                console.log(res.data.result);
                 if (!res.data.result) return;
-                setActivities(res.data.result);
+                const filteredActivities = res.data.result.filter(shouldRenderActivity);
+                setActivities(filteredActivities);
             })
             .catch(err => console.log(err));
     }, [])
 
+    const shouldRenderActivity = (activity: ActivityDT) => {
+        return !activity.hasBeenChecked || new Date(activity.date) > new Date();
+    } 
+
     return (
         <div id="upcoming-activities-container">
-            <h3>Upcoming activities:</h3>
-            {user.activities.length
+            {activities.length
                 ?
+                <>
+                    <h3>Upcoming activities:</h3>
                     <div id="activities-container">
                         {activities.map((activity) => 
                             <Activity key={activity._id} activity={activity}/>
                         )}
                     </div>
+                </>
                 : <h4>You don't have any upcoming activities</h4>}
         </div>
     );

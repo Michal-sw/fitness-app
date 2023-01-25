@@ -54,16 +54,16 @@ function ActivityMap(coordinates: Coordinates) {
                 setActivities(activities);
                 const placeIds = getPlaceIdsAsString(activities);
 
-                overpass(`[out:json];node(${placeIds});out body;`, {  })
+                return overpass(`[out:json];node(${placeIds});out body;`, {  })
                     .then((res) => res.json())
                     .then((res) => handleOverpassResponse(res, map))
-                    .catch(err => {
-                        console.log(err)
-                        actions.addNotification("Error joining the activity!");
-                    })
+                    .catch(err => err)
                     .finally(() => setIsLoading(false));
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err)
+                actions.addNotification("Error loading activities!");
+            });
     }, [isLoading]);
     
     const handleOverpassResponse = (res: any, map: Map) => {
