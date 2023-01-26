@@ -76,6 +76,10 @@ export function AuthProvider({ children }: {children: ReactElement }) {
     setError(err);
   }
 
+  function handleInvalidLogin() {
+    actions.addNotification('Invalid email or password')
+  }
+
   function setAuthData({ token, user }: { token:string, user:UserDT}) {
     setToken(token || "");
     setUser(user);
@@ -90,8 +94,8 @@ export function AuthProvider({ children }: {children: ReactElement }) {
           navigate('/');
         }
       })
-      .catch(err => {
-        handleError(err);
+      .catch(() => {
+        handleInvalidLogin();
       })
   }
 
@@ -104,7 +108,7 @@ export function AuthProvider({ children }: {children: ReactElement }) {
         }
       })
       .catch(err => {
-        handleError(err);
+        handleInvalidLogin();
       })
   }
 

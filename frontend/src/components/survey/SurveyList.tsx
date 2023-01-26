@@ -24,9 +24,11 @@ const SurveyList = () => {
                 <h3>Your score is {score}</h3>
                 <ul>
                     {surveys.map((x: any) => {
+                        console.log(x)
                         return (
                             <li key={x._id} className={`checked-survey-${x.hasBeenChecked}`}>
                                 {`${new Date(x.date).getDate()}.${new Date(x.date).getMonth() + 1}.${new Date(x.date).getFullYear()}`}
+                                <div>{`Water score: ${x.waterScore} Sleep score: ${x.sleepScore} Training score: ${x.trainingScore}`}</div>
                             </li>
                         );
                     })}
