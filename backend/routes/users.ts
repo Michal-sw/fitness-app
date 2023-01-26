@@ -2,7 +2,7 @@ import express, { Request, Response, Router } from 'express';
 import { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import { authorizeMiddleware } from '../middlewares/middlewares';
 import { getCookie, getPrivateKey, getNewTokenPair } from '../utils/utils';
-import { addUser, getUsers, getUserIfCredentialValid, getUserByLogin, markActivityAsSkipped, addUserActivity } from '../services/userService';
+import { addUser, getUsers, getUserIfCredentialValid, getUserByLogin, markActivityAsSkipped, addUserActivity, markActivityAsPerformed } from '../services/userService';
 import { IUser } from '../config/models/User';
 import { addUserToActivity, getActivitiesByUser } from '../services/activitiesService';
 
@@ -97,8 +97,12 @@ router.get('/:id/activities', async (req: Request, res: Response) => {
 
 router.patch('/:id/activities', async (req: Request, res: Response) => {
   const activityId = req.body.activityId;
-  const response = await markActivityAsSkipped(req.params.id, activityId);
- 
+  const skipped = req.body.skipped;
+
+  const response = skipped 
+    ? await markActivityAsSkipped(req.params.id, activityId)
+    : await markActivityAsPerformed(req.params.id);
+
   return res.status(response.statusCode).send(response);
 });
 

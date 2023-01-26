@@ -2,7 +2,6 @@ import useAuth from "../../../core/providers/AuthContext";
 import { ActivityDT } from "../../../core/types/ActivityDT";
 import ActivityCheck from "./ActivityCheck";
 import axiosService from "../../../services/axiosService";
-import { AxiosResponse } from "axios";
 import useNotifications from "../../../hooks/useNotifications";
 import { useNavigate } from "react-router";
 
@@ -24,7 +23,7 @@ const Activity = ({ activity }: ActivityProps) => {
                 .catch(_err => actions.addNotification("Error checking activity"));
         } else {
             axiosService
-                .updateActivity(token, { ...activity, hasBeenChecked: true })
+                .markActivityAsPerformed(token, user._id, { ...activity, hasBeenChecked: true })
                 .then(res => actions.addNotification("Activity successfully marked"))
                 .catch(err => actions.addNotification("Error checking activity"));
         }

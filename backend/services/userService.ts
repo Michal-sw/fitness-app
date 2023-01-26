@@ -1,7 +1,7 @@
 import { MongooseError, ObjectId, Types } from "mongoose";
 import User, { IUser } from "../config/models/User";
 import { LoginDT } from "../types/LoginDT";
-import { getCorrectObject, getErrorObject } from '../utils/utils';
+import { getCorrectObject, getErrorObject, calculateScore, ScoreType } from '../utils/utils';
 
 export const getUsers = async () => {
     const result = await User
@@ -65,7 +65,15 @@ export const markActivityAsSkipped = async (id: string, activityId: string) => {
     .then((user: IUser | any) => getCorrectObject(user))
     .catch((err: MongooseError) => getErrorObject(500, err.message));
 
+    calculateScore(ScoreType.ACTIVITY, undefined, id, false);
+
     return result;
+}
+
+export const markActivityAsPerformed = async (id: string) => {
+    calculateScore(ScoreType.ACTIVITY, undefined, id, true);
+
+    return getCorrectObject({});
 }
 
 export const getUserById = async (id: string) => {
