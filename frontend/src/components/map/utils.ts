@@ -1,5 +1,6 @@
 import L, { Map, LatLng } from "leaflet"
 import { OverpassNode } from "overpass-ts";
+import { ActivityDT } from "../../core/types/ActivityDT";
 
 interface addOverpassResutOptions {
     buttonText?: string;
@@ -8,15 +9,18 @@ interface addOverpassResutOptions {
     popUpHTML?: HTMLElement;
 }
 
-export const addOverpassResultToMap = (map: Map, dataPoints: OverpassNode[], options: addOverpassResutOptions ): void => {
-
+export const addOverpassResultToMap = (map: Map, dataPoints: OverpassNode[], options: addOverpassResutOptions, activities?: ActivityDT[] ): void => {
+    
     for (let dataPoint of dataPoints) {
         const position = new LatLng(dataPoint.lat, dataPoint.lon);
+        const activity = activities?.find(a => a.placeId === dataPoint.id)?.activityType;
 
         const popup = createPopupDiv(
             dataPoint,
-            options
+            options,
+            activity
         );
+
 
         L.circle(position, options.popUpSize || 20, {
           color: '#f69697',
@@ -31,25 +35,27 @@ export const addOverpassResultToMap = (map: Map, dataPoints: OverpassNode[], opt
     }                      
 }
 
-const createPopupDiv = (dataPoint: OverpassNode, options: addOverpassResutOptions): HTMLDivElement => {
+const createPopupDiv = (dataPoint: OverpassNode, options: addOverpassResutOptions, activityType: string | undefined): HTMLDivElement => {
     const nameOfPlace = dataPoint.tags?.leisure || "";
 
     const popup = document.createElement('div');
-    const text = createPopUpText(nameOfPlace, options);
+    const text = createPopUpText(nameOfPlace, options, 'Name');
+    const activityText = createPopUpText(activityType, options, 'Activity Type');
     const addWorkoutButton = createAddWorkoutButton(dataPoint, options);
     
     popup.append(text);
+    activityType && popup.append(activityText)
     popup.append(addWorkoutButton);
 
     return popup;
 }
 
-const createPopUpText = (nameOfPlace: string, options: addOverpassResutOptions): HTMLParagraphElement => {
+const createPopUpText = (nameOfPlace: string | undefined, options: addOverpassResutOptions, name: string): HTMLParagraphElement => {
     const container = document.createElement('div');
     const { popUpHTML } = options;
 
     const text = document.createElement('p');
-    text.innerText = `Name: ${nameOfPlace}`;
+    text.innerText = `${name}: ${nameOfPlace}`;
     
     container.append(text);
     

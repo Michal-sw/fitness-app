@@ -82,7 +82,7 @@ function ActivityMap(coordinates: Coordinates) {
             },
             buttonText: "JOIN ACTIVITY",
             popUpSize: 50
-        });
+        }, activities);
     }
 
     const getPlaceIdsAsString = (activities: ActivityDT[]) => {
