@@ -7,4 +7,35 @@
     background-color: #333;
 
     padding-right: 30px;
+
+    > button.active {
+        background-color: var(--main-color);
+        color: white;
+    }
 }
+
+
+
+#profile-icon {
+    width: 35px;
+    height: 35px;
+    color: white;
+    transition: 0.3s;
+    &:hover {
+        cursor: pointer;
+        color: var(--main-color);
+    }
+}
+
+#logo-icon {
+    width: 35px;
+    height: 35px;
+    color: var(--main-color);
+    transition: 0.3s;
+    margin-right: 15px;
+    &:hover {
+        cursor: pointer;
+        color: #9d88ec;
+    }
+}
+

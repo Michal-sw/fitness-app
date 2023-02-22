@@ -1,9 +1,10 @@
 #notification_container {
     display: flex;
     flex-direction: column;
-    position: absolute;
+    pointer-events: none;
+    position: fixed;
 
-    top: 10px;
+    top: 20px;
     left: 0; 
     right: 0; 
     margin-left: auto; 
@@ -14,6 +15,7 @@
 }
 
 .notification {
+    pointer-events: none;
     list-style: none;
     background-color: rgba(17, 181, 176, 0.4);
     border-radius: 5px;

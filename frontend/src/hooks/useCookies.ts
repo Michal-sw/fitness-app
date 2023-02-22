@@ -10,7 +10,6 @@ const useCookies = () => {
     }
 
     document.cookie = cookieKey + "=" + (value || "") + expires + "; path=/";  
-    console.log(cookieKey + "=" + (value || "") + expires + "; path=/");
   }
 
   const getCookie = (cookieKey: String) => {

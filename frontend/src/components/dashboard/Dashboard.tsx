@@ -35,7 +35,6 @@ const Dashboard = () => {
 
     return (
         <div id="dashboard_container">
-            <h2>Hello {user ? user.login : null}!</h2>
             <UpcomingActivities />
             {visibleSurvey &&
                 <Survey visible={visibleSurvey} setVisible={setVisibleSurvey} surveyId={surveyId} surveyNumber={surveyNumber} setPendingSurvey={setPendingSurvey}/>

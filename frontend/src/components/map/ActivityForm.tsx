@@ -38,7 +38,7 @@ function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
                 <div id='activity-form-container'>
                     <p id="close-button" onClick={() => setVisible(false)}>&#10006;</p>
                     <Formik initialValues={{
-                        activityType: "",
+                        activityType: "running",
                         date: ""
                     }} onSubmit={(values) => handleAddActivity(values)}>
                         <Form className={"login_form"}>

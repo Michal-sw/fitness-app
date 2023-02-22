@@ -32,7 +32,7 @@ const OutroPage = (props: IOutroPage) => {
                 .finishSurvey(token, props.surveyId, answers)
                 .then(res => props.setPendingSurvey(false))
                 .catch(err => console.log(err));
-        } else console.log(props)
+        }
         props.setVisible(false)
         setLoading(false);
     }

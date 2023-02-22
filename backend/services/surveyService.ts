@@ -31,7 +31,6 @@ export const addSurvey = async (id: string) => {
                 date.getDate() == now.getDate())
     })
     if (todaySurveys.length > 0) {
-        console.log(todaySurveys)
         if (todaySurveys[0].hasBeenChecked) return { statusCode: 200, completed: true}
         else return { statusCode: 200, completed: false, survey: todaySurveys[0] }
     }

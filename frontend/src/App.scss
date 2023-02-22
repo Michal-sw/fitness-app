@@ -37,10 +37,17 @@ button {
 }
 
 button:hover{
-  background-color: #3885ea;
+  background-color: var(--main-color);
+  // background-color: #3885ea;
   color: white;
 }
 
 .spacedRight {
   margin-left: auto;
+  margin-right: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
