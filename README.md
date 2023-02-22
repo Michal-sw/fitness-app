@@ -34,7 +34,7 @@ to access the app select "Sign in" and input random login and password
     - mqtt.js
 
   4. Deployment:
-    - Docker compose with NGINX
+    - Docker compose
     - RHEL 7 run on Microsoft Azure services
 ```
 ## Principles ##
