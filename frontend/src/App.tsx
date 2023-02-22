@@ -11,6 +11,7 @@ import Login from './components/auth/Login';
 import Notifications from './components/Notifications';
 import Dashboard from './components/dashboard/Dashboard';
 import History from './components/history/History';
+import User from './components/users/User';
 
 function App() {
   
@@ -52,6 +53,10 @@ function App() {
             <Route path='/signIn' element=
               {
                 <SignIn/>
+              }/>
+            <Route path='/user/:id' element=
+              {
+                <User />
               }/>
             </Routes>
           </>

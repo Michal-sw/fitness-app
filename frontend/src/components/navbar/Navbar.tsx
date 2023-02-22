@@ -6,7 +6,7 @@ import FitbitIcon from '@mui/icons-material/Fitbit';
 import { useLayoutEffect } from 'react';
 
 function Navbar() {
-    const { logout, authenticated } = useAuth();
+    const { logout, authenticated, user } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     
@@ -30,7 +30,7 @@ function Navbar() {
                     <button className='navButton' id="nav-path-/history" onClick={() => navigate('/history')}>History</button>
                     <div className='spacedRight'>
                         <button className='navButton' onClick={logout}>Logout</button>
-                        <AccountCircleIcon id="profile-icon" onClick={() => navigate("/signin")}/>
+                        <AccountCircleIcon id="profile-icon" onClick={() => navigate(`/user/${user._id}`)}/>
                     </div>
                     </>
                 :
