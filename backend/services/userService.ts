@@ -77,7 +77,7 @@ export const markActivityAsPerformed = async (id: string) => {
 }
 
 export const getUserById = async (id: string) => {
-    const user = await User.findById(id);
+    const user: IUser | null = await User.findById(id);
     if (!user) {
         return getErrorObject(404);
     }
@@ -92,12 +92,6 @@ export const getUserByLogin = async (login: string) => {
     return getCorrectObject(user[0]);
 };
 
-export const replaceUser = async ({ id, ...body }: {id:string}) => {
-    const user = await User.findOneAndReplace({ _id: new Types.ObjectId(id) }, body);
-    
-    return getCorrectObject(user);
-};
-
 export const deleteUser = async (id: string) => {
     await User.findOneAndDelete({ _id: new Types.ObjectId(id) })
         .then((user: IUser | null) => {
@@ -108,9 +102,15 @@ export const deleteUser = async (id: string) => {
 };
 
 export const editUser = async ({ id, ...body }: {id:string}) => {
-    const user = await User.findOneAndUpdate({ _id: new Types.ObjectId(id) }, body);
-    
-    return getCorrectObject(user);
+    try {
+        const user: IUser | null = await User.findOneAndUpdate({ _id: new Types.ObjectId(id) }, body);
+        if (!user) {
+            return getErrorObject(404, "User does not exist");
+        }
+        return getCorrectObject(user);    
+    } catch (er) {
+        return getErrorObject(400, "Login already taken")
+    }
 };
 
 const mockUsers = [

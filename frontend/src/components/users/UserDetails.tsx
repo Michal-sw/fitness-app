@@ -1,0 +1,90 @@
+import '../../styles/users/UserDetails.scss'
+import { UserDT } from '../../core/types/UserDT';
+import { TextField } from '@mui/material';
+import { useFormik } from 'formik';
+import useNotifications from '../../hooks/useNotifications';
+import axiosService from '../../services/axiosService';
+import useAuth from '../../core/providers/AuthContext';
+import { AxiosError } from 'axios';
+
+interface userDetailsProps {
+    user: UserDT;
+    isOwner: boolean;
+}
+
+const UserDetails = ({ user, isOwner }: userDetailsProps) => {
+    const { actions } = useNotifications();
+    const { token } = useAuth();
+
+    const formik = useFormik({
+        initialValues: {
+            login: user.login || "",
+            firstName: user.firstName || "",
+            lastName: user.lastName || "",
+         },
+        onSubmit: (values) => {
+            if (!values.login) return actions.addNotification("Login must not be empty!");
+            console.log(values);
+            axiosService
+                .updateUser(token, user._id, values)
+                .then(_res => actions.addSuccessNotification("New profile saved"))
+                .catch((er: AxiosError) => actions.addErrorNotification("This login is taken"));
+        }
+    });
+
+    const registrationDate: Date = user ? new Date(user.registrationDate) : new Date();
+    const registrationDateToRender = `${registrationDate.getDate()}.${registrationDate.getMonth()}.${registrationDate.getFullYear()}`;
+
+    return (
+        <form onSubmit={formik.handleSubmit}>
+            <div className='user-details'>
+                <div>
+                    <label>Login: </label>
+                    <TextField
+                        id='login'
+                        name='login'
+                        value={formik.values.login}
+                        onChange={formik.handleChange}
+                        InputProps={{readOnly: !isOwner}}
+                        variant='standard'
+                        />
+                </div>
+                <div>
+                    <label>First name: </label>
+                    <TextField 
+                        id='firstName'
+                        name='firstName'
+                        value={formik.values.firstName}
+                        onChange={formik.handleChange}                    
+                        InputProps={{readOnly: !isOwner}}
+                        variant='standard'
+                        />
+                </div>
+                <div>
+                    <label>Last name: </label>
+                    <TextField 
+                        id='lastName'
+                        name='lastName'
+                        value={formik.values.lastName}
+                        onChange={formik.handleChange}                                        
+                        InputProps={{readOnly: !isOwner}} 
+                        variant='standard'
+                        />
+                </div>
+                <div>
+                    <label>Registration Date: </label>
+                    <TextField 
+                        InputProps={{readOnly: true}}
+                        defaultValue={registrationDateToRender} 
+                        variant='standard'
+                        />
+                </div>
+                {isOwner &&
+                    <button type='submit'>Edit profile</button>
+                }
+            </div>
+        </form>
+    );
+};
+
+export default UserDetails;

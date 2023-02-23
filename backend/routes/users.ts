@@ -2,7 +2,7 @@ import express, { Request, Response, Router } from 'express';
 import { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import { authorizeMiddleware } from '../middlewares/middlewares';
 import { getCookie, getPrivateKey, getNewTokenPair } from '../utils/utils';
-import { addUser, getUsers, getUserIfCredentialValid, getUserByLogin, markActivityAsSkipped, addUserActivity, markActivityAsPerformed } from '../services/userService';
+import { addUser, getUsers, getUserIfCredentialValid, getUserByLogin, markActivityAsSkipped, addUserActivity, markActivityAsPerformed, editUser } from '../services/userService';
 import { IUser } from '../config/models/User';
 import { addUserToActivity, getActivitiesByUser } from '../services/activitiesService';
 
@@ -87,6 +87,15 @@ router.post('/refresh', (req: Request, res: Response) => {
 
     return res.send({ token, user });
   });
+})
+
+router.patch('/:id', async (req: Request, res: Response) => {
+  const response = await editUser({
+    id: req.params.id,
+    ...req.body
+  });
+
+  return res.status(response.statusCode).send(response);
 })
 
 router.get('/:id/activities', async (req: Request, res: Response) => {

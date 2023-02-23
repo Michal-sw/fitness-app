@@ -1,6 +1,5 @@
 import { NotificationMessage } from "../core/types/NotificationmessageDT";
 
-
 type SetStateFunction = React.Dispatch<React.SetStateAction<any>>
 
 class NotificationObservable {

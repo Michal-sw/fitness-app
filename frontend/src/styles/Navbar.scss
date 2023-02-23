@@ -1,4 +1,6 @@
 #navbar {
+    position: sticky;
+    width: 100%;
     display: flex;
     flex-direction: row;
     height: 6vh;
@@ -11,6 +13,18 @@
     > button.active {
         background-color: var(--main-color);
         color: white;
+    }
+}
+
+#logout-button {
+    &:hover {
+        background-color: var(--danger);
+    }
+}
+
+#login-button {
+    &:hover {
+        background-color: var(--success);
     }
 }
 

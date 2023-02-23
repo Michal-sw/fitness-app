@@ -2,6 +2,7 @@ import axios, { Axios, AxiosResponse } from "axios";
 import { LoginDT } from "../core/types/LoginDT";
 import { SurveyDT } from "../core/types/SurrveryDT";
 import { ActivityDT } from "../core/types/ActivityDT";
+import { UserDT } from "../core/types/UserDT";
 
 const apiPath = process.env.REACT_APP_API_PATH || "127.0.0.1:8080";
 // const chatbotPath = process.env.REACT_APP_CHATBOT_API_PATH || "127.0.0.1:5000";
@@ -52,6 +53,14 @@ const getUserActivities = async (token: string, id: string) => {
     }
   });
 } 
+
+const updateUser = async (token: string, userId: string, values: UserDT) => {
+  return axiosInstance.patch(`http://${apiPath}/users/${userId}`, { ...values }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+  });
+}
 
 const addActivity = async (token: string, id: string, values: ActivityDT) => {
   return axiosInstance.post(`http://${apiPath}/activities`, { id, ...values }, {
@@ -124,6 +133,7 @@ interface AxiosService {
   markActivityAsSkipped: (token:string, userId: string, values: ActivityDT) => Promise<AxiosResponse[]>, 
   markActivityAsPerformed: (token:string, userId: string, values: ActivityDT) => Promise<AxiosResponse[]>, 
   getUserActivities: (token: string, id: string) => Promise<AxiosResponse>,
+  updateUser: (token: string, id: string, values: any) => Promise<AxiosResponse>,
   updateActivity: (token:string, values: ActivityDT) => Promise<AxiosResponse>, 
   addActivity: (token: string, id: string, values: ActivityDT) => Promise<AxiosResponse>,
   addUserToActivity: (token: string, userId: string, activityId: string) => Promise<AxiosResponse>,
@@ -139,6 +149,7 @@ const axiosService: AxiosService = {
   startSurvey,
   finishSurvey,
   refreshToken,
+  updateUser,
   addActivity,
   getActivities,
   updateActivity,

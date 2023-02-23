@@ -25,4 +25,11 @@
     color: black;
 
     font-weight: 500;
+
+    &.error {
+        background-color: var(--danger-transparent);
+    }
+    &.success {
+        background-color: var(--success-transparent);
+    }
 }

@@ -14,8 +14,12 @@ const useNotifications = () => {
   const actions = useMemo(() => {
     return {
       addNotification: (notificationMessage: string, timeout:number = 5000) => 
-        notificationStore.addNotification({message: notificationMessage}, timeout)
-    }
+        notificationStore.addNotification({message: notificationMessage}, timeout),
+      addErrorNotification: (notificationMessage: string, timeout:number = 5000) =>
+        notificationStore.addNotification({message: notificationMessage, className: "error"}, timeout),
+      addSuccessNotification: (notificationMessage: string, timeout:number = 5000) =>
+        notificationStore.addNotification({message: notificationMessage, className: "success"}, timeout),
+      }
   }, [])
   
   return {

@@ -11,7 +11,7 @@ const Notifications = () => {
     <div id="notification_container">
       {notifications.map((notification, i) => {
         return (
-          <li key={i} className="notification">
+          <li key={i} className={`notification ${notification.className || ""}`}>
             {notification.message}
           </li>
         )

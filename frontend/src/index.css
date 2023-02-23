@@ -1,5 +1,9 @@
 :root {
   --main-color: #6c4ae7;
+  --success: #00995c;
+  --success-transparent: #00995cc9;
+  --danger: #b91929;
+  --danger-transparent: #b91929be;
 }
 
 body {

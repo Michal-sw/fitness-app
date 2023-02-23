@@ -77,7 +77,7 @@ export function AuthProvider({ children }: {children: ReactElement }) {
   }
 
   function handleInvalidLogin() {
-    actions.addNotification('Invalid email or password')
+    actions.addErrorNotification('Invalid email or password')
   }
 
   function setAuthData({ token, user }: { token:string, user:UserDT}) {

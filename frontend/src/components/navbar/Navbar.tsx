@@ -29,13 +29,13 @@ function Navbar() {
                     <button className='navButton' id="nav-path-/map/activities" onClick={() => navigate('/map/activities')}>Join activity</button>
                     <button className='navButton' id="nav-path-/history" onClick={() => navigate('/history')}>History</button>
                     <div className='spacedRight'>
-                        <button className='navButton' onClick={logout}>Logout</button>
+                        <button id='logout-button' className='navButton' onClick={logout}>Logout</button>
                         <AccountCircleIcon id="profile-icon" onClick={() => navigate(`/user/${user._id}`)}/>
                     </div>
                     </>
                 :
                     <div className='spacedRight'>
-                        <button className='navButton' onClick={() => navigate("/login")}>Log In</button>
+                        <button id='login-button' className='navButton' onClick={() => navigate("/login")}>Log In</button>
                         <button className='navButton' onClick={() => navigate("/signin")}>Sign In</button>
                     </div>
             }
