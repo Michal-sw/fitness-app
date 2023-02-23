@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../../../styles/dashboard/Dashboard.scss";
+import "../../../styles/dashboard/Activities.scss";
 import useAuth from "../../../core/providers/AuthContext";
 import { ActivityDT } from "../../../core/types/ActivityDT";
 import axiosService from "../../../services/axiosService";

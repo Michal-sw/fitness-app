@@ -29,7 +29,6 @@ const User = () => {
         } else {
             console.log("Looking for user");
         };
-        console.log(id);
     }, [id, user._id]);
 
     return (

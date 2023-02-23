@@ -6,6 +6,7 @@ import useNotifications from "../../../hooks/useNotifications";
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import { AxiosResponse } from "axios";
+import { Chip } from "@mui/material";
 
 interface ActivityProps {
     activity: ActivityDT;
@@ -50,8 +51,16 @@ const Activity = ({ activity }: ActivityProps) => {
                 <span className="activity-field-value">{activityType}</span>
             </div>
             <div className="activity-field">
-                <span className="activity-field-label">Attendees number:</span>
-                <span className="activity-field-value">{attendees.length}</span>
+                <span className="activity-field-label">Attendees:</span>
+                <div className="activity-field-value attendees-list">
+                    {attendees.map((attendee,i) => 
+                        <Chip 
+                            key={i}
+                            label={attendee.slice(0,5)}
+                            onClick={() => navigate(`/user/${attendee}`)}
+                        />
+                    )}
+                </div>
             </div>
             { activity.date
                 ?
@@ -61,8 +70,6 @@ const Activity = ({ activity }: ActivityProps) => {
                     </div>
                 : null};
             <div className="activity-field">
-                <span className="activity-field-label">Location ID:</span>
-                <span className="activity-field-value">{placeId}</span>
                 <button onClick={onNavigateToLocation}>Show on map</button>
             </div>
             { !hasBeenCheckedLocaly

@@ -24,7 +24,6 @@ const UserDetails = ({ user, isOwner }: userDetailsProps) => {
          },
         onSubmit: (values) => {
             if (!values.login) return actions.addNotification("Login must not be empty!");
-            console.log(values);
             axiosService
                 .updateUser(token, user._id, values)
                 .then(_res => actions.addSuccessNotification("New profile saved"))
@@ -33,7 +32,6 @@ const UserDetails = ({ user, isOwner }: userDetailsProps) => {
     });
 
     const registrationDate: Date = user ? new Date(user.registrationDate) : new Date();
-    const registrationDateToRender = `${registrationDate.getDate()}.${registrationDate.getMonth()}.${registrationDate.getFullYear()}`;
 
     return (
         <form onSubmit={formik.handleSubmit}>
@@ -75,7 +73,7 @@ const UserDetails = ({ user, isOwner }: userDetailsProps) => {
                     <label>Registration Date: </label>
                     <TextField 
                         InputProps={{readOnly: true}}
-                        defaultValue={registrationDateToRender} 
+                        defaultValue={registrationDate.toLocaleDateString()} 
                         variant='standard'
                         />
                 </div>
