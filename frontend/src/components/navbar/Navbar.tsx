@@ -1,22 +1,14 @@
 import '../../styles/Navbar.scss';
 import useAuth from '../../core/providers/AuthContext';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FitbitIcon from '@mui/icons-material/Fitbit';
-import { useLayoutEffect } from 'react';
+import NavbarSmartButton from './NavbarSmartButton';
+
 
 function Navbar() {
     const { logout, authenticated, user } = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();
-    
-    useLayoutEffect(() => {
-        const element = document.getElementById(`nav-path-${location.pathname}`);
-        element?.classList.add('active');
-        return (() => {
-            element?.classList.remove('active')
-        });
-    },[location]);
 
     return (
         <div id="navbar">
@@ -24,10 +16,10 @@ function Navbar() {
             {authenticated 
                 ? 
                     <>
-                    <button className='navButton' id="nav-path-/" onClick={() => navigate('/')}>Dashboard</button>
-                    <button className='navButton' id="nav-path-/map" onClick={() => navigate('/map')}>Map</button>
-                    <button className='navButton' id="nav-path-/map/activities" onClick={() => navigate('/map/activities')}>Join activity</button>
-                    <button className='navButton' id="nav-path-/history" onClick={() => navigate('/history')}>History</button>
+                    <NavbarSmartButton path='/' pathName='Dashboard'/>
+                    <NavbarSmartButton path='/map' pathName='Map'/>
+                    <NavbarSmartButton path='/map/activities' pathName='Join activity'/>
+                    <NavbarSmartButton path='/history' pathName='History'/>
                     <div className='spacedRight'>
                         <button id='logout-button' className='navButton' onClick={logout}>Logout</button>
                         <AccountCircleIcon id="profile-icon" onClick={() => navigate(`/user/${user._id}`)}/>
