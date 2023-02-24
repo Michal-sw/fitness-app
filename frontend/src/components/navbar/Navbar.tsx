@@ -3,7 +3,7 @@ import useAuth from '../../core/providers/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FitbitIcon from '@mui/icons-material/Fitbit';
-import NavbarSmartButton from './NavbarSmartButton';
+import NavbarSmartButton from './NavbarSmartButton';;
 
 
 function Navbar() {

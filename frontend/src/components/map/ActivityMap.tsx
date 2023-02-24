@@ -4,7 +4,7 @@ import L, { Map } from 'leaflet';
 import { overpass, OverpassNode } from 'overpass-ts';
 import useNotifications from '../../hooks/useNotifications';
 import { CircularProgress } from '@mui/material';
-import { addOverpassResultToMap } from './utils';
+import { addOverpassResultToMap, getPlaceIdsAsString } from './utils';
 import { ActivityDT } from '../../core/types/ActivityDT';
 import axiosService from '../../services/axiosService';
 import useAuth from '../../core/providers/AuthContext';
@@ -81,16 +81,13 @@ function ActivityMap(coordinates: Coordinates) {
                 }
             },
             buttonText: "JOIN ACTIVITY",
-            popUpSize: 50
-        }, activities);
+            popUpSize: 50,
+            activities,
+            userId: user._id
+        });
     }
 
-    const getPlaceIdsAsString = (activities: ActivityDT[]) => {
-        return activities.reduce((prev, curr) => {
-            if (!curr.placeId) return prev;
-            return prev ? `${prev}, ${curr.placeId}` : `id:${curr.placeId}`;
-        }, "");
-    }
+
 
     return (
         <>

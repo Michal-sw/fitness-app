@@ -24,7 +24,7 @@ function InteractiveMap({ latitude = 18.60, longitude = 54.35 }: InteractiveMapP
 
 
     const handleMapSearch = () => {
-        if (!map) return; 
+        if (!map || isLoading) return; 
         const bounds = map.getBounds();
         const bottomLeftCorner = bounds.getSouthWest();
         const upperRightCorner = bounds.getNorthEast();

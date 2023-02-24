@@ -6,14 +6,24 @@ interface addOverpassResutOptions {
     buttonText?: string;
     popUpSize?: number;
     buttonCallback?: (dataPoint:OverpassNode) => void;
-    popUpHTML?: HTMLElement;
+    userId?: String;
+    activities?: ActivityDT[];
 }
 
-export const addOverpassResultToMap = (map: Map, dataPoints: OverpassNode[], options: addOverpassResutOptions, activities?: ActivityDT[] ): void => {
-    
+export const getPlaceIdsAsString = (activities: ActivityDT[]) => {
+    return activities.reduce((prev, curr) => {
+        if (!curr.placeId) return prev;
+        return prev ? `${prev}, ${curr.placeId}` : `id:${curr.placeId}`;
+    }, "");
+}
+
+export const addOverpassResultToMap = (map: Map, dataPoints: OverpassNode[], options: addOverpassResutOptions): void => {
+
     for (let dataPoint of dataPoints) {
         const position = new LatLng(dataPoint.lat, dataPoint.lon);
-        const activity = activities?.find(a => a.placeId === dataPoint.id)?.activityType;
+        const activity = options.activities?.find(a => a.placeId === dataPoint.id);
+
+       if (isUserAParticipant(activity, options.userId)) continue;
 
         const popup = createPopupDiv(
             dataPoint,
@@ -30,42 +40,43 @@ export const addOverpassResultToMap = (map: Map, dataPoints: OverpassNode[], opt
         .addTo(map)
         .bindPopup(popup)
         .on('click', () => {
-            
         });
     }                      
 }
 
-const createPopupDiv = (dataPoint: OverpassNode, options: addOverpassResutOptions, activityType: string | undefined): HTMLDivElement => {
+const isUserAParticipant = (activity: ActivityDT | undefined, userId: String | undefined) => {
+    return activity?.attendees.find(attendee => attendee === userId);
+}
+
+const createPopupDiv = (dataPoint: OverpassNode, options: addOverpassResutOptions, activity: ActivityDT | undefined): HTMLDivElement => {
     const nameOfPlace = dataPoint.tags?.leisure || "";
 
     const popup = document.createElement('div');
-    const text = createPopUpText(nameOfPlace, options, 'Name');
-    const activityText = createPopUpText(activityType, options, 'Activity Type');
-    const addWorkoutButton = createAddWorkoutButton(dataPoint, options);
+    const name = createPopUpText('Name', nameOfPlace, options);
+    const activityType = createPopUpText('Activity Type', activity?.activityType, options);
+    const attendees = createPopUpText('Attendees', activity?.attendees.length.toString(), options);
+    const addWorkoutButton = createButton(dataPoint, options);
     
-    popup.append(text);
-    activityType && popup.append(activityText)
+    popup.append(name);
+    activity && popup.append(activityType);
+    activity && popup.append(attendees);
     popup.append(addWorkoutButton);
 
     return popup;
 }
 
-const createPopUpText = (nameOfPlace: string | undefined, options: addOverpassResutOptions, name: string): HTMLParagraphElement => {
+const createPopUpText = (label: string, nameOfPlace: string | undefined, options: addOverpassResutOptions): HTMLParagraphElement => {
     const container = document.createElement('div');
-    const { popUpHTML } = options;
 
     const text = document.createElement('p');
-    text.innerText = `${name}: ${nameOfPlace}`;
+    text.innerText = `${label}: ${nameOfPlace}`;
     
     container.append(text);
-    
-    if (popUpHTML) {
-        container.append(popUpHTML);
-    }
+
     return container;
 }
 
-const createAddWorkoutButton = (dataPoint: OverpassNode, options: addOverpassResutOptions): HTMLButtonElement => {
+const createButton = (dataPoint: OverpassNode, options: addOverpassResutOptions): HTMLButtonElement => {
     const addButton = document.createElement('button');
     const { buttonCallback, buttonText } = options;
 
@@ -73,8 +84,7 @@ const createAddWorkoutButton = (dataPoint: OverpassNode, options: addOverpassRes
         addButton.addEventListener('click', () => buttonCallback(dataPoint));
     }
 
-    addButton.innerText = buttonText ? buttonText : "ADD WORKOUT";
+    addButton.innerText = buttonText ? buttonText : "CLICK";
 
     return addButton;
 }
-

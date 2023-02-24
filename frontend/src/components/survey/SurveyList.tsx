@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useAuth from '../../core/providers/AuthContext';
 import axiosService from '../../services/axiosService';
 
