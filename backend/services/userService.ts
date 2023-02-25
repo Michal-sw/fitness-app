@@ -85,7 +85,8 @@ export const getUserById = async (id: string) => {
 };
 
 export const getUserByLogin = async (login: string) => {
-    const user = await User.find({ login });
+    const user = await User
+        .find({ login });
     if (!user) {
         return getErrorObject(404);
     }

@@ -56,8 +56,8 @@ const Activity = ({ activity }: ActivityProps) => {
                     {attendees.map((attendee,i) => 
                         <Chip 
                             key={i}
-                            label={attendee.slice(0,5)}
-                            onClick={() => navigate(`/user/${attendee}`)}
+                            label={attendee.login}
+                            onClick={() => navigate(`/user/${attendee._id}`)}
                         />
                     )}
                 </div>

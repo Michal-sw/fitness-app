@@ -2,7 +2,7 @@ import express, { Request, Response, Router } from 'express';
 import { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import { authorizeMiddleware } from '../middlewares/middlewares';
 import { getCookie, getPrivateKey, getNewTokenPair } from '../utils/utils';
-import { addUser, getUsers, getUserIfCredentialValid, getUserByLogin, markActivityAsSkipped, addUserActivity, markActivityAsPerformed, editUser } from '../services/userService';
+import { addUser, getUsers, getUserIfCredentialValid, getUserByLogin, getUserById, markActivityAsSkipped, addUserActivity, markActivityAsPerformed, editUser } from '../services/userService';
 import { IUser } from '../config/models/User';
 import { addUserToActivity, getActivitiesByUser } from '../services/activitiesService';
 
@@ -12,6 +12,11 @@ const router: Router = express.Router({mergeParams: true});
 
 router.get('/', authorizeMiddleware, async (req: Request, res: Response) => {
   const response: any = await getUsers();
+  res.status(response.statusCode).json(response);
+});
+
+router.get('/:id', authorizeMiddleware, async (req: Request, res: Response) => {
+  const response: any = await getUserById(req.params.id);
   res.status(response.statusCode).json(response);
 });
 

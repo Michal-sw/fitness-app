@@ -52,7 +52,7 @@ function ActivityMap(coordinates: Coordinates) {
         getActivities()
             .then((activities: ActivityDT[]) => {
                 const filteredActivities = activities
-                    .filter(a => a.attendees.find(at => at === user._id) ? false : true);
+                    .filter(a => a.attendees.find(at => at._id === user._id) ? false : true);
                 setActivities(filteredActivities);
                 const placeIds = getPlaceIdsAsString(activities);
 

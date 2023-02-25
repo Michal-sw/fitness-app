@@ -6,6 +6,7 @@ import { addUserActivity } from "./userService";
 export const getActivities = async () => {
     const result = await Activity
         .find()
+        .populate('attendees', 'login')
         .then((activities: [IActivity] | any) => getCorrectObject(activities))
         .catch((err: MongooseError) => getErrorObject(500, err.message));
 
@@ -40,7 +41,9 @@ export const addActivity = async ({ placeId, attendees, ...body }: {placeId: num
 };
 
 export const getActivityById = async (id: string) => {
-    const activity = await Activity.findById(id);
+    const activity = await Activity
+        .findById(id)
+        .populate('attendees', 'login');
     if (!activity) {
         return getErrorObject(404);
     }
@@ -50,10 +53,13 @@ export const getActivityById = async (id: string) => {
 export const getActivitiesByUser = async (userId: string) => {
     const id = new Types.ObjectId(userId);
 
-    const activities = await Activity.find({ attendees: id });
+    const activities = await Activity
+        .find({ attendees: id })
+        .populate('attendees', 'login');
     if (!activities) {
         return getErrorObject(404);
     }
+
     return getCorrectObject(activities);
 };
 

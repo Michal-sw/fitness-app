@@ -12,6 +12,7 @@ import Notifications from './components/Notifications';
 import Dashboard from './components/dashboard/Dashboard';
 import History from './components/history/History';
 import User from './components/users/User';
+import Overlay from './components/Overlay';
 
 function App() {
   
@@ -64,6 +65,7 @@ function App() {
         </BrowserRouter>
         <Chatbot />
         <Notifications />
+        <Overlay/>
         
       </div>
   );

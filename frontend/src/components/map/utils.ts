@@ -45,7 +45,7 @@ export const addOverpassResultToMap = (map: Map, dataPoints: OverpassNode[], opt
 }
 
 const isUserAParticipant = (activity: ActivityDT | undefined, userId: String | undefined) => {
-    return activity?.attendees.find(attendee => attendee === userId);
+    return activity?.attendees.find(attendee => attendee._id === userId);
 }
 
 const createPopupDiv = (dataPoint: OverpassNode, options: addOverpassResutOptions, activity: ActivityDT | undefined): HTMLDivElement => {
