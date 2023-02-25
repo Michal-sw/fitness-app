@@ -36,9 +36,7 @@ const Dashboard = () => {
     return (
         <div id="dashboard_container">
             <UpcomingActivities />
-            {visibleSurvey &&
-                <Survey visible={visibleSurvey} setVisible={setVisibleSurvey} surveyId={surveyId} surveyNumber={surveyNumber} setPendingSurvey={setPendingSurvey}/>
-            }
+            <Survey visible={visibleSurvey} setVisible={setVisibleSurvey} surveyId={surveyId} surveyNumber={surveyNumber} setPendingSurvey={setPendingSurvey}/>
             {pendingSurvey && !visibleSurvey &&
                 <PendingSurvey setVisible={setVisibleSurvey} surveyId={surveyId} setSurveyNumber={setSurveyNumber} />
             }

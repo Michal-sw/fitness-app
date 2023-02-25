@@ -3,6 +3,7 @@ import { useCallback, useState } from "react";
 import IntroPage from "./surveyPages/IntroPage";
 import PageModal from "./PageModal";
 import OutroPage from "./surveyPages/OutroPage";
+import { Collapse, Fade, Slide } from '@mui/material';
 
 interface ISurvey {
     visible: boolean,
@@ -83,10 +84,13 @@ const Survey = (props: ISurvey) => {
 
     return (
         <>
-            {props.visible &&
-            <div id={'survey-container'}>
-                {renderPage()}
-            </div>}
+            <Slide in={props.visible} direction='up'>
+                <div id={'survey-container'}>
+                    {renderPage()}
+                </div>
+            </Slide>
+            
+            
         </>
     );
 };
