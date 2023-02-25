@@ -8,10 +8,10 @@ const Notifications = () => {
   useEffect(() => undefined, [notifications.length])
 
   return (
-    <div id="notification_container">
+    <div id="notification-container">
       {notifications.map((notification, i) => {
         return (
-          <li key={i} className={`notification ${notification.className || ""}`}>
+          <li key={i} className={`notification fade-in ${notification.className || ""}`}>
             {notification.message}
           </li>
         )

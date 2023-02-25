@@ -30,7 +30,7 @@ function InteractiveMap({ latitude = 18.60, longitude = 54.35 }: InteractiveMapP
         const upperRightCorner = bounds.getNorthEast();
 
         if (map.getZoom() < 15) {
-            actions.addNotification("Map zoom must be bigger");
+            actions.addErrorNotification("Map zoom must be bigger");
             return;
         }
 

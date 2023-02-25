@@ -1,4 +1,17 @@
-#notification_container {
+.fade-in {
+    animation: fadeInAnimation 0.15s linear;
+  }
+  
+  @keyframes fadeInAnimation {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+#notification-container {
     display: flex;
     flex-direction: column;
     pointer-events: none;
