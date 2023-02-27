@@ -78,7 +78,7 @@ const UserDetails = ({ user, isOwner }: userDetailsProps) => {
                         />
                 </div>
                 {isOwner &&
-                    <button type='submit'>Edit profile</button>
+                    <button type='submit'>Save profile</button>
                 }
             </div>
         </form>

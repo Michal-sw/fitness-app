@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import useAuth from '../../core/providers/AuthContext';
 import axiosService from '../../services/axiosService';
+import useNotifications from '../../hooks/useNotifications';
 
 const SurveyList = () => {
-
     const { token, user } = useAuth();
     const [surveys, setSurveys] = useState<any>([]);
     const [score, setScore] = useState<number>(100);
+    const { actions } = useNotifications();
 
     useEffect(() => {
         axiosService.getSurveys(token, user._id)
@@ -14,6 +15,7 @@ const SurveyList = () => {
                 setScore(res.data.score);
                 setSurveys(res.data.result);
             }).catch(err => {
+                actions.addErrorNotification('Could not get surveys');
                 console.log(err)
             });
     }, [])

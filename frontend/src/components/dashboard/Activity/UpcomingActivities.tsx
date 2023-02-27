@@ -4,10 +4,12 @@ import useAuth from "../../../core/providers/AuthContext";
 import { ActivityDT } from "../../../core/types/ActivityDT";
 import axiosService from "../../../services/axiosService";
 import Activity from "./Activity";
+import useNotifications from "../../../hooks/useNotifications";
 
 const UpcomingActivities = () => {
     const { token, user } = useAuth();
     const [activities, setActivities] = useState<ActivityDT[]>([]);
+    const { actions } = useNotifications();
 
     useEffect(() => {
         axiosService.getUserActivities(token, user._id)
@@ -16,7 +18,7 @@ const UpcomingActivities = () => {
                 const filteredActivities = res.data.result.filter(shouldRenderActivity);
                 setActivities(filteredActivities);
             })
-            .catch(err => console.log(err));
+            .catch(err => actions.addErrorNotification('Could not get activities'));
     }, [])
 
     const shouldRenderActivity = (activity: ActivityDT) => {

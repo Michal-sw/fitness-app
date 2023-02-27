@@ -5,6 +5,7 @@ import axiosService from "../../services/axiosService";
 import useAuth from "../../core/providers/AuthContext";
 import UpcomingActivities from "./Activity/UpcomingActivities";
 import PendingSurvey from "./surveys/PendingSurvey";
+import useNotifications from "../../hooks/useNotifications";
 
 const Dashboard = () => {
     const { token, user } = useAuth();
@@ -12,6 +13,7 @@ const Dashboard = () => {
     const [pendingSurvey, setPendingSurvey] = useState<boolean>(false);
     const [surveyId, setSurveyId] = useState<string>('');
     const [surveyNumber, setSurveyNumber] = useState<string>('');
+    const { actions } = useNotifications();
 
     let getSurvey = true;
     useEffect(() => {
@@ -26,7 +28,7 @@ const Dashboard = () => {
                         setSurveyId(res.data.survey._id);
                         setPendingSurvey(true);
                     }
-                }).catch(err => console.log(err))
+                }).catch(err => actions.addErrorNotification('Could not get surveys'));
             // eslint-disable-next-line react-hooks/exhaustive-deps
             getSurvey = false;
         }

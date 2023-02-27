@@ -1,10 +1,11 @@
 import '../../styles/users/User.scss'
 import '../../styles/history/History.scss'
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useAuth from '../../core/providers/AuthContext';
 import UserDetails from './UserDetails';
 import { UserDT } from '../../core/types/UserDT';
+import axiosService from '../../services/axiosService';
 
 const defaultUserData: UserDT = {
     _id: "",
@@ -21,13 +22,17 @@ const defaultUserData: UserDT = {
 const User = () => {
     const { id } = useParams();
     const [viewedUser, setViewedUser] = useState(defaultUserData);
-    const { user } = useAuth();
+    const { user, token } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (id === user._id) {
             setViewedUser(user);
         } else {
-            console.log("Looking for user");
+            axiosService
+                .getUser(token, id || "")
+                .then(res => setViewedUser(res.data.result))
+                .catch(err => navigate('/404'));
         };
     }, [id, user._id]);
 

@@ -62,6 +62,14 @@ const updateUser = async (token: string, userId: string, values: UserDT) => {
   });
 }
 
+const getUser = async (token: string, userId: string) => {
+  return axiosInstance.get(`http://${apiPath}/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+  });
+}
+
 const addActivity = async (token: string, id: string, values: ActivityDT) => {
   return axiosInstance.post(`http://${apiPath}/activities`, { id, ...values }, {
     headers: {
@@ -134,6 +142,7 @@ interface AxiosService {
   markActivityAsPerformed: (token:string, userId: string, values: ActivityDT) => Promise<AxiosResponse[]>, 
   getUserActivities: (token: string, id: string) => Promise<AxiosResponse>,
   updateUser: (token: string, id: string, values: any) => Promise<AxiosResponse>,
+  getUser: (token: string, id: string) => Promise<AxiosResponse>,
   updateActivity: (token:string, values: ActivityDT) => Promise<AxiosResponse>, 
   addActivity: (token: string, id: string, values: ActivityDT) => Promise<AxiosResponse>,
   addUserToActivity: (token: string, userId: string, activityId: string) => Promise<AxiosResponse>,
@@ -150,6 +159,7 @@ const axiosService: AxiosService = {
   finishSurvey,
   refreshToken,
   updateUser,
+  getUser,
   addActivity,
   getActivities,
   updateActivity,

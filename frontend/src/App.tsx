@@ -13,6 +13,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import History from './components/history/History';
 import User from './components/users/User';
 import Overlay from './components/Overlay';
+import NotFound from './components/NotFound';
 
 function App() {
   
@@ -58,6 +59,10 @@ function App() {
             <Route path='/user/:id' element=
               {
                 <User />
+              }/>
+              <Route path='/404' element=
+              {
+                <NotFound />
               }/>
             </Routes>
           </>

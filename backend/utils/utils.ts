@@ -1,3 +1,4 @@
+import { ObjectId, Types } from "mongoose";
 import Survey from "../config/models/Surveys";
 import User from "../config/models/User";
 
@@ -48,6 +49,14 @@ export const getCookie = (cookies: String, key: string): string => {
   
   return targetCookie?.slice(key.length + 1) || "";
 };
+
+export const getMongoObjectId = (id: string): Types.ObjectId | null => {
+  try {
+    return new Types.ObjectId(id);
+  } catch (err) {
+    return null;
+  }
+}
 
 export const getCorrectObject = (result: any) => ({ result, statusCode: 200 });
 export const getErrorObject = (statusCode: number, message?: string) => ({ statusCode, result: message });

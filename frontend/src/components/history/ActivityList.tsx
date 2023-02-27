@@ -11,7 +11,6 @@ const ActivityList = () => {
     useEffect(() => {
         axiosService.getUserActivities(token, user._id)
             .then(res => {
-                console.log(res.data.result);
                 if (!res.data.result) return;
                 const sortedActivities = res.data.result
                     .sort((a:ActivityDT, b:ActivityDT) => {

@@ -1,7 +1,7 @@
 import { MongooseError, ObjectId, Types } from "mongoose";
 import User, { IUser } from "../config/models/User";
 import { LoginDT } from "../types/LoginDT";
-import { getCorrectObject, getErrorObject, calculateScore, ScoreType } from '../utils/utils';
+import { getCorrectObject, getErrorObject, calculateScore, ScoreType, getMongoObjectId } from '../utils/utils';
 
 export const getUsers = async () => {
     const result = await User
@@ -37,8 +37,11 @@ export const addUser = async ({ login, password }: LoginDT) => {
 };
 
 export const addUserActivity = async (id: string, activityId: ObjectId) => {
+    const objectId = getMongoObjectId(id);
+    if (!objectId) return getErrorObject(400);
+
     const result = await User.findOneAndUpdate(
-        { _id: new Types.ObjectId(id) }, 
+        { _id: objectId }, 
         { $push: { 
             activities: {
                     'activity': activityId,
@@ -54,8 +57,12 @@ export const addUserActivity = async (id: string, activityId: ObjectId) => {
 };
 
 export const markActivityAsSkipped = async (id: string, activityId: string) => {
+    const objectId = getMongoObjectId(id);
+    const activityObjectId = getMongoObjectId(activityId);
+    if (!objectId || !activityObjectId) return getErrorObject(400);
+
     const result = await User.findOneAndUpdate(
-        { _id: new Types.ObjectId(id), "activities.activity": new Types.ObjectId(activityId) },
+        { _id: objectId, "activities.activity": activityObjectId },
         { 
             $set: {
                 "activities.$.skipped": true
@@ -94,7 +101,10 @@ export const getUserByLogin = async (login: string) => {
 };
 
 export const deleteUser = async (id: string) => {
-    await User.findOneAndDelete({ _id: new Types.ObjectId(id) })
+    const objectId = getMongoObjectId(id);
+    if (!objectId) return getErrorObject(400);
+
+    await User.findOneAndDelete({ _id: objectId })
         .then((user: IUser | null) => {
             return getCorrectObject(user);
         }).catch((err: MongooseError) => {

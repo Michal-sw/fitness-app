@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Coordinates } from '../../core/types/CoordinatesDT';
 import L, { Map } from 'leaflet';
 import { overpass, OverpassNode } from 'overpass-ts';
 import useNotifications from '../../hooks/useNotifications';
