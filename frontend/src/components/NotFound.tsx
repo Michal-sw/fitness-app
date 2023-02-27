@@ -1,8 +1,10 @@
 const NotFound = () => {
     return (
-        <h2 id="not-found">
-            404, resource not found
-        </h2>
+        <div style={{ display:"flex", justifyContent: "center" }}>
+            <h2>
+                404, resource not found
+            </h2>
+        </div>
     );
 };
 
