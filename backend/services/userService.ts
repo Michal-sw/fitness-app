@@ -84,6 +84,9 @@ export const markActivityAsPerformed = async (id: string) => {
 }
 
 export const getUserById = async (id: string) => {
+    const objectId = getMongoObjectId(id);
+    if (!objectId) return getErrorObject(400);
+    
     const user: IUser | null = await User.findById(id);
     if (!user) {
         return getErrorObject(404);
