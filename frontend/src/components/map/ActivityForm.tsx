@@ -5,6 +5,8 @@ import DateTimeInput from './DateTimeInput';
 import useAuth from '../../core/providers/AuthContext';
 import useNotifications from '../../hooks/useNotifications';
 import axiosService from '../../services/axiosService';
+import useActivity from '../../core/providers/ActivityContext';
+import { ActivityDT } from '../../core/types/ActivityDT';
 
 interface ActivityFormProps {
     isVisible: boolean,
@@ -15,6 +17,7 @@ interface ActivityFormProps {
 function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
     const { user, token } = useAuth();
     const { actions } = useNotifications();
+    const { addActivity } = useActivity();
     
     function handleAddActivity (values: any) {
         const result = {
@@ -24,11 +27,14 @@ function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
             hasBeenChecked: false,
         };
 
-        actions.addNotification("Adding activity...");
         setVisible(false);
 
         axiosService.addActivity(token, user._id, result)
-            .then(_res => actions.addNotification("Activity added!"))
+            .then(res => {
+                const newActivity: ActivityDT = res.data?.result?.result;
+                actions.addNotification("Activity added!");
+                addActivity({ ...newActivity, attendees: [user] });
+            })
             .catch(_err => actions.addNotification("Error when adding activity!"));
     }
     

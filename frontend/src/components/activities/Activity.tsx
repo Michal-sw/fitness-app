@@ -1,12 +1,12 @@
-import useAuth from "../../../core/providers/AuthContext";
-import { ActivityDT } from "../../../core/types/ActivityDT";
+import useAuth from "../../core/providers/AuthContext";
+import { ActivityDT } from "../../core/types/ActivityDT";
 import ActivityCheck from "./ActivityCheck";
-import axiosService from "../../../services/axiosService";
-import useNotifications from "../../../hooks/useNotifications";
+import axiosService from "../../services/axiosService";
+import useNotifications from "../../hooks/useNotifications";
 import { useNavigate } from "react-router";
-import { useState } from "react";
 import { AxiosResponse } from "axios";
 import { Chip } from "@mui/material";
+import useActivity from "../../core/providers/ActivityContext";
 
 interface ActivityProps {
     activity: ActivityDT;
@@ -14,28 +14,24 @@ interface ActivityProps {
 
 const Activity = ({ activity }: ActivityProps) => {
     const { attendees, activityType, hasBeenChecked, date, placeId } = activity;
-    const [hasBeenCheckedLocaly, setHasBeenChecked] = useState<boolean>(hasBeenChecked || false);
     const { token, user } = useAuth();
     const { actions } = useNotifications();
     const navigate = useNavigate();
+    const { editActivity } = useActivity();
 
     const onCheck = (hasBeenSkipped: boolean) => {
-        if (hasBeenSkipped) {
-            const promise = axiosService
-                .markActivityAsSkipped(token, user._id, { ...activity, hasBeenChecked: true })
-            handleMarkActivityPromise(promise);
-        } else {
-            const promise = axiosService
-                .markActivityAsPerformed(token, user._id, { ...activity, hasBeenChecked: true })
-            handleMarkActivityPromise(promise);
-        }
+        const newActivity = { ...activity, hasBeenChecked: true };
+        const promise = hasBeenSkipped 
+            ? axiosService.markActivityAsSkipped(token, user._id, newActivity)
+            : axiosService.markActivityAsPerformed(token, user._id, newActivity)
+        handleMarkActivityPromise(promise);
+        editActivity(newActivity);
     }
     
     const handleMarkActivityPromise = (promise: Promise<AxiosResponse<any, any>[]>) => {
         promise
             .then(_res => {
                 actions.addNotification("Activity successfully marked")
-                setHasBeenChecked(true);
             })
             .catch(_err => actions.addNotification("Error checking activity"));
     }
@@ -72,7 +68,7 @@ const Activity = ({ activity }: ActivityProps) => {
             <div className="activity-field">
                 <button onClick={onNavigateToLocation}>Show on map</button>
             </div>
-            { !hasBeenCheckedLocaly
+            { !hasBeenChecked
                 ? <ActivityCheck  onCheck={onCheck} date={activity.date}/>
                 : null
             }

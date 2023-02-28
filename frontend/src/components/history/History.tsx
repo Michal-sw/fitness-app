@@ -1,5 +1,5 @@
 import SurveyList from '../survey/SurveyList';
-import ActivityList from './ActivityList';
+import ActivityList from '../activities/ActivityList';
 import '../../styles/survey/SurveyList.scss'
 import '../../styles/history/History.scss'
 
