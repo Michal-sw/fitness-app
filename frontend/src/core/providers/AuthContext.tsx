@@ -91,7 +91,7 @@ export function AuthProvider({ children }: {children: ReactElement }) {
       .then(res => {
         if (res.status === 200 && res.data.token) {
           setAuthData(res.data);
-          navigate('/');
+          navigate('/dashboard');
         }
       })
       .catch(() => {
@@ -104,7 +104,7 @@ export function AuthProvider({ children }: {children: ReactElement }) {
       .then(res => {
         if (res.status === 200 && res.data.token) {
           setAuthData(res.data);
-          navigate('/');
+          navigate('/dashboard');
         }
       })
       .catch(err => {

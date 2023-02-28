@@ -16,7 +16,7 @@ function Navbar() {
             {authenticated 
                 ? 
                     <>
-                    <NavbarSmartButton path='/' pathName='Dashboard'/>
+                    <NavbarSmartButton path='/dashboard' pathName='Dashboard'/>
                     <NavbarSmartButton path='/map' pathName='Map'/>
                     <NavbarSmartButton path='/map/activities' pathName='Join activity'/>
                     <NavbarSmartButton path='/history' pathName='History'/>

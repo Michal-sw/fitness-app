@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+#welcome-page-container {
+    display: flex;
+    flex-direction: column;
+    width: 70vw;
+    font-family: 'Poppins';
+    font-size: 1.2rem;
+    margin-top: 5vmin;
+}
+
+h1 {
+    margin-top: 0;
+    padding-top: 0;
+    transition: 350ms ease;
+}
+
+h3 {
+    color: white;
+}
+
+#welcome-page-content {
+    background-image: radial-gradient(
+        rgba(97, 4, 35, 0.137) 5%, 
+        transparent 8%
+    );
+    background-position: 0% 0%;
+    background-size: 5vmin 5vmin;
+    padding: 5vmin 5vmin 5vmin 15vmin;
+    position: relative;
+    transition: background-position 350ms ease;
+
+    z-index: 1;
+}
+
+#welcome-page-content:hover {
+    background-image: radial-gradient(
+        rgba(255, 255, 255, 0.2) 8%, 
+        transparent 8%
+    );
+}
+
+#welcome-page-container:hover::before {
+    background-position: 100% 100%;
+    transform: scale(1.08, 1.03);
+  }
+
+#welcome-page-container:hover {  
+    >#welcome-page-content > * {
+        color: white;
+    }
+}
+#welcome-page-container::before {
+    background: linear-gradient(
+        130deg, 
+        transparent 0% 33%, 
+        rgb(98, 0, 234) 66%, 
+        rgb(236, 63, 122) 83.5%, 
+        rgb(253, 216, 53) 100%
+      );
+      background-position: 0% 0%;
+      background-size: 300% 300%;
+      content: "";
+      height: 100%;
+      left: 0px;
+      pointer-events: none;
+      position: absolute;
+      top: 0px;
+      transition: background-position 350ms ease, transform 350ms ease;
+      width: 100%;
+}
+    
+    
+
+

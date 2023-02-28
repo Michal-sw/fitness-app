@@ -14,6 +14,7 @@ import History from './components/history/History';
 import User from './components/users/User';
 import Overlay from './components/Overlay';
 import NotFound from './components/NotFound';
+import WelcomePage from './components/WelcomePage';
 
 function App() {
   
@@ -25,6 +26,10 @@ function App() {
             <Navbar/>
             <Routes>
             <Route path='/' element=
+                {
+                  <WelcomePage />
+                }/>
+            <Route path='/dashboard' element=
                 {
                   <PrivateRoute>
                     <Dashboard />
