@@ -3,7 +3,7 @@ import Survey from "../survey/Survey";
 import "../../styles/dashboard/Dashboard.scss";
 import axiosService from "../../services/axiosService";
 import useAuth from "../../core/providers/AuthContext";
-import UpcomingActivities from "./Activity/UpcomingActivities";
+import UpcomingActivities from "../activities/UpcomingActivities";
 import PendingSurvey from "./surveys/PendingSurvey";
 import useNotifications from "../../hooks/useNotifications";
 
