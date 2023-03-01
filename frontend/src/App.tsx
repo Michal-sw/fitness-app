@@ -22,59 +22,59 @@ function App() {
   return (
       <div id='App'>
         <BrowserRouter>
-        <AuthProvider>
-          <ActivityProvider>
-            <>
-              <Navbar/>
-              <Routes>
-              <Route path='/' element=
-                  {
-                    <WelcomePage />
-                  }/>
-              <Route path='/dashboard' element=
+          <AuthProvider>
+            <ActivityProvider>
+              <>
+                <Navbar/>
+                <Routes>
+                <Route path='/' element=
+                    {
+                      <WelcomePage />
+                    }/>
+                <Route path='/dashboard' element=
+                    {
+                      <PrivateRoute>
+                        <Dashboard />
+                      </PrivateRoute>
+                    }/>
+                <Route path='/login' element=
+                    {
+                      <Login/>
+                    }/>
+                <Route path='/map' element=
+                    {
+                      <PrivateRoute>
+                        <MapWrapper />
+                      </PrivateRoute>
+                    }/>
+                <Route path='map/activities' element=
                   {
                     <PrivateRoute>
-                      <Dashboard />
+                        <ActivityMapWrapper />
                     </PrivateRoute>
                   }/>
-              <Route path='/login' element=
-                  {
-                    <Login/>
-                  }/>
-              <Route path='/map' element=
-                  {
-                    <PrivateRoute>
-                      <MapWrapper />
-                    </PrivateRoute>
-                  }/>
-              <Route path='map/activities' element=
+                <Route path='/history' element=
                 {
                   <PrivateRoute>
-                      <ActivityMapWrapper />
+                    <History />
                   </PrivateRoute>
                 }/>
-              <Route path='/history' element=
-              {
-                <PrivateRoute>
-                  <History />
-                </PrivateRoute>
-              }/>
-              <Route path='/signIn' element=
-                {
-                  <SignIn/>
-                }/>
-              <Route path='/user/:id' element=
-                {
-                  <User />
-                }/>
-                <Route path='/404' element=
-                {
-                  <NotFound />
-                }/>
-              </Routes>
-            </>
-          </ActivityProvider>
-        </AuthProvider>
+                <Route path='/signIn' element=
+                  {
+                    <SignIn/>
+                  }/>
+                <Route path='/user/:id' element=
+                  {
+                    <User />
+                  }/>
+                  <Route path='/404' element=
+                  {
+                    <NotFound />
+                  }/>
+                </Routes>
+              </>
+            </ActivityProvider>
+          </AuthProvider>
         </BrowserRouter>
         <Chatbot />
         <Notifications />
