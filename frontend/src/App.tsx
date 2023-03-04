@@ -16,6 +16,7 @@ import Overlay from './components/Overlay';
 import NotFound from './components/NotFound';
 import WelcomePage from './components/WelcomePage';
 import { ActivityProvider } from './core/providers/ActivityContext';
+import { WebSocketProvider } from './core/providers/WebSocketContext';
 
 function App() {
   
@@ -24,55 +25,57 @@ function App() {
         <BrowserRouter>
           <AuthProvider>
             <ActivityProvider>
-              <>
-                <Navbar/>
-                <Routes>
-                <Route path='/' element=
-                    {
-                      <WelcomePage />
-                    }/>
-                <Route path='/dashboard' element=
+              <WebSocketProvider>
+                <>
+                  <Navbar/>
+                  <Routes>
+                  <Route path='/' element=
+                      {
+                        <WelcomePage />
+                      }/>
+                  <Route path='/dashboard' element=
+                      {
+                        <PrivateRoute>
+                          <Dashboard />
+                        </PrivateRoute>
+                      }/>
+                  <Route path='/login' element=
+                      {
+                        <Login/>
+                      }/>
+                  <Route path='/map' element=
+                      {
+                        <PrivateRoute>
+                          <MapWrapper />
+                        </PrivateRoute>
+                      }/>
+                  <Route path='map/activities' element=
                     {
                       <PrivateRoute>
-                        <Dashboard />
+                          <ActivityMapWrapper />
                       </PrivateRoute>
                     }/>
-                <Route path='/login' element=
-                    {
-                      <Login/>
-                    }/>
-                <Route path='/map' element=
-                    {
-                      <PrivateRoute>
-                        <MapWrapper />
-                      </PrivateRoute>
-                    }/>
-                <Route path='map/activities' element=
+                  <Route path='/history' element=
                   {
                     <PrivateRoute>
-                        <ActivityMapWrapper />
+                      <History />
                     </PrivateRoute>
                   }/>
-                <Route path='/history' element=
-                {
-                  <PrivateRoute>
-                    <History />
-                  </PrivateRoute>
-                }/>
-                <Route path='/signIn' element=
-                  {
-                    <SignIn/>
-                  }/>
-                <Route path='/user/:id' element=
-                  {
-                    <User />
-                  }/>
-                  <Route path='/404' element=
-                  {
-                    <NotFound />
-                  }/>
-                </Routes>
-              </>
+                  <Route path='/signIn' element=
+                    {
+                      <SignIn/>
+                    }/>
+                  <Route path='/user/:id' element=
+                    {
+                      <User />
+                    }/>
+                    <Route path='/404' element=
+                    {
+                      <NotFound />
+                    }/>
+                  </Routes>
+                </>
+              </WebSocketProvider>
             </ActivityProvider>
           </AuthProvider>
         </BrowserRouter>

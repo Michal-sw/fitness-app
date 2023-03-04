@@ -10,14 +10,16 @@ export const createWebsocketServer = (server: any) => {
     });
 
     io.on('connection', (socket) => {
-        console.log("connected");
         io.emit('message', {
             text: "New user has joined the chat!"
         });
 
-        socket.on('message', async data => {
-            console.log("Message received");
-            io.emit('message', data)
+        socket.on('activityChat/', (data) => {
+            const { room, author, text } = data;
+            console.log("Received message");
+            console.log(data);
+
+            io.emit(`activityChat/${room}`, data);
         })
     })
 }  
