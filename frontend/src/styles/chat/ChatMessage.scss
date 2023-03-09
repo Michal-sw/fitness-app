@@ -7,5 +7,19 @@
     }
     >.chat-message-content {
         max-width: 200px;
+        word-wrap: break-word;
+        background-color: rgba(0,0,0,0.08);
+        border-radius: 16px;
+        font-size: 0.85rem;
+        padding: 0px 8px 0px 8px;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.chat-message.local-user {
+    justify-content: flex-end;
+    >.chat-message-content {
+        background-color: rgb(202, 234, 255);
     }
 }
