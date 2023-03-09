@@ -22,7 +22,9 @@ const ChatWindow = ({ activityId }: { activityId: string }) => {
      };
   
      const publishMessage = () => {
-        sendMessage(messageInput);
+        const trimmedMessage = messageInput.trim();
+        if (!messageInput || trimmedMessage.length === 0) return;
+        sendMessage(trimmedMessage);
         setMessageInput('');
      } 
   

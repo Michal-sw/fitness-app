@@ -42,6 +42,7 @@
             flex-direction: column;
             >textarea {
                 font-size: 0.8rem;
+                max-height: 100px;
             }
         }
     }

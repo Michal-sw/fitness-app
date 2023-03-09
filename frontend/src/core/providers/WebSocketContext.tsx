@@ -32,7 +32,7 @@ export function WebSocketProvider({ children }: {children: ReactElement }) {
 
   const joinChatRoom = (roomId: string) => {
     if (activeChats.find(chat => chat === roomId)) return;
-    setActiveChats([...activeChats, roomId]);
+    setActiveChats([roomId, ...activeChats]);
   }
   const leaveChatRoom = (roomId: string) => {
     const newActiveChats = activeChats.filter(chat => chat !== roomId);
