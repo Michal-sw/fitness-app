@@ -40,22 +40,22 @@
 
         .activity-field-value {
             color: white;
-        }
-
-        >.attendees-list {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            gap: 3px;
-            >div {
-                transition: 0.3s;
-                background-color: rgb(58, 58, 58);
-                color: whitesmoke;
-                &:hover {
-                    cursor: pointer;
-                    background-color: var(--main-color);
+            
+            >.attendees-list {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 3px;
+                >div {
+                    transition: 0.3s;
+                    background-color: rgb(58, 58, 58);
+                    color: whitesmoke;
+                    &:hover {
+                        cursor: pointer;
+                        background-color: var(--main-color);
+                    }
                 }
-            }
+            }    
         }
 
         >button {

@@ -5,19 +5,22 @@ import axiosService from "../../services/axiosService";
 import useNotifications from "../../hooks/useNotifications";
 import { useNavigate } from "react-router";
 import { AxiosResponse } from "axios";
-import { Chip } from "@mui/material";
 import useActivity from "../../core/providers/ActivityContext";
+import useWebSocket from "../../core/providers/WebSocketContext";
+import ActivityField from "./ActivityField";
+import ActivityAttendeesList from "./ActivityAttendeesList";
 
 interface ActivityProps {
     activity: ActivityDT;
 }
 
 const Activity = ({ activity }: ActivityProps) => {
-    const { attendees, activityType, hasBeenChecked, date, placeId } = activity;
+    const { _id, attendees, activityType, hasBeenChecked, date, placeId } = activity;
     const { token, user } = useAuth();
     const { actions } = useNotifications();
     const navigate = useNavigate();
     const { editActivity } = useActivity();
+    const { joinChatRoom } = useWebSocket();
 
     const onCheck = (hasBeenSkipped: boolean) => {
         const newActivity = { ...activity, hasBeenChecked: true };
@@ -42,35 +45,19 @@ const Activity = ({ activity }: ActivityProps) => {
 
     return (
         <div className="activity">
+            <ActivityField label="Activity Type:" value={activityType}/>
+            <ActivityField label="Attendees:" value={
+                <ActivityAttendeesList attendees={attendees}/>
+            }/>
+            {activity.date && 
+                <ActivityField label="Date:" value={new Date(date).toLocaleDateString()}/>
+            };
             <div className="activity-field">
-                <span className="activity-field-label">Activity type:</span>
-                <span className="activity-field-value">{activityType}</span>
-            </div>
-            <div className="activity-field">
-                <span className="activity-field-label">Attendees:</span>
-                <div className="activity-field-value attendees-list">
-                    {attendees.map((attendee,i) => 
-                        <Chip 
-                            key={i}
-                            label={attendee.login}
-                            onClick={() => navigate(`/user/${attendee._id}`)}
-                        />
-                    )}
-                </div>
-            </div>
-            { activity.date
-                ?
-                    <div className="activity-field">
-                        <span className="activity-field-label">Date:</span>
-                        <span className="activity-field-value">{new Date(date).toLocaleDateString()}</span>
-                    </div>
-                : null};
-            <div className="activity-field">
+                <button onClick={() => joinChatRoom(_id)}>Open chat</button>
                 <button onClick={onNavigateToLocation}>Show on map</button>
             </div>
-            { !hasBeenChecked
-                ? <ActivityCheck  onCheck={onCheck} date={activity.date}/>
-                : null
+            {!hasBeenChecked &&
+                <ActivityCheck  onCheck={onCheck} date={activity.date}/>
             }
         </div>
     );
