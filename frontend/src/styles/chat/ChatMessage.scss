@@ -1,0 +1,11 @@
+.chat-message {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    >.chat-message-author {
+        font-weight: 500;
+    }
+    >.chat-message-content {
+        max-width: 200px;
+    }
+}

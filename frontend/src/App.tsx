@@ -17,6 +17,7 @@ import NotFound from './components/NotFound';
 import WelcomePage from './components/WelcomePage';
 import { ActivityProvider } from './core/providers/ActivityContext';
 import { WebSocketProvider } from './core/providers/WebSocketContext';
+import ChatList from './components/chat/ChatList';
 
 function App() {
   
@@ -74,6 +75,7 @@ function App() {
                       <NotFound />
                     }/>
                   </Routes>
+                  <ChatList/>
                 </>
               </WebSocketProvider>
             </ActivityProvider>

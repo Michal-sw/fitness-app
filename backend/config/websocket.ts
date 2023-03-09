@@ -16,8 +16,6 @@ export const createWebsocketServer = (server: any) => {
 
         socket.on('activityChat/', (data) => {
             const { room, author, text } = data;
-            console.log("Received message");
-            console.log(data);
 
             io.emit(`activityChat/${room}`, data);
         })

@@ -16,12 +16,10 @@ export function useChat(activityId: string) {
     const chatServerPath = 'activityChat/';
 
     useEffect(() => {
-        console.log(socket);
         if (!socket) return;
 
         socket.on(chatRoomPath, (data: ChatMessageDT) => {
-            console.log("Received message");
-            console.log(data);
+            receiveMessage(data);
         })
         socket.emit(chatServerPath, { author: user.login, text: "Just entered the chat!", room: activityId });
 
@@ -30,10 +28,15 @@ export function useChat(activityId: string) {
         }
     }, [socket?.connected]);
 
+    function receiveMessage(message: ChatMessageDT) {
+        if (message.author === user.login) return;
+        setChatHistory(history => [...history, message]);
+    }
+
     function sendMessage(text: string) {
         const newMessage = createMessageObject(text, user.login, activityId);
         setChatHistory([...chatHistory, newMessage]);
-        socket?.emit(chatRoomPath, newMessage);
+        socket?.emit(chatServerPath, newMessage);
     }
       
     return {

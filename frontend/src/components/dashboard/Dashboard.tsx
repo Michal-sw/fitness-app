@@ -6,6 +6,7 @@ import useAuth from "../../core/providers/AuthContext";
 import UpcomingActivities from "../activities/UpcomingActivities";
 import PendingSurvey from "./surveys/PendingSurvey";
 import useNotifications from "../../hooks/useNotifications";
+import { useChat } from "../../hooks/useChat";
 
 const Dashboard = () => {
     const { token, user } = useAuth();
