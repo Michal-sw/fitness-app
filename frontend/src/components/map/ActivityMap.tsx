@@ -25,7 +25,7 @@ function ActivityMap(coordinates: Coordinates) {
                 center: [coordinates.longitude, coordinates.latitude],
                 zoom: 12,
                 layers: [
-                    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                    L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     }),
                 ],

@@ -1,6 +1,6 @@
 import { useChat } from "../../hooks/useChat";
 import useWebSocket from "../../core/providers/WebSocketContext";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
 
@@ -15,11 +15,14 @@ const ChatWindow = ({ activityId }: { activityId: string }) => {
         lastMessageRef.current.style.height = '20px';
     }, [chatHistory.length])
     
-    console.log("render");
+    const activityVisibleId = useMemo(
+        () => activityId.slice(0,6)
+    , [activityId]);
+
     return (
         <div className="chat-container">
             <button onClick={() => leaveChatRoom(activityId)}>&#10006;</button>
-            {activityId.slice(0,6)}
+            <p>{activityVisibleId}</p>
             <div className="messages-container">
                 {chatHistory.map((message, index) => (
                     <ChatMessage

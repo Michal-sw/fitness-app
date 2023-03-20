@@ -57,7 +57,7 @@ function InteractiveMap({ latitude = 18.60, longitude = 54.35 }: InteractiveMapP
                 center: [longitude, latitude],
                 zoom: 12,
                 layers: [
-                    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                    L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     }),
                 ],
