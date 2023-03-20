@@ -8,13 +8,17 @@ const dbConnData = {
   password: process.env.MONGODB_PASSWORD || 'password'
 }
 
+const mongoUrl = process.env.PRODUCTION
+  ? `mongodb+srv://${dbConnData.user}:${dbConnData.password}@mycluster.jn27w6m.mongodb.net/${dbConnData.database}`
+  : `mongodb://${dbConnData.host}:${dbConnData.port}/${dbConnData.database}`;
+
 const connectToMongoDB = () => new Promise(async (resolve, reject) => {
   let tries = 0;
 
   while (tries < 5) {
     tries++;
     const connection = await mongoose
-      .connect(`mongodb://${dbConnData.host}:${dbConnData.port}/${dbConnData.database}`)
+      .connect(mongoUrl)
       .then(() => true)
       .catch(() => false)
 

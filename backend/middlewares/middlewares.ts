@@ -5,10 +5,10 @@ const jwt = require('jsonwebtoken');
 
 const corsMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const origin = process.env.FRONTEND_URL
-    ? "http://"+process.env.FRONTEND_URL+":3000"
+    ? process.env.FRONTEND_URL
     : "http://127.0.0.1:3000";
   res.header('Access-Control-Allow-Credentials', "true");
-  res.header("Access-Control-Allow-Origin", 'http://127.0.0.1:3000');
+  res.header("Access-Control-Allow-Origin", origin);
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,PATCH,DELETE,UPDATE,OPTIONS');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-HTTP-Method-Override, Authorization");
   return next()

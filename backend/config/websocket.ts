@@ -4,7 +4,7 @@ export const createWebsocketServer = (server: any) => {
     const io: Server = new Server(server, {
         cors: {
             origin: process.env.FRONTEND_URL
-                ? "http://"+process.env.FRONTEND_URL+":3000"
+                ? process.env.FRONTEND_URL
                 : "http://127.0.0.1:3000"
         }
     });

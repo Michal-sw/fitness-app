@@ -1,6 +1,9 @@
-import express, { Express } from 'express';
 import dotenv from 'dotenv';
-import { createServer } from 'http';
+dotenv.config();
+
+import express, { Express } from 'express';
+import { createServer } from 'https';
+import { readFileSync } from 'fs';
 
 import users from './routes/users';
 import surveys from './routes/surveys';
@@ -10,9 +13,13 @@ import { corsMiddleware, logger } from './middlewares/middlewares';
 import connectToMongoDB from './config/mongoClient';
 import { createWebsocketServer } from './config/websocket';
 
-dotenv.config();
 const port = process.env.PORT || 8080;
 const app: Express = express();
+
+const sslOptions = {
+  key: readFileSync('.cert/klucz_TLS_no_passphrase.key'),
+  cert: readFileSync('.cert/tls_certificate.crt')
+};
 
 app.use(logger);
 app.use(corsMiddleware);
@@ -21,7 +28,7 @@ app.use('/users', users);
 app.use('/surveys', surveys)
 app.use('/activities', activities);
 
-const server = createServer(app);
+const server = createServer(sslOptions, app);
 createWebsocketServer(server);
 
 const runApp = async () => {
