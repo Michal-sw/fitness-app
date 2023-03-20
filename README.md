@@ -30,12 +30,14 @@ to access the app select "Sign in" and input random login and password
     - Python
     - Tensorflow
 
-  3. MQTT:
-    - mqtt.js
+  3. Websockets:
+    - socket-io
 
   4. Deployment:
     - Docker compose
-    - RHEL 7 run on Microsoft Azure services
+    - Ubuntu on Oracle Cloud for backend
+    - MongoDB Atlas
+    - Vercel for frontend
 ```
 ## Principles ##
 ```markdown
