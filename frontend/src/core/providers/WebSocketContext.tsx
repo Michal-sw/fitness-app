@@ -2,6 +2,8 @@ import { createContext, ReactElement, useContext, useEffect, useState } from "re
 import useAuth from "./AuthContext";
 import { io, Socket } from "socket.io-client";
 
+const websocketPath = process.env.REACT_APP_API_PATH || "http://127.0.0.1:8080";
+
 interface WebSocketContextType {
   socket: Socket | null;
   activeChats: string[];
@@ -20,7 +22,7 @@ export function WebSocketProvider({ children }: {children: ReactElement }) {
 
   useEffect(() => {
     if (!authenticated) return;
-    const socket = io('http://localhost:8080');
+    const socket = io(websocketPath);
     setSocket(socket);
     return () => {
         socket.disconnect();
