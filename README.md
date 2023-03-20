@@ -7,7 +7,7 @@ Workout partners can chat with each other using websockets
 
 Additionaly the app is equipped with a simple Chatbot which can suggest some workout exercises for input body part.
 ```
-## [LIVE DEMO]()
+## [LIVE DEMO](https://fitness-app-michal-sw.vercel.app)
 ```markdown
 to access the app select "Sign in" and input random login and password
 ```
