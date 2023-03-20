@@ -4,7 +4,7 @@ import { SurveyDT } from "../core/types/SurrveryDT";
 import { ActivityDT } from "../core/types/ActivityDT";
 import { UserDT } from "../core/types/UserDT";
 
-const apiPath = process.env.REACT_APP_API_PATH || "127.0.0.1:8080";
+const apiPath = process.env.REACT_APP_API_PATH || "http://127.0.0.1:8080";
 // const chatbotPath = process.env.REACT_APP_CHATBOT_API_PATH || "127.0.0.1:5000";
 
 const axiosInstance = axios.create({
@@ -15,7 +15,7 @@ const axiosInstance = axios.create({
 });
 
 const getSurveys = async (token: string, id: string) => {
-  return axiosInstance.get(`http://${apiPath}/surveys/${id}`, {
+  return axiosInstance.get(`${apiPath}/surveys/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -23,7 +23,7 @@ const getSurveys = async (token: string, id: string) => {
 };
 
 const startSurvey = async (token: string, id: string) => {
-  return axiosInstance.post(`http://${apiPath}/surveys`, { id: id }, {
+  return axiosInstance.post(`${apiPath}/surveys`, { id: id }, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -31,7 +31,7 @@ const startSurvey = async (token: string, id: string) => {
 };
 
 const finishSurvey = async (token: string, id: string, values: SurveyDT) => {
-  return axiosInstance.patch(`http://${apiPath}/surveys`, { id: id, ...values }, {
+  return axiosInstance.patch(`${apiPath}/surveys`, { id: id, ...values }, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -39,7 +39,7 @@ const finishSurvey = async (token: string, id: string, values: SurveyDT) => {
 };
 
 const getActivities = async (token: string) => {
-  return axiosInstance.get(`http://${apiPath}/activities/`, {
+  return axiosInstance.get(`${apiPath}/activities/`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -47,7 +47,7 @@ const getActivities = async (token: string) => {
 };
 
 const getUserActivities = async (token: string, id: string) => {
-  return axiosInstance.get(`http://${apiPath}/users/${id}/activities/`, {
+  return axiosInstance.get(`${apiPath}/users/${id}/activities/`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -55,7 +55,7 @@ const getUserActivities = async (token: string, id: string) => {
 } 
 
 const updateUser = async (token: string, userId: string, values: UserDT) => {
-  return axiosInstance.patch(`http://${apiPath}/users/${userId}`, { ...values }, {
+  return axiosInstance.patch(`${apiPath}/users/${userId}`, { ...values }, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -63,7 +63,7 @@ const updateUser = async (token: string, userId: string, values: UserDT) => {
 }
 
 const getUser = async (token: string, userId: string) => {
-  return axiosInstance.get(`http://${apiPath}/users/${userId}`, {
+  return axiosInstance.get(`${apiPath}/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -71,7 +71,7 @@ const getUser = async (token: string, userId: string) => {
 }
 
 const addActivity = async (token: string, id: string, values: ActivityDT) => {
-  return axiosInstance.post(`http://${apiPath}/activities`, { id, ...values }, {
+  return axiosInstance.post(`${apiPath}/activities`, { id, ...values }, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -93,7 +93,7 @@ const markActivityAsPerformed = async (token: string, userId:string, values: Act
 };
 
 const updateUserActivity = async (token: string, userId: string, values: ActivityDT, skipped: boolean) => {
-  return axiosInstance.patch(`http://${apiPath}/users/${userId}/activities`, { activityId: values._id, skipped },{
+  return axiosInstance.patch(`${apiPath}/users/${userId}/activities`, { activityId: values._id, skipped },{
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -101,7 +101,7 @@ const updateUserActivity = async (token: string, userId: string, values: Activit
 }
 
 const updateActivity = async (token: string, values: ActivityDT) => {
-  return axiosInstance.patch(`http://${apiPath}/activities`, values, {
+  return axiosInstance.patch(`${apiPath}/activities`, values, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -109,7 +109,7 @@ const updateActivity = async (token: string, values: ActivityDT) => {
 };
 
 const addUserToActivity = async (token: string, userId: string, activityId: string) => {
-  return axiosInstance.post(`http://${apiPath}/users/${userId}/activities`, { activityId } ,{
+  return axiosInstance.post(`${apiPath}/users/${userId}/activities`, { activityId } ,{
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -117,19 +117,19 @@ const addUserToActivity = async (token: string, userId: string, activityId: stri
 };
 
 const refreshToken = async () => {
-  return axiosInstance.post(`http://${apiPath}/users/refresh`);
+  return axiosInstance.post(`${apiPath}/users/refresh`);
 };
 
 const login = async (values: LoginDT) => {
-  return axiosInstance.post(`http://${apiPath}/users/login`, values);
+  return axiosInstance.post(`${apiPath}/users/login`, values);
 };
 
 const signIn = async (values: LoginDT) => {
-  return axiosInstance.post(`http://${apiPath}/users/signin`, values);
+  return axiosInstance.post(`${apiPath}/users/signin`, values);
 };
 
 const logout = async () => {
-  return axiosInstance.get(`http://${apiPath}/users/logout`);
+  return axiosInstance.get(`${apiPath}/users/logout`);
 };
 
 interface AxiosService {
