@@ -33,7 +33,10 @@ to access the app select "Sign in" and input random login and password
   3. Websockets:
     - socket-io
 
-  4. Deployment:
+  4. Security:
+    - JWT refresh and access tokens
+    
+  5. Deployment:
     - Docker compose
     - Ubuntu on Oracle Cloud for backend
     - MongoDB Atlas
