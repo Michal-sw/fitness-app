@@ -22,7 +22,7 @@ export function WebSocketProvider({ children }: {children: ReactElement }) {
 
   useEffect(() => {
     if (!authenticated) return;
-    const socket = io(websocketPath, {path: '/fitness/'});
+    const socket = io(websocketPath, {path: '/fitness/socket.io/'});
     setSocket(socket);
     return () => {
         socket.disconnect();
