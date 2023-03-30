@@ -2,6 +2,7 @@ import '../../styles/auth/Login.scss';
 import { Field, Form, Formik } from 'formik';
 import useAuth from '../../core/providers/AuthContext';
 import { LoginDT } from '../../core/types/LoginDT';
+import { Alert } from '@mui/material';
 
 
 function SignIn() {
@@ -12,18 +13,21 @@ function SignIn() {
   }
 
   return (
-    <div className={"login_container"}>
-        <Formik initialValues={{
-            login: "",
-            password: ""
-        }} onSubmit={(values) => handleSignIn(values)}>
-            <Form className={"login_form"}>
-                <Field name={"login"} placeholder={"Email or mobile number"} />
-                <Field name={"password"} placeholder={"Password"} type={"password"} />
-                <button type={"submit"} className={"login_button"}>Sign in</button>
-            </Form>
-        </Formik>   
-    </div>
+    <>
+        <div className={"login_container"}>
+          <Formik initialValues={{
+              login: "",
+              password: ""
+          }} onSubmit={(values) => handleSignIn(values)}>
+              <Form className={"login_form"}>
+                  <Field name={"login"} placeholder={"Email or mobile number"} />
+                  <Field name={"password"} placeholder={"Password"} type={"password"} />
+                  <button type={"submit"} className={"login_button"}>Sign in</button>
+              </Form>
+          </Formik>   
+      </div>
+      <Alert id='signin_alert' severity="info">Before signing in, please visit <a href="https://130.61.177.18:3001" target='_blank'>https://130.61.177.18:3001</a> and mark the website certificate as valid</Alert>
+    </>
   )
 }
 
