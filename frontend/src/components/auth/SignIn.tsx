@@ -26,7 +26,7 @@ function SignIn() {
               </Form>
           </Formik>   
       </div>
-      <Alert id='signin_alert' severity="info">Before signing in, please visit <a href="https://130.61.177.18:3001" target='_blank'>https://130.61.177.18:3001</a> and mark the website certificate as valid</Alert>
+      <Alert id='signin_alert' severity="info">If you have problems signing in, please visit <a href="https://michal-sw.com/fitness" target='_blank'>https://michal-sw.com/fitness</a> and mark the website certificate as valid</Alert>
     </>
   )
 }
