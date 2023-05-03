@@ -1,0 +1,9 @@
+node_modules
+build
+.husky
+.vscode
+public
+.env
+.env.development
+Dockerfile
+.md

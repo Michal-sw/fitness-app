@@ -1,5 +1,5 @@
 export interface NotificationMessage {
-    message: String;
-    id?: number;
-    className?: String;
+  message: string;
+  id?: number;
+  className?: string;
 }

@@ -1,10 +1,17 @@
-import { createContext, ReactElement, useContext, useEffect, useMemo, useState } from "react";
+import {
+  ReactElement,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
 import { LoginDT } from "../types/LoginDT";
-import axiosService from "../../services/axiosService";
-import { AxiosError } from "axios";
-import useNotifications from "../../hooks/useNotifications";
 import { UserDT } from "../types/UserDT";
+import axiosService from "../../services/axiosService";
+import useNotifications from "../../hooks/useNotifications";
 
 interface AuthContextType {
   user: UserDT;
@@ -27,13 +34,11 @@ const initUser: UserDT = {
   refreshToken: "",
   activities: [],
   registrationDate: new Date(),
-}
+};
 
-const AuthContext = createContext<AuthContextType>(
-  {} as AuthContextType
-);
+const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-export function AuthProvider({ children }: {children: ReactElement }) {
+export function AuthProvider({ children }: { children: ReactElement }) {
   const [user, setUser] = useState<UserDT>(initUser);
   const [token, setToken] = useState<string>("");
   const [authenticated, setAuthenticated] = useState<boolean>();
@@ -45,78 +50,84 @@ export function AuthProvider({ children }: {children: ReactElement }) {
 
   useEffect(() => {
     if (error) setError(null);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   useEffect(() => {
-    const interval = setInterval(() => axiosService
-      .refreshToken()
-        .then(res => setAuthData(res.data))
-        .catch(err => setError(err))
-    , 60000);
-    return () => clearInterval(interval); 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    const interval = setInterval(
+      () =>
+        axiosService
+          .refreshToken()
+          .then((res) => setAuthData(res.data))
+          .catch((err) => setError(err)),
+      60000
+    );
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
-  
+
   useEffect(() => {
-    axiosService.refreshToken()
-      .then(res => {
+    axiosService
+      .refreshToken()
+      .then((res) => {
         setAuthData(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         setError(err);
       })
       .finally(() => {
         setLoadingInitial(false);
-      })
+      });
   }, []);
 
-  function handleError(err: AxiosError) {
-    actions.addNotification(err.message);
-    setError(err);
-  }
+  // function handleError(err: AxiosError) {
+  //   actions.addNotification(err.message);
+  //   setError(err);
+  // }
 
   function handleInvalidLogin() {
-    actions.addErrorNotification('Invalid email or password')
+    actions.addErrorNotification("Invalid email or password");
   }
 
-  function setAuthData({ token, user }: { token:string, user:UserDT}) {
+  function setAuthData({ token, user }: { token: string; user: UserDT }) {
     setToken(token || "");
     setUser(user);
     if (token) setAuthenticated(true);
   }
 
   function login(values: LoginDT) {
-    axiosService.login(values)
-      .then(res => {
+    axiosService
+      .login(values)
+      .then((res) => {
         if (res.status === 200 && res.data.token) {
           setAuthData(res.data);
-          navigate('/dashboard');
+          navigate("/dashboard");
         }
       })
       .catch(() => {
         handleInvalidLogin();
-      })
+      });
   }
 
   function signIn(values: LoginDT) {
-    axiosService.signIn(values)
-      .then(res => {
+    axiosService
+      .signIn(values)
+      .then((res) => {
         if (res.status === 200 && res.data.token) {
           setAuthData(res.data);
-          navigate('/dashboard');
+          navigate("/dashboard");
         }
       })
-      .catch(err => {
+      .catch(() => {
         handleInvalidLogin();
-      })
+      });
   }
 
   function logout() {
     setToken("");
     setAuthenticated(false);
     axiosService.logout();
-    navigate('/');
+    navigate("/");
   }
 
   const memoedValue = useMemo(
@@ -127,7 +138,7 @@ export function AuthProvider({ children }: {children: ReactElement }) {
       authenticated,
       login,
       signIn,
-      logout
+      logout,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [error, token, authenticated]

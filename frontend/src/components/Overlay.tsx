@@ -1,11 +1,7 @@
-import '../styles/Overlay.scss';
+import "../styles/Overlay.scss";
 
 const Overlay = () => {
-
-    return (
-        <div id="purple-overlay">
-        </div>
-    )
-}
+  return <div id="purple-overlay"></div>;
+};
 
 export default Overlay;
