@@ -16,7 +16,7 @@ module.exports = {
         tsconfigRootDir: __dirname,
         sourceType: "module",
       },
-      plugins: ["@typescript-eslint", "react-hooks", "prettier", "react"],
+      plugins: ["@typescript-eslint", "react-hooks", "prettier"],
       rules: {
         "no-empty-function": "off",
         "@typescript-eslint/no-empty-function": ["error"],
