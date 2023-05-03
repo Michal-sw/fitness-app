@@ -1,0 +1,9 @@
+# Ignore artifacts:
+node_modules
+build
+.husky
+.env
+.env.development
+.gitignore
+Dockerfile
+.md
