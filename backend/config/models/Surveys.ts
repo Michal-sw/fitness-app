@@ -10,25 +10,25 @@ export interface ISurvey {
 }
 
 const surveySchema = new Schema<ISurvey>({
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    date: {
-      type: Date
-    },
-    waterScore: {
-        type: Number
-    },
-    sleepScore: {
-        type: Number
-    },
-    trainingScore: {
-        type: Number
-    },
-    hasBeenChecked: {
-      type: Boolean
-    }
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
+  date: {
+    type: Date,
+  },
+  waterScore: {
+    type: Number,
+  },
+  sleepScore: {
+    type: Number,
+  },
+  trainingScore: {
+    type: Number,
+  },
+  hasBeenChecked: {
+    type: Boolean,
+  },
 });
 
-export default model('Surveys', surveySchema);
+export default model("Surveys", surveySchema);

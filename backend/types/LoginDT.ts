@@ -1,4 +1,4 @@
 export interface LoginDT {
-    login: string;
-    password: string;
+  login: string;
+  password: string;
 }
