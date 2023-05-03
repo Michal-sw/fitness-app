@@ -16,54 +16,57 @@ export interface IUser {
 }
 
 interface UserActivity {
-  activity:Types.ObjectId,
-  skipped: boolean
+  activity: Types.ObjectId;
+  skipped: boolean;
 }
 
 const userSchema = new Schema<IUser>({
-    firstName: {
-      type: String,
-    },
-    lastName: {
-      type: String,
-    },
-    password: {
-      type: String,
-      required: true
-    },
-    login: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    email: {
-      type: String,
-      lowercase: true,
-      match: [/[\w.]*[@][\w]*[.][\w]*/, 'Please put in a correct email address']
-    },
-    activities: [
-      new Schema({
+  firstName: {
+    type: String,
+  },
+  lastName: {
+    type: String,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  login: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  email: {
+    type: String,
+    lowercase: true,
+    match: [/[\w.]*[@][\w]*[.][\w]*/, "Please put in a correct email address"],
+  },
+  activities: [
+    new Schema(
+      {
         activity: {
           type: Schema.Types.ObjectId,
-          ref: "Activity"
+          ref: "Activity",
         },
         skipped: {
-          type: Boolean
-        }
-      }, {_id: false})
-    ],
-    registrationDate: {
-      type: Date
-    },
-    score: {
-      type: Number
-    },
-    surveyStreak: {
-      type: Number
-    },
-    workoutStreak: {
-      type: Number
-    }
+          type: Boolean,
+        },
+      },
+      { _id: false }
+    ),
+  ],
+  registrationDate: {
+    type: Date,
+  },
+  score: {
+    type: Number,
+  },
+  surveyStreak: {
+    type: Number,
+  },
+  workoutStreak: {
+    type: Number,
+  },
 });
 
-export default model('User', userSchema);
+export default model("User", userSchema);

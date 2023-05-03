@@ -4,28 +4,30 @@ export interface IActivity {
   _id: ObjectId;
   placeId: number;
   attendees: [Types.ObjectId];
-  activityType: String;
+  activityType: string;
   date: Date;
   hasBeenChecked: boolean;
 }
 
 const activitySchema = new Schema<IActivity>({
-    placeId: {
-      type: Number
-    },
-    attendees: [{
+  placeId: {
+    type: Number,
+  },
+  attendees: [
+    {
       type: Schema.Types.ObjectId,
-      ref: "User"
-    }],
-    activityType: {
-      type: String
+      ref: "User",
     },
-    date: {
-      type: Date
-    },
-    hasBeenChecked: {
-      type: Boolean
-    }
+  ],
+  activityType: {
+    type: String,
+  },
+  date: {
+    type: Date,
+  },
+  hasBeenChecked: {
+    type: Boolean,
+  },
 });
 
-export default model('Activity', activitySchema);
+export default model("Activity", activitySchema);
