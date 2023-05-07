@@ -1,23 +1,26 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.scss";
-import PrivateRoute from "./components/auth/PrivateRoute";
-import Chatbot from "./components/chatbot/Chatbot";
-import MapWrapper from "./components/map/MapWrapper";
+
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 import ActivityMapWrapper from "./components/map/ActivityMapWrapper";
-import { AuthProvider } from "./core/providers/AuthContext";
-import Navbar from "./components/navbar/Navbar";
-import SignIn from "./components/auth/SignIn";
-import Login from "./components/auth/Login";
-import Notifications from "./components/Notifications";
-import Dashboard from "./components/dashboard/Dashboard";
-import History from "./components/history/History";
-import User from "./components/users/User";
-import Overlay from "./components/Overlay";
-import NotFound from "./components/NotFound";
-import WelcomePage from "./components/WelcomePage";
 import { ActivityProvider } from "./core/providers/ActivityContext";
-import { WebSocketProvider } from "./core/providers/WebSocketContext";
+import { AuthProvider } from "./core/providers/AuthContext";
 import ChatList from "./components/chat/ChatList";
+import Chatbot from "./components/chatbot/Chatbot";
+import Dashboard from "./components/dashboard/Dashboard";
+import Footer from "./components/footer/Footer";
+import History from "./components/history/History";
+import Login from "./components/auth/Login";
+import MapWrapper from "./components/map/MapWrapper";
+import Navbar from "./components/navbar/Navbar";
+import NotFound from "./components/NotFound";
+import Notifications from "./components/Notifications";
+import Overlay from "./components/Overlay";
+import PrivateRoute from "./components/auth/PrivateRoute";
+import SignIn from "./components/auth/SignIn";
+import User from "./components/users/User";
+import { WebSocketProvider } from "./core/providers/WebSocketContext";
+import WelcomePage from "./components/WelcomePage";
 
 function App() {
   return (
@@ -68,6 +71,7 @@ function App() {
                   <Route path="/404" element={<NotFound />} />
                 </Routes>
                 <ChatList />
+                <Footer />
               </>
             </WebSocketProvider>
           </ActivityProvider>
