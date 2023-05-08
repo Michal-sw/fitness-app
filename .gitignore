@@ -2,3 +2,6 @@
 */.env
 **/node_modules/**
 **/.idea/
+**/venv
+**/.pytest_cache
+**/*pycache*
