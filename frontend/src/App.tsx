@@ -50,7 +50,7 @@ function App() {
                     path="/map"
                     element={
                       <PrivateRoute>
-                        <MapComponent/>
+                        <MapComponent />
                       </PrivateRoute>
                     }
                   />
