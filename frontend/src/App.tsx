@@ -2,7 +2,6 @@ import "./App.scss";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import ActivityMapWrapper from "./components/map/ActivityMapWrapper";
 import { ActivityProvider } from "./core/providers/ActivityContext";
 import { AuthProvider } from "./core/providers/AuthContext";
 import ChatList from "./components/chat/ChatList";
@@ -11,7 +10,6 @@ import Dashboard from "./components/dashboard/Dashboard";
 import Footer from "./components/footer/Footer";
 import History from "./components/history/History";
 import Login from "./components/auth/Login";
-import MapWrapper from "./components/map/MapWrapper";
 import Navbar from "./components/navbar/Navbar";
 import NotFound from "./components/NotFound";
 import Notifications from "./components/Notifications";
@@ -21,6 +19,12 @@ import SignIn from "./components/auth/SignIn";
 import User from "./components/users/User";
 import { WebSocketProvider } from "./core/providers/WebSocketContext";
 import WelcomePage from "./components/WelcomePage";
+import MapWrapperHOC from "./components/map/MapWrapperHOC";
+import ActivityMap from "./components/map/ActivityMap";
+import InteractiveMap from "./components/map/InteractiveMap";
+
+const MapComponent = MapWrapperHOC(InteractiveMap);
+const ActivitySearchMapComponent = MapWrapperHOC(ActivityMap);
 
 function App() {
   return (
@@ -46,7 +50,7 @@ function App() {
                     path="/map"
                     element={
                       <PrivateRoute>
-                        <MapWrapper />
+                        <MapComponent/>
                       </PrivateRoute>
                     }
                   />
@@ -54,7 +58,7 @@ function App() {
                     path="map/activities"
                     element={
                       <PrivateRoute>
-                        <ActivityMapWrapper />
+                        <ActivitySearchMapComponent />
                       </PrivateRoute>
                     }
                   />
