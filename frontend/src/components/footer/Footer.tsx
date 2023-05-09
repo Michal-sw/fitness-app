@@ -27,7 +27,7 @@ const Footer = (): JSX.Element => {
             </div>
             <div>
                 Florian Dobkowski | Michał Świerczewski @ 2023
-                <a href="https://www.flaticon.com/free-icons/follow" title="follow icons">Follow icons created by Handicon - Flaticon</a>
+                <a href="https://www.flaticon.com/free-icons/follow" title="follow icons">Following icons created by Handicon - Flaticon</a>
             </div>
         </footer>
     )

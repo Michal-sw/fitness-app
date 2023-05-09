@@ -20,7 +20,7 @@
     width: 320px;
     height: fit-content;
     gap: 5px;
-    background-color: rgb(39, 39, 39);
+    background-color: var(--dark-background-color);
     box-shadow: 0 0 10px 2px gray;
 
     transition: 0.3s;

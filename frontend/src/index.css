@@ -1,5 +1,6 @@
 :root {
   --main-color: #6c4ae7;
+  --dark-background-color: rgb(39,39,39);
   --success: #00995c;
   --success-transparent: #00995cc9;
   --danger: #b91929;
