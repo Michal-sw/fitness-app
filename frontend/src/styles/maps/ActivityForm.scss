@@ -17,6 +17,7 @@
     background-color: whitesmoke;
     padding: 20px;
     border-radius: 15px;
+    box-shadow: 0 0 10px 1px gray;
 
     #close-button {
         color:rgb(174, 0, 0);
@@ -43,7 +44,17 @@
         height:100%;
         flex-direction: column;
         gap: 20px;
-
+        
+        > div {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            > textarea {
+                resize: none;
+                width: 100%;
+            }
+        }
         button {
             margin-top: auto;
         }

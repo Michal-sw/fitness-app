@@ -1,14 +1,15 @@
-import "../../styles/maps/ActivityForm.scss";
+import "../../../styles/maps/ActivityForm.scss";
 
 import { Field, Form, Formik } from "formik";
 
-import { ActivityDT } from "../../core/types/ActivityDT";
+import { ActivityDT } from "../../../core/types/ActivityDT";
 import DateTimeInput from "./DateTimeInput";
 import React from "react";
-import axiosService from "../../services/axiosService";
-import useActivity from "../../core/providers/ActivityContext";
-import useAuth from "../../core/providers/AuthContext";
-import useNotifications from "../../hooks/useNotifications";
+import axiosService from "../../../services/axiosService";
+import useActivity from "../../../core/providers/ActivityContext";
+import useAuth from "../../../core/providers/AuthContext";
+import useNotifications from "../../../hooks/useNotifications";
+import DescriptionInput from "./DescriptionInput";
 
 interface ActivityFormProps {
   isVisible: boolean;
@@ -50,6 +51,7 @@ function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
         initialValues={{
           activityType: "running",
           date: "",
+          description: "",
         }}
         onSubmit={(values) => handleAddActivity(values)}
       >
@@ -70,6 +72,19 @@ function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
               <option value="conditioning">Conditioning</option>
               <option value="basketball">Basketball</option>
             </Field>
+          </div>
+          <div>
+            <label>Level</label>
+            <Field name={"level"} placeholder={"Level"} as="select">
+              <option value="novice">Novice</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+              <option value="elite">Elite</option>
+            </Field>
+          </div>
+
+          <div>
+            <Field name={"description"} component={DescriptionInput} />
           </div>
 
           <button type={"submit"} className={"login_button"}>

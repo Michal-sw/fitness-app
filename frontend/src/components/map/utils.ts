@@ -1,32 +1,35 @@
 import L, { LatLng, Map } from "leaflet";
 
 import { ActivityDT } from "../../core/types/ActivityDT";
-import { OverpassNode } from "overpass-ts";
+import { NominatimResponseExt } from "../../core/types/NominatimResponseExt";
 
 interface addOverpassResutOptions {
   buttonText?: string;
   popUpSize?: number;
-  buttonCallback?: (dataPoint: OverpassNode) => void;
+  buttonCallback?: (dataPoint: NominatimResponseExt) => void;
   userId?: string;
   activities?: ActivityDT[];
 }
 
-export const getPlaceIdsAsString = (activities: ActivityDT[]) => {
-  return activities.reduce((prev, curr) => {
-    if (!curr.placeId) return prev;
-    return prev ? `${prev}, ${curr.placeId}` : `id:${curr.placeId}`;
-  }, "");
+const getMostAccurateAddress = (dataPoint: NominatimResponseExt) => {
+  const { road, house_number, city } = dataPoint.address;
+  const address = [road, house_number, city].filter((el) => el).join(", ");
+  return address;
+};
+
+export const getPlaceIdsAsNominatimString = (activities: ActivityDT[]) => {
+  return activities.map((el: ActivityDT) => `N${el.placeId}`).join(",");
 };
 
 export const addOverpassResultToMap = (
   map: Map,
-  dataPoints: OverpassNode[],
+  dataPoints: NominatimResponseExt[],
   options: addOverpassResutOptions
 ): void => {
   for (const dataPoint of dataPoints) {
-    const position = new LatLng(dataPoint.lat, dataPoint.lon);
+    const position = new LatLng(Number(dataPoint.lat), Number(dataPoint.lon));
     const activity = options.activities?.find(
-      (a) => a.placeId === dataPoint.id
+      (a) => a.placeId === dataPoint.osm_id
     );
 
     if (isUserAParticipant(activity, options.userId)) continue;
@@ -54,14 +57,21 @@ const isUserAParticipant = (
 };
 
 const createPopupDiv = (
-  dataPoint: OverpassNode,
+  dataPoint: NominatimResponseExt,
   options: addOverpassResutOptions,
   activity: ActivityDT | undefined
 ): HTMLDivElement => {
-  const nameOfPlace = dataPoint.tags?.leisure || "";
+  const nameOfPlace =
+    dataPoint.address.leisure || dataPoint.type.replaceAll("_", " ");
 
   const popup = document.createElement("div");
+
   const name = createPopUpText("Name", nameOfPlace, options);
+  const addressText = createPopUpText(
+    "Address",
+    getMostAccurateAddress(dataPoint),
+    options
+  );
   const activityType = createPopUpText(
     "Activity Type",
     activity?.activityType,
@@ -75,6 +85,7 @@ const createPopupDiv = (
   const addWorkoutButton = createButton(dataPoint, options);
 
   popup.append(name);
+  popup.append(addressText);
   activity && popup.append(activityType);
   activity && popup.append(attendees);
   popup.append(addWorkoutButton);
@@ -99,7 +110,7 @@ const createPopUpText = (
 };
 
 const createButton = (
-  dataPoint: OverpassNode,
+  dataPoint: NominatimResponseExt,
   options: addOverpassResutOptions
 ): HTMLButtonElement => {
   const addButton = document.createElement("button");

@@ -18,6 +18,7 @@
     "formik": "^2.2.9",
     "leaflet": "^1.9.3",
     "leaflet-overpass-layer": "^2.9.0",
+    "nominatim-browser": "^2.1.0",
     "overpass-ts": "^4.3.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
