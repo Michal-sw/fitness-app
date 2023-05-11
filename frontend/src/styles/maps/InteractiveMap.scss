@@ -5,6 +5,28 @@
   border: 0.5px black solid;
 }
 
+.map-popup {
+  display: flex;
+  flex-direction: column;
+
+  > div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    > label {
+      font-weight: bold;
+    }
+    > p {
+      margin: 5px 0 5px 0;
+      padding: 5px;
+      width: 100%;
+      border-radius: 5px;
+      background-color: rgb(240, 240, 240);
+    }
+  }
+}
+
 #map-wrapper {
   position:relative;
   display:flex;

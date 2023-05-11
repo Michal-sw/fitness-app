@@ -1,6 +1,6 @@
 import "../../../styles/maps/ActivityForm.scss";
 
-import { Field, Form, Formik } from "formik";
+import { useFormik } from "formik";
 
 import { ActivityDT } from "../../../core/types/ActivityDT";
 import DateTimeInput from "./DateTimeInput";
@@ -9,7 +9,9 @@ import axiosService from "../../../services/axiosService";
 import useActivity from "../../../core/providers/ActivityContext";
 import useAuth from "../../../core/providers/AuthContext";
 import useNotifications from "../../../hooks/useNotifications";
-import DescriptionInput from "./DescriptionInput";
+import { TextField, TextareaAutosize } from "@mui/material";
+import SelectField from "./SelectField";
+import { ACTIVITY_LEVELS, ACTIVITY_TYPES, validationSchema } from "./helpers";
 
 interface ActivityFormProps {
   isVisible: boolean;
@@ -22,6 +24,23 @@ function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
   const { actions } = useNotifications();
   const { addActivity } = useActivity();
 
+  const formik = useFormik({
+    initialValues: {
+      activityType: "running",
+      date: "",
+      level: "novice",
+      title: "",
+      description: "",
+    },
+    validate: validationSchema,
+    onSubmit: handleAddActivity,
+  });
+
+  const closeAndResetForm = () => {
+    formik.resetForm();
+    setVisible(false);
+  };
+
   function handleAddActivity(values: any) {
     const result = {
       ...values,
@@ -29,8 +48,7 @@ function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
       placeId,
       hasBeenChecked: false,
     };
-
-    setVisible(false);
+    closeAndResetForm();
 
     axiosService
       .addActivity(token, user._id, result)
@@ -44,54 +62,67 @@ function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
 
   return isVisible ? (
     <div id="activity-form-container">
-      <p id="close-button" onClick={() => setVisible(false)}>
+      <p id="close-button" onClick={closeAndResetForm}>
         &#10006;
       </p>
-      <Formik
-        initialValues={{
-          activityType: "running",
-          date: "",
-          description: "",
-        }}
-        onSubmit={(values) => handleAddActivity(values)}
-      >
-        <Form className={"login_form"}>
-          <div>
-            <label>Date</label>
-            <Field name={"date"} component={DateTimeInput} />
-          </div>
-          <div>
-            <label>Activity type</label>
-            <Field
-              name={"activityType"}
-              placeholder={"Activity type"}
-              as="select"
-            >
-              <option value="running">Running</option>
-              <option value="strength">Strength</option>
-              <option value="conditioning">Conditioning</option>
-              <option value="basketball">Basketball</option>
-            </Field>
-          </div>
-          <div>
-            <label>Level</label>
-            <Field name={"level"} placeholder={"Level"} as="select">
-              <option value="novice">Novice</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-              <option value="elite">Elite</option>
-            </Field>
-          </div>
-
-          <div>
-            <Field name={"description"} component={DescriptionInput} />
-          </div>
-
-          <button type={"submit"} className={"login_button"}>
-            Submit workout!
-          </button>
-        </Form>
-      </Formik>
+      <form onSubmit={formik.handleSubmit}>
+        <div>
+          <label>Date</label>
+          <DateTimeInput name="date" handleFormikChange={formik.handleChange} />
+        </div>
+        <div>
+          <SelectField
+            name="level"
+            label="Level"
+            value={formik.values.level}
+            onChange={formik.handleChange}
+            options={ACTIVITY_LEVELS}
+          />
+          <SelectField
+            name="activityType"
+            label="Activity Type"
+            value={formik.values.activityType}
+            onChange={formik.handleChange}
+            options={ACTIVITY_TYPES}
+          />
+        </div>
+        <div>
+          <TextField
+            fullWidth
+            variant="standard"
+            name="title"
+            label="Title"
+            value={formik.values.title}
+            onChange={formik.handleChange}
+            error={formik.touched.title && formik.errors.title ? true : false}
+            helperText={formik.touched.title && formik.errors.title}
+          />
+        </div>
+        <div>
+          <TextField
+            fullWidth
+            name="description"
+            label="Description"
+            multiline
+            value={formik.values.description}
+            onChange={formik.handleChange}
+            error={
+              formik.touched.description && formik.errors.description
+                ? true
+                : false
+            }
+            helperText={formik.touched.description && formik.errors.description}
+            placeholder="Add a description..."
+            InputProps={{
+              inputComponent: TextareaAutosize,
+              inputProps: { minRows: 2, maxRows: 5 },
+            }}
+          />
+        </div>
+        <button type={"submit"} className={"login_button"}>
+          Submit workout!
+        </button>
+      </form>
     </div>
   ) : null;
 }

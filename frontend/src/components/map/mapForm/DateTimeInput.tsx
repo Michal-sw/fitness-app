@@ -1,15 +1,23 @@
-import { FieldProps } from "formik";
 import { FormEvent } from "react";
 
-const DateTimeInput = ({ field, form }: FieldProps) => {
-  function handleChange(e: FormEvent<HTMLInputElement>) {
-    const value = e.currentTarget.value;
-    const asDate = new Date(value);
+interface DateTimeInputProps {
+  handleFormikChange: (e: any) => void;
+  name: string;
+}
 
-    form.setFieldValue(field.name, asDate);
+const DateTimeInput = ({ handleFormikChange, name }: DateTimeInputProps) => {
+  function handleChange(e: FormEvent<HTMLInputElement>) {
+    const event = {
+      ...e,
+      currentTarget: {
+        ...e.currentTarget,
+        value: new Date(e.currentTarget.value),
+      },
+    };
+    handleFormikChange(event);
   }
 
-  return <input type={"datetime-local"} onChange={handleChange} />;
+  return <input type={"datetime-local"} onChange={handleChange} name={name} />;
 };
 
 export default DateTimeInput;

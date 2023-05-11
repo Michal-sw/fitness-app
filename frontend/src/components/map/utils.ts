@@ -11,6 +11,9 @@ interface addOverpassResutOptions {
   activities?: ActivityDT[];
 }
 
+const capitalizeFirstLetter = (string: string) =>
+  string.charAt(0).toUpperCase() + string.slice(1);
+
 const getMostAccurateAddress = (dataPoint: NominatimResponseExt) => {
   const { road, house_number, city } = dataPoint.address;
   const address = [road, house_number, city].filter((el) => el).join(", ");
@@ -65,29 +68,33 @@ const createPopupDiv = (
     dataPoint.address.leisure || dataPoint.type.replaceAll("_", " ");
 
   const popup = document.createElement("div");
+  popup.classList.add("map-popup");
 
-  const name = createPopUpText("Name", nameOfPlace, options);
+  const name = createPopUpText("Name: ", capitalizeFirstLetter(nameOfPlace));
   const addressText = createPopUpText(
-    "Address",
-    getMostAccurateAddress(dataPoint),
-    options
+    "Address: ",
+    getMostAccurateAddress(dataPoint)
   );
-  const activityType = createPopUpText(
-    "Activity Type",
-    activity?.activityType,
-    options
-  );
+
+  const activityTypeText =
+    "" +
+    capitalizeFirstLetter(activity?.level || "") +
+    " " +
+    capitalizeFirstLetter(activity?.activityType || "");
+
+  const activityType = createPopUpText("Activity Type: ", activityTypeText);
   const attendees = createPopUpText(
-    "Attendees",
-    activity?.attendees.length.toString(),
-    options
+    "Attendees: ",
+    activity?.attendees.length.toString()
   );
+  const description = createPopUpText("", activity?.description);
   const addWorkoutButton = createButton(dataPoint, options);
 
   popup.append(name);
   popup.append(addressText);
   activity && popup.append(activityType);
   activity && popup.append(attendees);
+  activity && popup.append(description);
   popup.append(addWorkoutButton);
 
   return popup;
@@ -95,16 +102,17 @@ const createPopupDiv = (
 
 const createPopUpText = (
   label: string,
-  nameOfPlace: string | undefined,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  options: addOverpassResutOptions
+  text: string | undefined
 ): HTMLParagraphElement => {
   const container = document.createElement("div");
 
-  const text = document.createElement("p");
-  text.innerText = `${label}: ${nameOfPlace}`;
-
-  container.append(text);
+  const appendElement = (tagName: string, innerText: string) => {
+    const element = document.createElement(tagName);
+    element.innerText = innerText;
+    container.append(element);
+  };
+  if (label) appendElement("label", label);
+  if (text) appendElement("p", text);
 
   return container;
 };

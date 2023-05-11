@@ -3,6 +3,9 @@ import { ObjectId, Schema, Types, model } from "mongoose";
 export interface IActivity {
   _id: ObjectId;
   placeId: number;
+  title: string;
+  description: string;
+  level: string;
   attendees: [Types.ObjectId];
   activityType: string;
   date: Date;
@@ -12,6 +15,15 @@ export interface IActivity {
 const activitySchema = new Schema<IActivity>({
   placeId: {
     type: Number,
+  },
+  title: {
+    type: String,
+  },
+  description: {
+    type: String,
+  },
+  level: {
+    type: String,
   },
   attendees: [
     {
