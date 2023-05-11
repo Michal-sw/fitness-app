@@ -1,7 +1,6 @@
-import L, { Map } from "leaflet";
-import { OverpassNode, overpass } from "overpass-ts";
+import { Map } from "leaflet";
 import React, { useEffect, useRef, useState } from "react";
-import { addOverpassResultToMap, getPlaceIdsAsString } from "./utils";
+import { addOverpassResultToMap, getPlaceIdsAsNominatimString } from "./utils";
 
 import { ActivityDT } from "../../core/types/ActivityDT";
 import { CircularProgress } from "@mui/material";
@@ -9,41 +8,24 @@ import { Coordinates } from "../../core/types/CoordinatesDT";
 import axiosService from "../../services/axiosService";
 import useAuth from "../../core/providers/AuthContext";
 import useNotifications from "../../hooks/useNotifications";
+import { NominatimResponseExt } from "../../core/types/NominatimResponseExt";
+import { NominatimError, lookupAddress } from "nominatim-browser";
+import useOverleafMap from "../../hooks/useOverleafMap";
 
-function ActivityMap(coordinates: Coordinates) {
+function ActivityMap({ latitude, longitude }: Coordinates) {
   const mapContainerRef = useRef(null);
   const { actions } = useNotifications();
+  const { isLoading, setIsLoading, map } = useOverleafMap({
+    mapContainerRef,
+    latitude,
+    longitude,
+  });
   const { token, user } = useAuth();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [map, setMap] = useState<Map | null>(null);
   const [activities, setActivities] = useState<ActivityDT[]>([]);
 
   useEffect(() => {
-    const mapContainer = mapContainerRef.current;
-    if (mapContainer) {
-      const map: Map = L.map("map-container", {
-        center: [coordinates.longitude, coordinates.latitude],
-        zoom: 12,
-        layers: [
-          L.tileLayer("https://{s}.tile.osm.org/{z}/{x}/{y}.png", {
-            attribution:
-              '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          }),
-        ],
-      });
-      setMap(map);
-      setIsLoading(true);
-
-      return () => {
-        map.remove();
-        setMap(null);
-      };
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (!map || !isLoading || activities.length) return;
+    if (!map || activities.length) return;
+    setIsLoading(true);
 
     const getActivities = async () => {
       return axiosService
@@ -58,29 +40,31 @@ function ActivityMap(coordinates: Coordinates) {
           a.attendees.find((at) => at._id === user._id) ? false : true
         );
         setActivities(filteredActivities);
-        const placeIds = getPlaceIdsAsString(activities);
+        const placeIds = getPlaceIdsAsNominatimString(activities);
 
-        return overpass(`[out:json];node(${placeIds});out body;`, {})
-          .then((res) => res.json())
-          .then((res) => handleOverpassResponse(res, map, activities))
-          .catch((err) => err)
+        return lookupAddress({
+          osm_ids: `N${placeIds}`,
+        })
+          .then((dataPoints: NominatimResponseExt[]) =>
+            handleOverpassResponse(dataPoints, map, activities)
+          )
+          .catch((err: NominatimError) => err)
           .finally(() => setIsLoading(false));
       })
       .catch(() => {
         actions.addNotification("Error loading activities!");
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
+  }, [map]);
 
   const handleOverpassResponse = (
-    res: any,
+    dataPoints: NominatimResponseExt[],
     map: Map,
     activities: ActivityDT[]
   ) => {
-    const dataPoints: OverpassNode[] = res.elements;
     addOverpassResultToMap(map, dataPoints, {
-      buttonCallback: (dataPoint: OverpassNode) => {
-        const activity = activities.find((a) => a.placeId === dataPoint.id);
+      buttonCallback: (dataPoint: NominatimResponseExt) => {
+        const activity = activities.find((a) => a.placeId === dataPoint.osm_id);
         if (activity) {
           axiosService
             .addUserToActivity(token, user._id, activity._id)

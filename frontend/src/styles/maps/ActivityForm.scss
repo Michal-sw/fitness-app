@@ -6,17 +6,17 @@
 
     top: 0;
     bottom: 0;
-    height: 60%;
 
     left: 0; 
     right: 0; 
     width: fit-content;
-
+    height: fit-content;
     margin: auto; 
   
     background-color: whitesmoke;
-    padding: 20px;
+    padding: 20px 20px 0px 20px;
     border-radius: 15px;
+    box-shadow: 0 0 10px 1px gray;
 
     #close-button {
         color:rgb(174, 0, 0);
@@ -40,10 +40,20 @@
         margin:0;
         padding: 20px 20px 20px 20px;
         display: flex;
-        height:100%;
+
         flex-direction: column;
         gap: 20px;
-
+        
+        > div {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            > textarea {
+                resize: none;
+                width: 100%;
+            }
+        }
         button {
             margin-top: auto;
         }

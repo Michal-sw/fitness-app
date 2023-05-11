@@ -1,26 +1,25 @@
-import L, { Map } from "leaflet";
+import { Map } from "leaflet";
 import { OverpassNode, overpass } from "overpass-ts";
 import React, { useEffect, useRef, useState } from "react";
 
-import ActivityForm from "./ActivityForm";
+import ActivityForm from "./mapForm/ActivityForm";
 import { CircularProgress } from "@mui/material";
 import { addOverpassResultToMap } from "./utils";
 import { useLocation } from "react-router";
 import useNotifications from "../../hooks/useNotifications";
+import { lookupAddress } from "nominatim-browser";
+import { NominatimResponseExt } from "../../core/types/NominatimResponseExt";
+import { Coordinates } from "../../core/types/CoordinatesDT";
+import useOverleafMap from "../../hooks/useOverleafMap";
 
-interface InteractiveMapProps {
-  latitude?: number;
-  longitude?: number;
-}
-
-function InteractiveMap({
-  latitude = 18.6,
-  longitude = 54.35,
-}: InteractiveMapProps) {
+function InteractiveMap({ latitude, longitude }: Coordinates) {
   const mapContainerRef = useRef(null);
   const { actions } = useNotifications();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [map, setMap] = useState<Map | null>(null);
+  const { isLoading, setIsLoading, map } = useOverleafMap({
+    mapContainerRef,
+    latitude,
+    longitude,
+  });
   const [isFormVisible, setIsFormVisible] = useState<boolean>(false);
   const [placeId, setPlaceId] = useState<number>(0);
   const { state } = useLocation();
@@ -42,11 +41,18 @@ function InteractiveMap({
       {}
     )
       .then((res) => res.json())
-      .then((res) => {
-        const dataPoints: OverpassNode[] = res.elements;
+      .then((res) =>
+        res.elements.map((el: OverpassNode) => `N${el.id}`).join(",")
+      )
+      .then((placeIds: string) =>
+        lookupAddress({
+          osm_ids: placeIds,
+        })
+      )
+      .then((dataPoints: NominatimResponseExt[]) => {
         addOverpassResultToMap(map, dataPoints, {
-          buttonCallback: (dataPoint: OverpassNode) => {
-            setPlaceId(dataPoint.id);
+          buttonCallback: (dataPoint: NominatimResponseExt) => {
+            setPlaceId(Number(dataPoint.osm_id));
             setIsFormVisible(true);
           },
           buttonText: "ADD WORKOUT!",
@@ -59,40 +65,18 @@ function InteractiveMap({
   };
 
   useEffect(() => {
-    const mapContainer = mapContainerRef.current;
-    if (mapContainer) {
-      const map: Map = L.map("map-container", {
-        center: [longitude, latitude],
-        zoom: 12,
-        layers: [
-          L.tileLayer("https://{s}.tile.osm.org/{z}/{x}/{y}.png", {
-            attribution:
-              '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          }),
-        ],
-      });
-      setMap(map);
-
-      if (state?.preFetchLocation) fetchLocation(map);
-
-      return () => {
-        map.remove();
-        setMap(null);
-      };
-    }
+    if (state?.preFetchLocation && map)
+      fetchLocation(map, `N${state.preFetchLocation}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [map]);
 
-  const fetchLocation = (map: Map) => {
+  const fetchLocation = (map: Map, place_ids: string) => {
     setIsLoading(true);
-    overpass(`[out:json];node(id:${state.preFetchLocation});out body;`, {})
-      .then((res) => res.json())
-      .then((res) => {
-        const dataPoints: OverpassNode[] = res.elements;
+    lookupAddress({
+      osm_ids: place_ids,
+    })
+      .then((dataPoints: NominatimResponseExt[]) => {
         addOverpassResultToMap(map, dataPoints, {
-          buttonCallback: () => {
-            // handle callback
-          },
           buttonText: "Your training location",
           popUpSize: 100,
         });
