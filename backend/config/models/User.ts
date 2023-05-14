@@ -13,6 +13,7 @@ export interface IUser {
   score: number;
   surveyStreak: number;
   workoutStreak: number;
+  isAdmin: boolean;
 }
 
 interface UserActivity {
@@ -66,6 +67,9 @@ const userSchema = new Schema<IUser>({
   },
   workoutStreak: {
     type: Number,
+  },
+  isAdmin: {
+    type: Boolean,
   },
 });
 

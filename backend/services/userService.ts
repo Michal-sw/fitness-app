@@ -116,13 +116,15 @@ export const deleteUser = async (id: string) => {
   const objectId = getMongoObjectId(id);
   if (!objectId) return getErrorObject(400);
 
-  await User.findOneAndDelete({ _id: objectId })
+  const result = await User.findOneAndDelete({ _id: objectId })
     .then((user: IUser | null) => {
       return getCorrectObject(user);
     })
     .catch((err: MongooseError) => {
       return getErrorObject(400, err.message);
     });
+
+  return result;
 };
 
 export const editUser = async ({ id, ...body }: { id: string }) => {

@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import jwt, { VerifyErrors, VerifyOptions } from "jsonwebtoken";
+import jwt, { JwtPayload, VerifyCallback } from "jsonwebtoken";
 
 import { getPrivateKey } from "../utils/utils";
+import { getUserById } from "../services/userService";
 
 const corsMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const origin = process.env.FRONTEND_URL
@@ -30,10 +31,25 @@ const authorizeMiddleware = (
   const privateKey = getPrivateKey();
   if (!token) return res.sendStatus(401);
 
-  jwt.verify(token, privateKey, ((error: VerifyErrors) => {
+  jwt.verify(token, privateKey, (async (error, payload: JwtPayload) => {
     if (error) return res.sendStatus(401);
+    const user = await getUserById(payload?.id);
+    if (user.statusCode !== 200) return res.sendStatus(400);
+    req.user = user.result;
     return next();
-  }) as VerifyOptions);
+  }) as VerifyCallback);
+};
+
+const authenticateMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.user) return res.sendStatus(400);
+  if (!req.user.isAdmin && req.user._id.toString() !== req.params.id) {
+    return res.sendStatus(403);
+  } 
+  return next();
 };
 
 const logger = (req: Request, res: Response, next: NextFunction) => {
@@ -42,4 +58,4 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
   return next();
 };
 
-export { authorizeMiddleware, corsMiddleware, logger };
+export { authorizeMiddleware, authenticateMiddleware, corsMiddleware, logger };
