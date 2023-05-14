@@ -1,9 +1,9 @@
 import {
   addUser,
   addUserActivity,
+  deleteUser,
   editUser,
   getUserById,
-  getUserByLogin,
   getUserIfCredentialValid,
   getUsers,
   markActivityAsPerformed,
@@ -18,7 +18,7 @@ import { getCookie, getNewTokenPair, getPrivateKey } from "../utils/utils";
 import jwt, { JwtPayload, VerifyErrors, VerifyOptions } from "jsonwebtoken";
 
 import { IUser } from "../config/models/User";
-import { authorizeMiddleware } from "../middlewares/middlewares";
+import { authenticateMiddleware, authorizeMiddleware } from "../middlewares/middlewares";
 
 const router: Router = express.Router({ mergeParams: true });
 
@@ -43,7 +43,7 @@ router.post("/login", async (req: Request, res: Response) => {
 
   if (!user) return res.sendStatus(401);
 
-  const { refreshToken, token } = getNewTokenPair(login);
+  const { refreshToken, token } = getNewTokenPair(user._id);
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
@@ -63,14 +63,14 @@ router.post("/signin", async (req: Request, res: Response) => {
     return res.status(response.statusCode).send(response.result);
   }
 
-  const { refreshToken, token } = getNewTokenPair(login);
+  const user: IUser = response.result;
+  const { refreshToken, token } = getNewTokenPair(user._id);
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     sameSite: "strict",
   });
 
-  const user: IUser = response.result;
 
   return res.send({ token, user });
 });
@@ -93,26 +93,26 @@ router.post("/refresh", (req: Request, res: Response) => {
 
   jwt.verify(oldRefreshToken, privateKey, (async (
     error: VerifyErrors,
-    decodedPayload: JwtPayload
+    payload: JwtPayload
   ) => {
     if (error) return res.sendStatus(403);
-    const login = decodedPayload?.login;
+    const userId = payload?.id;
 
-    const { refreshToken, token } = getNewTokenPair(login);
+    const { refreshToken, token } = getNewTokenPair(userId);
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       sameSite: "strict",
     });
 
-    const response = await getUserByLogin(login);
+    const response = await getUserById(userId);
     const user: IUser = response.result;
 
     return res.send({ token, user });
   }) as VerifyOptions);
 });
 
-router.patch("/:id", async (req: Request, res: Response) => {
+router.patch("/:id", authorizeMiddleware, authenticateMiddleware, async (req: Request, res: Response) => {
   const response = await editUser({
     id: req.params.id,
     ...req.body,
@@ -121,13 +121,22 @@ router.patch("/:id", async (req: Request, res: Response) => {
   return res.status(response.statusCode).send(response);
 });
 
-router.get("/:id/activities", async (req: Request, res: Response) => {
+router.delete("/:id", authorizeMiddleware, authenticateMiddleware, async (req: Request, res: Response) => {
+  const response = await deleteUser({
+    id: req.params.id,
+    ...req.body,
+  });
+
+  return res.status(response.statusCode).send(response);
+});
+
+router.get("/:id/activities", authorizeMiddleware, authenticateMiddleware, async (req: Request, res: Response) => {
   const response = await getActivitiesByUser(req.params.id);
 
   return res.status(response.statusCode).send(response);
 });
 
-router.patch("/:id/activities", async (req: Request, res: Response) => {
+router.patch("/:id/activities", authorizeMiddleware, authenticateMiddleware, async (req: Request, res: Response) => {
   const activityId = req.body.activityId;
   const skipped = req.body.skipped;
 
@@ -138,7 +147,7 @@ router.patch("/:id/activities", async (req: Request, res: Response) => {
   return res.status(response.statusCode).send(response);
 });
 
-router.post("/:id/activities", async (req: Request, res: Response) => {
+router.post("/:id/activities", authorizeMiddleware, async (req: Request, res: Response) => {
   const activityId = req.body.activityId;
 
   const response = await addUserActivity(req.params.id, activityId);

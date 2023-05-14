@@ -1,5 +1,5 @@
 import Survey from "../config/models/Surveys";
-import { Types } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 import User from "../config/models/User";
 import fs from "fs";
 import jwt from "jsonwebtoken";
@@ -22,16 +22,17 @@ export const getPrivateKey = (): string => {
   }
 };
 
-export const getNewTokenPair = (login: string) => {
+export const getNewTokenPair = (userId: string | ObjectId) => {
+  const idAsString = userId.toString();
   const privateKey = getPrivateKey();
 
   // The tokens must be paired with the user in the database
   // 15 minute expire
-  const refreshToken = jwt.sign({ login }, privateKey, {
+  const refreshToken = jwt.sign({ id: idAsString }, privateKey, {
     expiresIn: 60 * 15,
   });
   // 5 minutes expire
-  const token = jwt.sign({ login }, privateKey, {
+  const token = jwt.sign({ id: idAsString }, privateKey, {
     expiresIn: 60 * 5,
   });
 
@@ -39,7 +40,7 @@ export const getNewTokenPair = (login: string) => {
     refreshToken,
     token,
   };
-};
+}
 
 export const getCookie = (cookies: string, key: string): string => {
   const cookiesSplitted = cookies.split("; ");
