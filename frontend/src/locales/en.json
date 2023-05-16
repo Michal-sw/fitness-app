@@ -1,0 +1,44 @@
+{
+  "navbar": {
+    "dashboard": "Dashboard",
+    "map": "Map",
+    "join-activity": "Join activity",
+    "history": "History",
+    "login": "Log In",
+    "signin": "Sign In",
+    "logout": "Logout"
+  },
+  "survey": {
+    "pending-survey": "Pending survey"
+  },
+
+  "activityCard": {
+    "activityTypeLabel": "Activity type",
+    "attendeesLabel": "Attendees",
+    "dateLabel": "Date",
+    "openChat": "Open chat",
+    "showOnMap": "Show on map",
+    "performedDecline": "Skipped",
+    "performedConfirm": "Sweated!"
+  },
+
+  "map": {
+    "search": "Search",
+    "addWorkout": "ADD WORKOUT!",
+    "trainingLocation": "Your training location",
+    "popup": {
+      "placeName": "Name",
+      "placeAddress": "Address",
+      "attendeesNumber": "Attendees",
+      "activityType": "Activity type",
+      "joinActivity": "Join activity"
+    },
+    "form": {
+      "description": "Description",
+      "descriptionPlaceholder": "Add a description...",
+      "date": "Date",
+      "title": "Title",
+      "submit": "Submit workout!"
+    }
+  }
+}

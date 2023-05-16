@@ -1,6 +1,7 @@
 import { Map } from "leaflet";
 import { OverpassNode, overpass } from "overpass-ts";
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import ActivityForm from "./mapForm/ActivityForm";
 import { CircularProgress } from "@mui/material";
@@ -13,6 +14,7 @@ import { Coordinates } from "../../core/types/CoordinatesDT";
 import useOverleafMap from "../../hooks/useOverleafMap";
 
 function InteractiveMap({ latitude, longitude }: Coordinates) {
+  const { t } = useTranslation();
   const mapContainerRef = useRef(null);
   const { actions } = useNotifications();
   const { isLoading, setIsLoading, map } = useOverleafMap({
@@ -55,7 +57,7 @@ function InteractiveMap({ latitude, longitude }: Coordinates) {
             setPlaceId(Number(dataPoint.osm_id));
             setIsFormVisible(true);
           },
-          buttonText: "ADD WORKOUT!",
+          buttonText: t("map.addWorkout") || "",
         });
       })
       .catch(() => {
@@ -77,7 +79,7 @@ function InteractiveMap({ latitude, longitude }: Coordinates) {
     })
       .then((dataPoints: NominatimResponseExt[]) => {
         addOverpassResultToMap(map, dataPoints, {
-          buttonText: "Your training location",
+          buttonText: t("map.trainingLocation") || "",
           popUpSize: 100,
         });
       })
@@ -91,7 +93,7 @@ function InteractiveMap({ latitude, longitude }: Coordinates) {
     <>
       {isLoading ? <CircularProgress id="map-spinner" /> : null}
       <button id="map-search" onClick={handleMapSearch}>
-        Search
+        {t("map.search")}
       </button>
       <ActivityForm
         isVisible={isFormVisible}

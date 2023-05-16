@@ -2,6 +2,7 @@ import L, { LatLng, Map } from "leaflet";
 
 import { ActivityDT } from "../../core/types/ActivityDT";
 import { NominatimResponseExt } from "../../core/types/NominatimResponseExt";
+import i18next from "../../i18n";
 
 interface addOverpassResutOptions {
   buttonText?: string;
@@ -70,9 +71,12 @@ const createPopupDiv = (
   const popup = document.createElement("div");
   popup.classList.add("map-popup");
 
-  const name = createPopUpText("Name: ", capitalizeFirstLetter(nameOfPlace));
+  const name = createPopUpText(
+    `${i18next.t("map.popup.placeName")}: `,
+    capitalizeFirstLetter(nameOfPlace)
+  );
   const addressText = createPopUpText(
-    "Address: ",
+    `${i18next.t("map.popup.placeAddress")}: `,
     getMostAccurateAddress(dataPoint)
   );
 
@@ -82,9 +86,12 @@ const createPopupDiv = (
     " " +
     capitalizeFirstLetter(activity?.activityType || "");
 
-  const activityType = createPopUpText("Activity Type: ", activityTypeText);
+  const activityType = createPopUpText(
+    `${i18next.t("map.popup.activityType")}: `,
+    activityTypeText
+  );
   const attendees = createPopUpText(
-    "Attendees: ",
+    `${i18next.t("map.popup.attendeesNumber")}: `,
     activity?.attendees.length.toString()
   );
   const description = createPopUpText("", activity?.description);

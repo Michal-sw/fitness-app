@@ -9,6 +9,7 @@ import useAuth from "../../core/providers/AuthContext";
 import { useNavigate } from "react-router";
 import useNotifications from "../../hooks/useNotifications";
 import useWebSocket from "../../core/providers/WebSocketContext";
+import { useTranslation } from "react-i18next";
 
 interface ActivityProps {
   activity: ActivityDT;
@@ -22,6 +23,7 @@ const Activity = ({ activity }: ActivityProps) => {
   const navigate = useNavigate();
   const { editActivity } = useActivity();
   const { joinChatRoom } = useWebSocket();
+  const { t } = useTranslation();
 
   const onCheck = (hasBeenSkipped: boolean) => {
     const newActivity = { ...activity, hasBeenChecked: true };
@@ -48,21 +50,28 @@ const Activity = ({ activity }: ActivityProps) => {
 
   return (
     <div className="activity">
-      <ActivityField label="Activity Type:" value={activityType} />
       <ActivityField
-        label="Attendees:"
+        label={t("activityCard.activityTypeLabel") + ":"}
+        value={activityType}
+      />
+      <ActivityField
+        label={t("activityCard.attendeesLabel") + ":"}
         value={<ActivityAttendeesList attendees={attendees} />}
       />
       {activity.date && (
         <ActivityField
-          label="Date:"
+          label={t("activityCard.dateLabel") + ":"}
           value={new Date(date).toLocaleDateString()}
         />
       )}
       ;
       <div className="activity-field">
-        <button onClick={() => joinChatRoom(_id)}>Open chat</button>
-        <button onClick={onNavigateToLocation}>Show on map</button>
+        <button onClick={() => joinChatRoom(_id)}>
+          {t("activityCard.openChat")}
+        </button>
+        <button onClick={onNavigateToLocation}>
+          {t("activityCard.showOnMap")}
+        </button>
       </div>
       {!hasBeenChecked && (
         <ActivityCheck onCheck={onCheck} date={activity.date} />

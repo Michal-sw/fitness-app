@@ -5,6 +5,8 @@ import { useFormik } from "formik";
 import { ActivityDT } from "../../../core/types/ActivityDT";
 import DateTimeInput from "./DateTimeInput";
 import React from "react";
+import { useTranslation } from "react-i18next";
+
 import axiosService from "../../../services/axiosService";
 import useActivity from "../../../core/providers/ActivityContext";
 import useAuth from "../../../core/providers/AuthContext";
@@ -23,6 +25,7 @@ function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
   const { user, token } = useAuth();
   const { actions } = useNotifications();
   const { addActivity } = useActivity();
+  const { t } = useTranslation();
 
   const formik = useFormik({
     initialValues: {
@@ -67,7 +70,7 @@ function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
       </p>
       <form onSubmit={formik.handleSubmit}>
         <div>
-          <label>Date</label>
+          <label>{t("map.form.date")}</label>
           <DateTimeInput name="date" handleFormikChange={formik.handleChange} />
         </div>
         <div>
@@ -91,7 +94,7 @@ function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
             fullWidth
             variant="standard"
             name="title"
-            label="Title"
+            label={t("map.form.title") || ""}
             value={formik.values.title}
             onChange={formik.handleChange}
             error={formik.touched.title && formik.errors.title ? true : false}
@@ -102,7 +105,7 @@ function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
           <TextField
             fullWidth
             name="description"
-            label="Description"
+            label={t("map.form.description") || ""}
             multiline
             value={formik.values.description}
             onChange={formik.handleChange}
@@ -112,7 +115,7 @@ function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
                 : false
             }
             helperText={formik.touched.description && formik.errors.description}
-            placeholder="Add a description..."
+            placeholder={t("map.form.descriptionPlaceholder") || ""}
             InputProps={{
               inputComponent: TextareaAutosize,
               inputProps: { minRows: 2, maxRows: 5 },
@@ -120,7 +123,7 @@ function ActivityForm({ isVisible, setVisible, placeId }: ActivityFormProps) {
           />
         </div>
         <button type={"submit"} className={"login_button"}>
-          Submit workout!
+          {t("map.form.submit")}
         </button>
       </form>
     </div>
