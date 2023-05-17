@@ -60,6 +60,7 @@
         > .message-input-container {
             display: flex;
             flex-direction: row;
+            position: relative;
             > textarea {
                 font-size: 0.8rem;
                 border-radius: 5px;
