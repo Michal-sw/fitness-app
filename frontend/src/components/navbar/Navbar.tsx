@@ -22,18 +22,12 @@ function Navbar() {
             path="/dashboard"
             pathName={t("navbar.dashboard")}
           />
-          <NavbarSmartButton
-            path="/map"
-            pathName={t("navbar.map")}
-          />
+          <NavbarSmartButton path="/map" pathName={t("navbar.map")} />
           <NavbarSmartButton
             path="/map/activities"
             pathName={t("navbar.join-activity")}
           />
-          <NavbarSmartButton
-            path="/history"
-            pathName={t("navbar.history")}
-          />
+          <NavbarSmartButton path="/history" pathName={t("navbar.history")} />
           <div className="spacedRight">
             <button id="logout-button" className="navButton" onClick={logout}>
               {t("navbar.logout")}

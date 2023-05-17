@@ -54,7 +54,7 @@ function ActivityMap({ latitude, longitude }: Coordinates) {
           .finally(() => setIsLoading(false));
       })
       .catch(() => {
-        actions.addNotification("Error loading activities!");
+        actions.addErrorNotification("Error loading activities!");
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map]);
