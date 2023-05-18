@@ -66,7 +66,7 @@ const Activity = ({ activity }: ActivityProps) => {
       )}
       ;
       <div className="activity-field">
-        <button onClick={() => joinChatRoom(_id)}>
+        <button onClick={() => joinChatRoom(_id, activity.title || _id)}>
           {t("activityCard.openChat")}
         </button>
         <button onClick={onNavigateToLocation}>

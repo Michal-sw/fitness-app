@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SendIcon from "@mui/icons-material/Send";
 
 const ChatInput = ({
   sendMessage,
@@ -34,7 +35,7 @@ const ChatInput = ({
         onChange={handleMessageChange}
         onKeyUp={handleKeyboardStroke}
       />
-      <button onClick={publishMessage}>Send</button>
+      <SendIcon className="send-icon" onClick={publishMessage} />
     </div>
   );
 };
