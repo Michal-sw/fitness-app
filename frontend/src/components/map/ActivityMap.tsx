@@ -11,6 +11,7 @@ import useNotifications from "../../hooks/useNotifications";
 import { NominatimResponseExt } from "../../core/types/NominatimResponseExt";
 import { NominatimError, lookupAddress } from "nominatim-browser";
 import useOverleafMap from "../../hooks/useOverleafMap";
+import { useTranslation } from "react-i18next";
 
 function ActivityMap({ latitude, longitude }: Coordinates) {
   const mapContainerRef = useRef(null);
@@ -20,6 +21,7 @@ function ActivityMap({ latitude, longitude }: Coordinates) {
     latitude,
     longitude,
   });
+  const { t } = useTranslation();
   const { token, user } = useAuth();
   const [activities, setActivities] = useState<ActivityDT[]>([]);
 
@@ -76,7 +78,7 @@ function ActivityMap({ latitude, longitude }: Coordinates) {
             });
         }
       },
-      buttonText: "JOIN ACTIVITY",
+      buttonText: t("map.popup.joinActivity") || "",
       popUpSize: 50,
       activities,
       userId: user._id,

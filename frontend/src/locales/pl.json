@@ -1,0 +1,45 @@
+{
+  "navbar": {
+    "dashboard": "Panel",
+    "map": "Mapa",
+    "join-activity": "Dołącz do aktywności",
+    "history": "Historia",
+    "login": "Zaloguj się",
+    "signin": "Zarejestruj się",
+    "logout": "Wyloguj się"
+  },
+
+  "survey": {
+    "pending-survey": "Ankieta do wypełnienia"
+  },
+
+  "activityCard": {
+    "activityTypeLabel": "Typ aktywności",
+    "attendeesLabel": "Uczestnicy",
+    "dateLabel": "Data",
+    "openChat": "Otwórz czat",
+    "showOnMap": "Pokaż na mapie",
+    "performedDecline": "Pominięty",
+    "performedConfirm": "Wykonany!"
+  },
+
+  "map": {
+    "search": "Szukaj",
+    "addWorkout": "DODAJ TRENING!",
+    "trainingLocation": "Lokalizacja Twojego treningu",
+    "popup": {
+      "placeName": "Nazwa",
+      "placeAddress": "Adres",
+      "attendeesNumber": "Uczestnicy",
+      "activityType": "Typ aktywności",
+      "joinActivity": "Dołącz do aktywności"
+    },
+    "form": {
+      "description": "Opis",
+      "descriptionPlaceholder": "Dodaj opis...",
+      "date": "Data",
+      "title": "Tytuł",
+      "submit": "Dodaj trening!"
+    }
+  }
+}
