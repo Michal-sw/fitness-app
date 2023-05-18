@@ -16,13 +16,33 @@
     > .chat-container {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
-        height: fit-content;
-    
+        height: 390px;
+        min-width: 290px;
         background-color: whitesmoke;
         border-radius: 5px;
         box-shadow: 0 0 3px 1px rgb(142, 142, 142);
+        gap: 8px;
+
+        >.chat-title-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            background-color: var(--main-color);
+            color: white;
+            font-weight: 500;
+            width: 100%;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            align-items: flex-start;
+            padding: 0 0 0 15px;
+            border-bottom: 1px solid black;
+            > p {
+                margin: 0;
+                padding: 5px 0 0 0;
+            }
+        }
 
         > .messages-container {
             display: flex;
@@ -31,20 +51,44 @@
             background-color: white;
             padding: 10px;
 
-            max-height: 30vh;
+            height: 30vh;
             overflow-y: scroll;
-            min-width: 180px;
-            margin-bottom: 8px;
+            min-width: 260px;
             gap: 8px;
         }
 
         > .message-input-container {
             display: flex;
-            flex-direction: column;
-            >textarea {
+            flex-direction: row;
+            position: relative;
+            > textarea {
                 font-size: 0.8rem;
-                max-height: 100px;
+                border-radius: 5px;
+                box-shadow: 0 0 3px 0.3px rgb(142, 142, 142);
+                border: none;
+                max-height: 80px;
+                min-height: 60px;
+                width: 260px;
             }
+            >.send-icon {
+                color: #333;
+                width: 25px;
+                height: 25px;
+                align-self: center;
+                position: absolute;
+                right: 1px;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #chat-list-container {
+        > .chat-container:not(:last-child) {
+            display: none;
         }
     }
 }

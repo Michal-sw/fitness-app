@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface IPendingSurveyProps {
   setVisible: (visible: boolean) => void;
@@ -7,6 +8,8 @@ interface IPendingSurveyProps {
 }
 
 const PendingSurvey = (props: IPendingSurveyProps) => {
+  const { t } = useTranslation();
+
   const handleClick = () => {
     props.setSurveyNumber("pending");
     props.setVisible(true);
@@ -14,7 +17,7 @@ const PendingSurvey = (props: IPendingSurveyProps) => {
 
   return (
     <button onClick={handleClick} style={{ borderRadius: 8, fontSize: 24 }}>
-      Pending Survey
+      {t("survey.pending-survey")}
     </button>
   );
 };

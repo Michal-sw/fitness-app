@@ -12,9 +12,14 @@ const websocketPath = process.env.REACT_APP_API_PATH || "http://127.0.0.1:8080";
 
 interface WebSocketContextType {
   socket: Socket | null;
-  activeChats: string[];
-  joinChatRoom: (roomId: string) => void;
+  activeChats: ChatRoom[];
+  joinChatRoom: (roomId: string, chatTitle: string) => void;
   leaveChatRoom: (roomId: string) => void;
+}
+
+interface ChatRoom {
+  id: string;
+  title: string;
 }
 
 const WebSocketContext = createContext<WebSocketContextType>(
@@ -23,7 +28,7 @@ const WebSocketContext = createContext<WebSocketContextType>(
 
 export function WebSocketProvider({ children }: { children: ReactElement }) {
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [activeChats, setActiveChats] = useState<string[]>([]);
+  const [activeChats, setActiveChats] = useState<ChatRoom[]>([]);
   const { authenticated } = useAuth();
 
   useEffect(() => {
@@ -37,12 +42,12 @@ export function WebSocketProvider({ children }: { children: ReactElement }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticated]);
 
-  const joinChatRoom = (roomId: string) => {
-    if (activeChats.find((chat) => chat === roomId)) return;
-    setActiveChats([roomId, ...activeChats]);
+  const joinChatRoom = (roomId: string, chatTitle: string) => {
+    if (activeChats.find((chat) => chat.id === roomId)) return;
+    setActiveChats([{ id: roomId, title: chatTitle }, ...activeChats]);
   };
   const leaveChatRoom = (roomId: string) => {
-    const newActiveChats = activeChats.filter((chat) => chat !== roomId);
+    const newActiveChats = activeChats.filter((chat) => chat.id !== roomId);
     setActiveChats(newActiveChats);
   };
 

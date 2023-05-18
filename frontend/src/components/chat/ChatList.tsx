@@ -7,8 +7,8 @@ const ChatList = () => {
 
   return (
     <div id="chat-list-container">
-      {activeChats.map((roomId) => (
-        <ChatWindow key={roomId} activityId={roomId} />
+      {activeChats.map((chat) => (
+        <ChatWindow key={chat.id} activityId={chat.id} chatTitle={chat.title} />
       ))}
     </div>
   );
