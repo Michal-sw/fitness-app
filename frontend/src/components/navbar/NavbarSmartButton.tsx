@@ -4,9 +4,11 @@ import { useLayoutEffect, useRef } from "react";
 function NavbarSmartButton({
   path,
   pathName,
+  onClick
 }: {
   path: string;
   pathName: string;
+  onClick?: () => any;
 }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,7 +28,10 @@ function NavbarSmartButton({
     <button
       ref={navButton}
       className="navButton"
-      onClick={() => navigate(path)}
+      onClick={() => {
+        navigate(path);
+        onClick && onClick();
+      }}
     >
       {pathName}
     </button>

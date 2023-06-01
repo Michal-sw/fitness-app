@@ -3,20 +3,37 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    min-width: 320px;
 
     h3 {
         padding-left: 20px;
+        color: black;
+        font-weight: normal;
+        font-size: 24px;
+        position: sticky;
+        margin: 0;
     }
     ul {
         padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+
         li {
             list-style: none;
             font-size: 24px;
-            padding: 8px 64px;
+            padding: 8px 24px;
             margin: 8px;
             border: 2px solid;
             border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 90%;
         }
 
         .checked-survey-true {
@@ -25,6 +42,28 @@
 
         .checked-survey-false {
             border-color: red;
+        }
+    }
+}
+
+@media (min-width: 769px) {
+    #survey-list {
+        overflow-y: scroll;
+        height: 80%;
+        align-self: center;
+        padding-bottom: 24px;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+
+    #survey-list {
+        width: 80%;
+        ul {
+            li {
+                width: 90%;
+            }
         }
     }
 }

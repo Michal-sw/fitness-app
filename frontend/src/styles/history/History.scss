@@ -10,7 +10,9 @@
     flex-direction: row;
     width: 100%;
     max-width: 1300px;
+    height: 100%;
 
+    padding: 0 24px;
     align-items: flex-start;
     justify-content: space-evenly;
 
@@ -26,4 +28,23 @@
         overflow: auto;
     }
 
+    #survey-list {
+        margin-bottom: 10em;
+    }
+
 }
+
+@media (max-width: 768px) {
+    #history-lists-container {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+}
+
+@media (min-width: 769px) {
+    #history-container {
+        height: 100%;
+        overflow: hidden;
+    }
+}
+

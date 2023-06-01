@@ -26,7 +26,7 @@ const SurveyList = () => {
   return (
     <>
       <div id={"survey-list"}>
-        <h3>Your score is {score}</h3>
+        <h3>Your score is <strong>{score}</strong></h3>
         <ul>
           {surveys.map((x: any) => {
             return (
@@ -34,7 +34,9 @@ const SurveyList = () => {
                 {`${new Date(x.date).getDate()}.${
                   new Date(x.date).getMonth() + 1
                 }.${new Date(x.date).getFullYear()}`}
-                <div>{`Water score: ${x.waterScore} Sleep score: ${x.sleepScore} Training score: ${x.trainingScore}`}</div>
+                <div>{`Water score: ${x.waterScore}`}</div>
+                <div>{`Sleep score: ${x.sleepScore}`}</div>
+                <div>{`Training score: ${x.trainingScore}`}</div>
               </li>
             );
           })}
