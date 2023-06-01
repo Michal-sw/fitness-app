@@ -74,7 +74,7 @@
 #open_chatbot {
     z-index: 999;
     position: fixed;
-    bottom: 20px;
+    bottom: 108px;
     right: 20px;
 
     width: fit-content;
@@ -86,4 +86,10 @@
 
 #open_chatbot:hover {
     transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+    }
 }

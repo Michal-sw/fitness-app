@@ -10,6 +10,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     padding: 20px;
+    justify-content: center;
 
     gap: 10px;
 }
@@ -17,7 +18,8 @@
 .activity {
     display: flex;
     flex-direction: column;
-    width: 320px;
+    width: 100%;
+    max-width: 350px;
     height: fit-content;
     gap: 5px;
     background-color: var(--dark-background-color);
@@ -33,6 +35,9 @@
         flex-direction: row;
         margin: 0;
         gap: 5px;
+
+        justify-content: center;
+        align-items: center;
         
         .activity-field-label {
             color: rgb(169, 169, 169);
@@ -57,11 +62,8 @@
                 }
             }    
         }
-
-        >button {
-            margin-left: auto;
-        }
     }
+
 
     &:hover {
         transform: scale(1.03);
@@ -73,4 +75,5 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    gap: 5px;
 }
