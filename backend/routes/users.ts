@@ -13,15 +13,181 @@ import {
   addUserToActivity,
   getActivitiesByUser,
 } from "../services/activitiesService";
+import { authenticateMiddleware, authorizeMiddleware } from "../middlewares/middlewares";
 import express, { Request, Response, Router } from "express";
 import { getCookie, getNewTokenPair, getPrivateKey } from "../utils/utils";
 import jwt, { JwtPayload, VerifyErrors, VerifyOptions } from "jsonwebtoken";
 
 import { IUser } from "../config/models/User";
-import { authenticateMiddleware, authorizeMiddleware } from "../middlewares/middlewares";
 
 const router: Router = express.Router({ mergeParams: true });
 
+
+/**
+ * @swagger
+ * tags:
+ *  name: users
+ * /users:
+ *   get:
+ *     summary: Get all users
+ *     tags: [users]
+ *     responses:
+ *      200:
+ *        description: All users
+ * /users/{id}:
+ *   get:
+ *     summary: Get user by id
+ *     tags: [users]
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Id of the user
+ *     responses:
+ *      200:
+ *        description: User of a given id
+ *   patch:
+ *     summary: Edit user
+ *     tags: [users]
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Id of the user
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            required:
+ *              - id
+ *              - firstName
+ *              - lastName
+ *              - password
+ *              - login
+ *              - email
+ *              - activities
+ *              - registrationDate
+ *              - score
+ *              - surveyStreak
+ *              - workoutStreak
+ *              - isAdmin
+ *            properties:
+ *              id:
+ *                type: string
+ *              firstName:
+ *                type: string
+ *              lastName:
+ *                type: string
+ *              password:
+ *                type: string
+ *              login:
+ *                type: string
+ *              email:
+ *                type: string
+ *              activities:
+ *                type: array
+ *                items:
+ *                  type: object
+ *                  properties:
+ *                    activityId:
+ *                      type: string
+ *                    skipped:
+ *                      type: boolean
+ *              registrationDate:
+ *                type: string
+ *              score:
+ *                type: number
+ *              surveyStreak:
+ *                type: number
+ *              workoutStreak:
+ *                type: number
+ *              isAdmin:
+ *                type: boolean
+ *     responses:
+ *      200:
+ *        description: User of a given id
+ *   delete:
+ *    summary: Delete user
+ *    tags: [users]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Id of the user
+ *    responses:
+ *      200:
+ *        description: User deleted
+ * /users/{id}/activities:
+ *  get:
+ *    summary: Get users activities
+ *    tags: [users]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Id of the user
+ *    responses:
+ *      200:
+ *        description: Get users activities
+ *  post:
+ *    summary: Add activity to user
+ *    tags: [users]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Id of the user
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            required:
+ *              - activityId
+ *            properties:
+ *              activityId:
+ *                type: string
+ *    responses:
+ *      200:
+ *        description: Get users activities
+ *  patch:
+ *     summary: Edit users activity
+ *     tags: [users]
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Id of the user
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            required:
+ *              - activityId
+ *              - isSkipped
+ *            properties:
+ *              activityId:
+ *                type: string
+ *              isSkipped:
+ *                type: boolean
+ */
 router.get("/", authorizeMiddleware, async (req: Request, res: Response) => {
   const response: any = await getUsers();
   res.status(response.statusCode).json(response);
