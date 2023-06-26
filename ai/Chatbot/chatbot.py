@@ -14,7 +14,7 @@ word_list = pickle.load(open('pickles/main_intents_word_list.pkl', 'rb'))
 tags = pickle.load(open('pickles/main_intents_tags.pkl', 'rb'))
 network = load_model('chatbotmodelv2.h5')
 
-probability = 0.5
+probability = 0.75
 
 
 def predict(sentence):
