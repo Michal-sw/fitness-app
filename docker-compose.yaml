@@ -10,11 +10,8 @@ services:
       - "8080:8080"
     depends_on:
       - "database"
-    environment:
-      - FRONTEND_URL=frontend
-      - MONGODB_HOST=database
-      - MONGODB_DATABASE=health_app_db
-      - MONGODB_PORT=27017
+    env_file:
+      - ./.env.backend
   
   frontend:
     build:
@@ -22,6 +19,8 @@ services:
       context: ./frontend
     ports:
       - "3000:3000"
+    env_file:
+      - ./.env.frontend
     
     volumes:
     - /opt/app/node_modules
@@ -33,10 +32,10 @@ services:
     image: "bitnami/mongodb:latest"
     volumes:
       - ./db/mongodb-data:/var/lib/mongodb/data
-    environment:
-      - MONGODB_DATABASE=health_app_db
     ports:
       - 27017:27017
+    env_file:
+      - ./.env.db
   
   chatbot:
     restart: always
